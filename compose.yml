@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  mariadb:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: mariadb
+
+  postgresdb:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: postgres

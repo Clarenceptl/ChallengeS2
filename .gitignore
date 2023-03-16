@@ -3,3 +3,5 @@
 .DS_Store
 .env
 .npm
+/docker/mariadb
+/docker/postgres
