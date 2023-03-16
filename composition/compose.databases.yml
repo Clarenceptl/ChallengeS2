@@ -1,19 +1,27 @@
 version: '3.8'
 
 services:
+  adminer:
+    container_name: challengeS2-adminer
+    image: adminer
+    ports:
+      - "8081:8080"
+
   mariadb:
-    image: mariadb
+    image: mariadb:10
     container_name: challengeS2-mariadb
     ports:
       - "3306:3306"
     environment:
-      MARIADB_ROOT_PASSWORD: passwd
-      MARIADB_DATABASE: user
+      MARIADB_PASSWORD: password
+      MARIADB_USER: mariadb
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: database
     volumes:
       - ../docker/mariadb:/data/db
 
   postgres:
-    image: postgres:latest
+    image: postgres:15-alpine
     container_name: challengeS2-postgres
     environment:
       POSTGRES_USER: "postgres"
@@ -21,7 +29,6 @@ services:
       POSTGRES_DB: "database"
     volumes:
       - ../docker/postgres:/var/lib/postgresql/data
-
     ports:
       - "5432:5432"
 
@@ -29,3 +36,7 @@ networks:
     default:
         external: true
         name: challengeS2-network
+
+volumes:
+  postgres: { }
+  mariadb: { }

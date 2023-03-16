@@ -10,3 +10,8 @@ services:
     extends:
       file: ./composition/compose.databases.yml
       service: postgres
+
+  adminer:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: adminer
