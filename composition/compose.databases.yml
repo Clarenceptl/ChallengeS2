@@ -13,10 +13,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MARIADB_PASSWORD: password
-      MARIADB_USER: mariadb
-      MARIADB_ROOT_PASSWORD: password
-      MARIADB_DATABASE: database
+      MARIADB_PASSWORD: ${DATABASE_MARIADB_PASSWORD}
+      MARIADB_USER: ${DATABASE_MARIADB_USER}
+      MARIADB_ROOT_PASSWORD: ${DATABASE_MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DATABASE_MARIADB_DATABASE}
     volumes:
       - ../docker/mariadbdata:/data/db
 
