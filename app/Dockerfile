@@ -1,10 +1,14 @@
-FROM node:lts-alpine
+FROM node:18.15-alpine
 
-WORKDIR /app
+WORKDIR /node/app
 
 COPY package*.json ./
 
+RUN npm ci
+
 RUN npm install
+
+RUN npm install -g vite
 
 COPY . .
 
