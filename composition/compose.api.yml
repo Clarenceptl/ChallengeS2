@@ -2,12 +2,11 @@ version: '3.8'
 
 services:
   api:
-    build: 
+    build:
       context: ../api
       dockerfile: Dockerfile
     container_name: challengeS2-api
-    restart: always
     volumes:
-      - ../api:/app
+      - ../api:/usr/src/app
     ports:
-      - '3000:3000'
+      - '3080:3080'

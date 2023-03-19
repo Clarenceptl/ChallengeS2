@@ -15,7 +15,13 @@ services:
     extends:
       file: ./composition/compose.databases.yml
       service: adminer
-  #api:
-  #  extends:
-  #    file: ./composition/compose.api.yml
-  #    service: api
+
+  api:
+    extends:
+      file: ./composition/compose.api.yml
+      service: api
+
+  node-front:
+    extends:
+      file: ./composition/compose.frontend.yml
+      service: node
