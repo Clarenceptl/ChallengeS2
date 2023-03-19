@@ -1,15 +1,13 @@
-FROM node:18-alpine As development
+FROM node:lts-alpine
 
-WORKDIR /app
+WORKDIR usr/src/app
 
-COPY package*.json ./
-
-RUN npm ci
+COPY package*.json .
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3080
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start"]

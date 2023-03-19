@@ -18,7 +18,7 @@ services:
       MARIADB_ROOT_PASSWORD: ${DATABASE_MARIADB_ROOT_PASSWORD}
       MARIADB_DATABASE: ${DATABASE_MARIADB_DATABASE}
     volumes:
-      - ../docker/mariadbdata:/data/db
+      - ../docker/mariadb:/data/db
 
   postgres:
     image: postgres:15.2-alpine
@@ -31,7 +31,7 @@ services:
       POSTGRES_USER: ${DATABASE_POSTGRES_USER}
       POSTGRES_PASSWORD: ${DATABASE_POSTGRES_PASSWORD}
     volumes:
-      - ../docker/postgresdata:/var/lib/postgresql/data
+      - ../docker/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
