@@ -1,6 +1,6 @@
-FROM node:lts-alpine
+FROM node:18.15-alpine
 
-WORKDIR usr/src/app
+WORKDIR /usr/src/app
 
 COPY package*.json .
 
