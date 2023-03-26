@@ -8,5 +8,6 @@ services:
     container_name: challengeS2-api
     volumes:
       - ../api:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - '3080:3080'
