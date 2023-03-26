@@ -7,23 +7,10 @@ services:
     ports:
       - "8081:8080"
 
-  mariadb:
-    image: mariadb:10
-    container_name: challengeS2-mariadb
-    ports:
-      - "3306:3306"
-    environment:
-      MARIADB_PASSWORD: ${DATABASE_MARIADB_PASSWORD}
-      MARIADB_USER: ${DATABASE_MARIADB_USER}
-      MARIADB_ROOT_PASSWORD: ${DATABASE_MARIADB_ROOT_PASSWORD}
-      MARIADB_DATABASE: ${DATABASE_MARIADB_DATABASE}
-    volumes:
-      - ../docker/mariadb:/data/db
-
   postgres:
     image: postgres:15.2-alpine
     container_name: challengeS2-postgres
-    restart: always
+    restart: unless-stopped
     env_file:
       - ../.env
     environment:
@@ -34,6 +21,21 @@ services:
       - ../docker/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+  mongodb:
+    image: mongo
+    container_name: challengeS2-mongodb
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DATABASE_MONGO_NAME}
+    volumes:
+      - ../docker/mongodb:/data/db
+    ports:
+      - "27017:27017"
 
 networks:
   default:

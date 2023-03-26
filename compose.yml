@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  mariadb:
+  mongodb:
     extends:
       file: ./composition/compose.databases.yml
-      service: mariadb
+      service: mongodb
 
   postgresdb:
     extends:
