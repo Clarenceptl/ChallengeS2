@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  analytics-service:
+    build:
+      context: ../services/analytics
+      dockerfile: Dockerfile
+    container_name: challengeS2-analytics-service
+    volumes:
+      - ../services/analytics:/analytics-service
+      - /analytics-service/node_modules
+    ports:
+      - 3020:3020
+
+  app-service:
+    build:
+      context: ../services/application
+      dockerfile: Dockerfile
+    container_name: challengeS2-app-service
+    volumes:
+      - ../services/application:/app
+      - /app/node_modules
+    ports:
+      - 3021:3021
+
+  auth-service:
+    build:
+      context: ../services/authentication
+      dockerfile: Dockerfile
+    container_name: challengeS2-authentication-service
+    volumes:
+      - ../services/authentication:/auth-service
+      - /auth-service/node_modules
+    ports:
+      - 3022:3022
+
+  mailing-service:
+    build:
+      context: ../services/mailing
+      dockerfile: Dockerfile
+    container_name: challengeS2-mailing-service
+    volumes:
+      - ../services/mailing:/mailing-service
+      - /mailing-service/node_modules
+    ports:
+      - 3023:3023

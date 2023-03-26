@@ -25,3 +25,23 @@ services:
     extends:
       file: ./composition/compose.frontend.yml
       service: node
+
+  analytics-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: analytics-service
+  
+  app-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: app-service
+
+  auth-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: auth-service
+  
+  mailing-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: mailing-service
