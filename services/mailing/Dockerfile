@@ -1,6 +1,6 @@
 FROM node:18.15-alpine As development
 
-WORKDIR /app
+WORKDIR /mailing-service
 
 COPY --chown=node:node package*.json ./
 
@@ -12,5 +12,7 @@ COPY --chown=node:node . .
 
 # Use the node user from the image (instead of the root user)
 USER node
+
+EXPOSE 3023
 
 CMD ["npm", "run", "start:dev"]
