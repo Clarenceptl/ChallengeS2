@@ -21,7 +21,7 @@ services:
       file: ./composition/compose.api.yml
       service: api
 
-  node-front:
+  app-front:
     extends:
       file: ./composition/compose.frontend.yml
       service: node
@@ -45,3 +45,8 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: mailing-service
+  
+  bo-analytics:
+    extends:
+      file: ./composition/compose.bo-analytics.yml
+      service: bo-analytics

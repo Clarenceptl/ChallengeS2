@@ -1,6 +1,6 @@
 FROM node:18.15-alpine
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -8,6 +8,6 @@ RUN npm ci
 
 COPY . .
 
-EXPOSE 5173
+EXPOSE 5000
 
 CMD [ "npm", "run", "dev" ]
