@@ -5,7 +5,7 @@ services:
     build:
       context: ../api
       dockerfile: Dockerfile
-    container_name: challengeS2-api
+    container_name: challenges2_api
     volumes:
       - ../api:/usr/src/app
       - /usr/src/app/node_modules
