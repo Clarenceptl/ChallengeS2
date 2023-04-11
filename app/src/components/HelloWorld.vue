@@ -5,6 +5,17 @@ defineProps({
     required: true
   }
 })
+const vTracking = (el, binding) => {
+  console.log('el', el)
+  console.log('binding', binding)
+  console.log('binding.value', binding.value)
+  console.log('binding.arg', binding.arg)
+  el.addEventListener(binding.arg, () => {
+    console.log('the event is', binding.arg)
+    console.log('the value is', binding.value)
+  })
+  // call api to send data to the backend
+}
 </script>
 
 <template>
@@ -16,6 +27,8 @@ defineProps({
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
   </div>
+  <!-- button click me -->
+  <button v-tracking:click="1 + 1">click me</button>
 </template>
 
 <style scoped>

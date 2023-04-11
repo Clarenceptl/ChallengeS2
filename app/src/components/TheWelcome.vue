@@ -11,6 +11,7 @@ import SupportIcon from './icons/IconSupport.vue'
   <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
+      <!-- button click me -->
     </template>
     <template #heading>Documentation</template>
 
