@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   adminer:
-    container_name: challengeS2-adminer
+    container_name: challenges2_adminer
     image: adminer
     ports:
       - "8081:8080"
 
   postgres:
     image: postgres:15.2-alpine
-    container_name: challengeS2-postgres
+    container_name: challengeS2_postgres
     restart: unless-stopped
     env_file:
       - ../.env
@@ -24,7 +24,7 @@ services:
 
   mongodb:
     image: mongo
-    container_name: challengeS2-mongodb
+    container_name: challenges2_mongodb
     restart: unless-stopped
     env_file:
       - ../.env
