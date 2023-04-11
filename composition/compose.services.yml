@@ -5,7 +5,7 @@ services:
     build:
       context: ../services/analytics
       dockerfile: Dockerfile
-    container_name: challengeS2-analytics-service
+    container_name: challenges2_analytics-service
     volumes:
       - ../services/analytics:/analytics-service
       - /analytics-service/node_modules
@@ -16,7 +16,7 @@ services:
     build:
       context: ../services/application
       dockerfile: Dockerfile
-    container_name: challengeS2-app-service
+    container_name: challenges2_app-service
     volumes:
       - ../services/application:/app
       - /app/node_modules
@@ -27,7 +27,7 @@ services:
     build:
       context: ../services/authentication
       dockerfile: Dockerfile
-    container_name: challengeS2-authentication-service
+    container_name: challenges2_authentication-service
     volumes:
       - ../services/authentication:/auth-service
       - /auth-service/node_modules
@@ -38,7 +38,7 @@ services:
     build:
       context: ../services/mailing
       dockerfile: Dockerfile
-    container_name: challengeS2-mailing-service
+    container_name: challenges2_mailing-service
     volumes:
       - ../services/mailing:/mailing-service
       - /mailing-service/node_modules
