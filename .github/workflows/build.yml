@@ -24,15 +24,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push analytics
-        id: docker_build_analytics
+        id: docker_build_analytics_service
         uses: docker/build-push-action@v2
         with:
-          context: ./bo-analytics
+          context: ./services/analytics
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-bo-analytics:ci
 
       - name: Build and push application
-        id: docker_build
+        id: docker_build_application_service
         uses: docker/build-push-action@v2
         with:
           context: ./services/application
@@ -40,42 +40,42 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2_app-service:ci
 
       - name: Build and push mailing
-        id: docker_build
+        id: docker_build_mailing_service
         uses: docker/build-push-action@v2
         with:
-          context: ./services/application
+          context: ./services/mailing
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2_mailing-service:ci
 
       - name: Build and push bo-analytics
-        id: docker_build
+        id: docker_build_bo-analytics
         uses: docker/build-push-action@v2
         with:
-          context: ./services/application
+          context: ./bo-analytics
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-bo-analytics:ci
 
       - name: Build and push app front
-        id: docker_build
+        id: docker_build_app-front
         uses: docker/build-push-action@v2
         with:
-          context: ./services/application
+          context: ./app
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2_app-front:ci
 
       - name: Build and push authentication
-        id: docker_build
+        id: docker_build_authentication_service
         uses: docker/build-push-action@v2
         with:
-          context: ./services/application
+          context: ./services/authentication
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-auth-service:ci
 
       - name: Build and push api
-        id: docker_build
+        id: docker_build_api
         uses: docker/build-push-action@v2
         with:
-          context: ./services/application
+          context: ./api
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api:ci
 
