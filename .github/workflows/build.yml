@@ -27,7 +27,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ../
+          context: ../bo-analytics
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-bo-analytics:ci
 
