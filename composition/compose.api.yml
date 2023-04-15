@@ -3,11 +3,11 @@ version: '3.8'
 services:
   api:
     build:
-      context: ../api
+      context: ../api-gateway
       dockerfile: Dockerfile
     container_name: challenges2_api
     volumes:
-      - ../api:/usr/src/app
-      - /usr/src/app/node_modules
+      - ../api-gateway:/app
+      - /app/node_modules
     ports:
       - '3080:3080'
