@@ -75,9 +75,9 @@ jobs:
         id: docker_build_api
         uses: docker/build-push-action@v2
         with:
-          context: ./api
+          context: ./api-gateway
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api:ci
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api-gateway:ci
 
 
       - name: Image digest
