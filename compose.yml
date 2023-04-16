@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  # mongodb:
-  #   extends:
-  #     file: ./composition/compose.databases.yml
-  #     service: mongodb
+  mongodb:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: mongodb
 
   postgresdb:
     extends:
@@ -21,32 +21,32 @@ services:
       file: ./composition/compose.api.yml
       service: api
 
-  # app-front:
-  #   extends:
-  #     file: ./composition/compose.frontend.yml
-  #     service: node
+  app-front:
+    extends:
+      file: ./composition/compose.frontend.yml
+      service: node
 
-  # analytics-service:
-  #   extends:
-  #     file: ./composition/compose.services.yml
-  #     service: analytics-service
+  analytics-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: analytics-service
   
   app-service:
     extends:
       file: ./composition/compose.services.yml
       service: app-service
 
-  # auth-service:
-  #   extends:
-  #     file: ./composition/compose.services.yml
-  #     service: auth-service
+  auth-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: auth-service
   
-  # mailing-service:
-  #   extends:
-  #     file: ./composition/compose.services.yml
-  #     service: mailing-service
+  mailing-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: mailing-service
   
-  # bo-analytics:
-  #   extends:
-  #     file: ./composition/compose.bo-analytics.yml
-  #     service: bo-analytics
+  bo-analytics:
+    extends:
+      file: ./composition/compose.bo-analytics.yml
+      service: bo-analytics
