@@ -18,9 +18,4 @@ export class AuthController {
     return this.authService.register(data);
   }
 
-  // @Post()
-  // public async userCreated(user: CreatedUserRequest) {
-  //   console.log('user created', user);
-  //   return user;
-  // }
 }
