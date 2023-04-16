@@ -17,6 +17,8 @@ services:
       context: ../services/application
       dockerfile: Dockerfile
     container_name: challenges2_app-service
+    env_file:
+      - ../.env
     volumes:
       - ../services/application:/app
       - /app/node_modules

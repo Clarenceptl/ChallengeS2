@@ -6,15 +6,15 @@ services:
   #     file: ./composition/compose.databases.yml
   #     service: mongodb
 
-  # postgresdb:
-  #   extends:
-  #     file: ./composition/compose.databases.yml
-  #     service: postgres
+  postgresdb:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: postgres
 
-  # adminer:
-  #   extends:
-  #     file: ./composition/compose.databases.yml
-  #     service: adminer
+  adminer:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: adminer
 
   api-gateway:
     extends:
@@ -31,10 +31,10 @@ services:
   #     file: ./composition/compose.services.yml
   #     service: analytics-service
   
-  # app-service:
-  #   extends:
-  #     file: ./composition/compose.services.yml
-  #     service: app-service
+  app-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: app-service
 
   # auth-service:
   #   extends:
