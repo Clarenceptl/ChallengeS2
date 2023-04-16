@@ -79,6 +79,5 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api:ci
 
-
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
