@@ -17,5 +17,4 @@ export class AuthController {
   public register(@Body(ValidationPipe) data: CreatedUserRequest) {
     return this.authService.register(data);
   }
-
 }
