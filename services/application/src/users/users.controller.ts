@@ -14,6 +14,7 @@ import { WithoutPassword, HashPassword } from './decorator/users.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @HashPassword()
   @MessagePattern({ cmd: 'register-user' })
   public async createUser(@Body(ValidationPipe) user: CreatedUserRequest) {
     const res = this.usersService.createUser(user);
@@ -31,7 +32,6 @@ export class UsersController {
     return this.usersService.getUser(uuid);
   }
 
-  @HashPassword()
   @MessagePattern({ cmd: 'update-user' })
   public updateUser(
     @Param('user', ParseUUIDPipe) user: string,

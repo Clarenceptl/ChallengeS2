@@ -7,7 +7,6 @@ import {
 import { Observable, map } from 'rxjs';
 import { User } from '../users.entity';
 import { removePassword } from '../../helpers';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class RemovePassword implements NestInterceptor {
@@ -24,19 +23,6 @@ export class RemovePassword implements NestInterceptor {
           if (typeof data === 'object' && data.password) {
             return removePassword(data);
           }
-        }
-      })
-    );
-  }
-}
-
-@Injectable()
-export class encryptPassword implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(
-      map((data: User) => {
-        if (typeof data === 'object' && data.password) {
-          return { ...data, password: bcrypt.hashSync(data.password, 10) };
         }
       })
     );

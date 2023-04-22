@@ -7,15 +7,12 @@ export class HashPasswordGuard implements CanActivate {
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const { confirmPassword, password } = context
-      .switchToHttp()
-      .getRequest().body;
+    const { confirmPassword, password } = context.switchToRpc().getData();
 
     if (!password) return true;
     if (password !== confirmPassword) return false;
-    context.switchToHttp().getRequest().body.password =
-      encryptPassword(confirmPassword);
-    delete context.switchToHttp().getRequest().body.confirmPassword;
+    context.switchToRpc().getData().password = encryptPassword(confirmPassword);
+
     return true;
   }
 }
