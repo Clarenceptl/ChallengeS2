@@ -50,3 +50,8 @@ services:
     extends:
       file: ./composition/compose.bo-analytics.yml
       service: bo-analytics
+
+  mailcatcher:
+    extends:
+      file: ./composition/compose.services.yml
+      service: mailcatcher
