@@ -1,2 +1,0 @@
-// Enum
-export * from "./globalEnum";
