@@ -1,4 +1,8 @@
 <script setup>
+import useMousePosition from '@/composables/useMousePosition';
+
+const { x, y } = useMousePosition();
+
 defineProps({
   msg: {
     type: String,
@@ -15,6 +19,9 @@ const vTracking = (el, binding) => {
     console.log('the value is', binding.value)
   })
   // call api to send data to the backend
+  // vue plugin pour encapsuler le code
+  // batching des requetes via service worker
+  // fetch or becon api to send data to the backend, fetch if you need a response, becon if you don't
 }
 </script>
 
@@ -26,9 +33,13 @@ const vTracking = (el, binding) => {
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
+    <!-- button click me -->
+    <button v-tracking:click="1 + 1">click me</button>
+    <button v-track:ASWEER.click="'m'">track</button>
+    <div>
+      <p>Mouse position: {{ x }}, {{ y }}</p>
+    </div>
   </div>
-  <!-- button click me -->
-  <button v-tracking:click="1 + 1">click me</button>
 </template>
 
 <style scoped>
