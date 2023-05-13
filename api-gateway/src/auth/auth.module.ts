@@ -11,8 +11,8 @@ import { SERVICE_NAME } from 'src/global';
         name: SERVICE_NAME.AUTH,
         transport: Transport.TCP,
         options: {
-          host: 'app-service',
-          port: 3021
+          host: 'auth-service',
+          port: 3022
         }
       }
     ])

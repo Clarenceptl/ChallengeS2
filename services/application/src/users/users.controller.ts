@@ -9,30 +9,31 @@ import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
 import { MessagePattern } from '@nestjs/microservices';
 import { WithoutPassword, HashPassword } from './decorator/users.decorator';
+import { SERVICE_CMD } from '../global';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @HashPassword()
-  @MessagePattern({ cmd: 'register-user' })
+  @MessagePattern({ cmd: SERVICE_CMD.CREATE_USER })
   public async createUser(@Body(ValidationPipe) user: CreatedUserRequest) {
     const res = this.usersService.createUser(user);
     return res;
   }
 
-  @MessagePattern({ cmd: 'get-users' })
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USER })
   @WithoutPassword()
   public getUsers() {
     return this.usersService.getUsers();
   }
 
-  @MessagePattern({ cmd: 'get-user' })
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
   public getUser(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.getUser(uuid);
   }
 
-  @MessagePattern({ cmd: 'update-user' })
+  @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
   public updateUser(
     @Param('user', ParseUUIDPipe) user: string,
     @Body(ValidationPipe) body: UpdatedUserRequest
@@ -40,7 +41,7 @@ export class UsersController {
     return this.usersService.updateUser(user, body);
   }
 
-  @MessagePattern({ cmd: 'delete-user' })
+  @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })
   public async deleteUser(@Body(ValidationPipe) uuid: string) {
     return this.usersService.deleteUser(uuid);
   }

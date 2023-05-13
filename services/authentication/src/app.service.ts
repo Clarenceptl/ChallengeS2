@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Welcome to auth service !';
+  
+  public login(data: any) {
+    return data;
+  }
+
+  public register(data: any) {
+    return data;
   }
 }
