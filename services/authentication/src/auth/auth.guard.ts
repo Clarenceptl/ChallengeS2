@@ -5,9 +5,9 @@ import {
   Injectable
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+// import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JsonWebTokenError } from 'jsonwebtoken';
+// import { JsonWebTokenError } from 'jsonwebtoken';
 // import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -45,25 +45,25 @@ export class AuthGuard implements CanActivate {
     }
 
     // try {
-    //   // const payload = this.jwtService.verify(token);
-    //   // const user = await this.usersService.getUser(payload.id);
+    //   const payload = this.jwtService.verify(token);
+    //   const user = await this.usersService.getUser(payload.id);
 
-    //   // if (!user) {
-    //   //   throw new BadRequestException('User is invalid');
-    //   // }
-    //   // TODO : user service
-    //   // const roles = this.reflector.get<UserRole[]>(
-    //   //   'roles',
-    //   //   context.getHandler()
-    //   // );
+    //   if (!user) {
+    //     throw new BadRequestException('User is invalid');
+    //   }
+    //   TODO : user service
+    //   const roles = this.reflector.get<UserRole[]>(
+    //     'roles',
+    //     context.getHandler()
+    //   );
 
-    //   // if (roles) {
-    //   //   if (!roles.includes(user.role)) {
-    //   //     throw new ForbiddenException(
-    //   //       'User is not allowed to access this resource'
-    //   //     );
-    //   //   }
-    //   // }
+    //   if (roles) {
+    //     if (!roles.includes(user.role)) {
+    //       throw new ForbiddenException(
+    //         'User is not allowed to access this resource'
+    //       );
+    //     }
+    //   }
 
     //   return true;
     // } catch (error) {
