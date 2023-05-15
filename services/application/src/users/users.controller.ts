@@ -33,6 +33,11 @@ export class UsersController {
     return this.usersService.getUser(uuid);
   }
 
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USER_BY_EMAIL })
+  public getUserByEmail(@Body(ValidationPipe) email: string) {
+    return this.usersService.getUserByEmail(email);
+  }
+
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
   public updateUser(
     @Param('user', ParseUUIDPipe) user: string,

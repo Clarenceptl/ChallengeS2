@@ -28,6 +28,10 @@ export class UsersService {
     return await this.userRepository.findOneBy({ id });
   }
 
+  public async getUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ email });
+  }
+
   public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
     return await this.userRepository.update({ id }, updatedUser);
   }

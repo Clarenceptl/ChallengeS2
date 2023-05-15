@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_POSTGRES_HOST,
-      port: 5432,
-      username: process.env.DATABASE_POSTGRES_USER,
-      password: process.env.DATABASE_POSTGRES_PASSWORD,
-      database: process.env.DATABASE_POSTGRES_NAME,
-      synchronize: true, // TODO: Remove this in production
-      autoLoadEntities: true
+    JwtModule.register({
+      global: true,
+      secret: process.env.JSON_WEB_TOKEN_SECRET,
+      signOptions: {
+        expiresIn: '1d'
+      }
     }),
     AuthModule
   ],

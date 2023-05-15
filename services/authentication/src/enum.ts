@@ -1,9 +1,10 @@
 export enum SERVICE_CMD {
   REGISTER_USER = 'auth_register',
-  LOGIN_USER = 'auth_login'
+  LOGIN_USER = 'auth_login',
+  GET_USER_BY_EMAIL = 'get-user-by-email'
 }
 
 export enum SERVICE_NAME {
   AUTH = 'AUTH_SERVICE',
-  APP = 'APPLICATION_SERVICE'
+  APP = 'APP_SERVICE'
 }

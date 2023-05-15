@@ -6,7 +6,7 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreatedUserRequest } from './auth.dto';
+import { CreatedUserRequest, LoginRequest } from './auth.dto';
 import { isPublic } from '../global';
 
 @Controller('auth')
@@ -22,8 +22,8 @@ export class AuthController {
 
   @Post('login')
   @isPublic()
-  @HttpCode(201)
-  public login(@Body(ValidationPipe) data: CreatedUserRequest) {
+  @HttpCode(200)
+  public login(@Body(ValidationPipe) data: LoginRequest) {
     return this.authService.login(data);
   }
 }
