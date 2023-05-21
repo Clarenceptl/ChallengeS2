@@ -1,4 +1,4 @@
-import { IsString, IsDefined } from 'class-validator';
+import { IsString, IsDefined, IsEmail } from 'class-validator';
 
 export class CreatedUserRequest {
   @IsString()
@@ -17,6 +17,7 @@ export class CreatedUserRequest {
 export class LoginRequest {
   @IsString()
   @IsDefined()
+  @IsEmail()
   email: string;
 
   @IsString()

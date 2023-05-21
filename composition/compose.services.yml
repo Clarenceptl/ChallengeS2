@@ -9,8 +9,6 @@ services:
     volumes:
       - ../services/analytics:/analytics-service
       - /analytics-service/node_modules
-    ports:
-      - "3020:3020"
 
   app-service:
     build:
@@ -22,19 +20,17 @@ services:
     volumes:
       - ../services/application:/app
       - /app/node_modules
-    ports:
-      - "3021:3021"
 
   auth-service:
     build:
       context: ../services/authentication
       dockerfile: Dockerfile
     container_name: challenges2_authentication-service
+    env_file:
+      - ../.env
     volumes:
       - ../services/authentication:/auth-service
       - /auth-service/node_modules
-    ports:
-      - "3022:3022"
 
   mailing-service:
     build:
@@ -44,8 +40,6 @@ services:
     volumes:
       - ../services/mailing:/mailing-service
       - /mailing-service/node_modules
-    ports:
-      - "3023:3023"
 
   mailcatcher:
     image: schickling/mailcatcher

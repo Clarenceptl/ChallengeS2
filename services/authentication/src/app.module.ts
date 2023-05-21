@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: process.env.JSON_WEB_TOKEN_SECRET,
+      signOptions: {
+        expiresIn: '1d'
+      }
+    }),
+    AuthModule
+  ],
+  controllers: [],
+  providers: []
 })
 export class AppModule {}

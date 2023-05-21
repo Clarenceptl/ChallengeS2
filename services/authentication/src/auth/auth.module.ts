@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { SERVICE_NAME } from 'src/enum';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAME } from 'src/global';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: SERVICE_NAME.AUTH,
+        name: SERVICE_NAME.APP,
         transport: Transport.TCP,
         options: {
-          host: 'auth-service',
-          port: 3022
+          host: 'app-service',
+          port: 3021
         }
       }
     ])
