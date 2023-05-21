@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreatedUserRequest, LoginRequest } from './auth.dto';
 import { SERVICE_CMD, SERVICE_NAME } from 'src/global';
@@ -15,9 +15,15 @@ export class AuthService {
   }
 
   public async login(data: LoginRequest) {
-    const res = await lastValueFrom(
-      this.client.send({ cmd: SERVICE_CMD.LOGIN_USER }, data)
-    );
+    let res: string;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.LOGIN_USER }, data)
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+
     return { token: res };
   }
 }

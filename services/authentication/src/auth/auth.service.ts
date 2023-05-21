@@ -1,8 +1,8 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { SERVICE_NAME, SERVICE_CMD } from '../enum';
 import { lastValueFrom } from 'rxjs';
-import { compare, hash } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -18,12 +18,12 @@ export class AuthService {
     );
 
     if (!user) {
-      throw new BadRequestException('Email or password invalid');
+      throw new RpcException('Email or password invalid');
     }
 
     const isValidPassword = await compare(data.password, user.password);
     if (!isValidPassword) {
-      throw new BadRequestException('Email or password invalid');
+      throw new RpcException('Email or password invalid');
     }
 
     const token = this.jwtService.sign({
