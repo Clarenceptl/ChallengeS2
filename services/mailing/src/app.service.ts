@@ -7,6 +7,7 @@ export class AppService {
   constructor(private readonly mailerService: MailerService) {}
 
   public async register(data: RegisterMailRequest): Promise<void> {
+    const url = process.env.FRONTEND_URL + '/auth/confirm/' + data.token;
     try {
       await this.mailerService.sendMail({
         to: data.email,
@@ -15,6 +16,7 @@ export class AppService {
         template: 'registerMail', // The `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
+          url,
           token: data.token,
           firstname: data.firstname
         }

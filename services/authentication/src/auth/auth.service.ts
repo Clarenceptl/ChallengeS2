@@ -26,6 +26,13 @@ export class AuthService {
       });
     }
 
+    if (!user.isVerified) {
+      throw new RpcException({
+        error: 400,
+        message: 'Your account is not verified'
+      });
+    }
+
     const isValidPassword = await compare(data.password, user.password);
     if (!isValidPassword) {
       throw new RpcException({
