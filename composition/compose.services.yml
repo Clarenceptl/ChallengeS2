@@ -37,9 +37,13 @@ services:
       context: ../services/mailing
       dockerfile: Dockerfile
     container_name: challenges2_mailing-service
+    env_file:
+      - ../.env
     volumes:
       - ../services/mailing:/mailing-service
       - /mailing-service/node_modules
+    ports:
+      - "3023:3023"
 
   mailcatcher:
     image: schickling/mailcatcher

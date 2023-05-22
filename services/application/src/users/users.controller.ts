@@ -8,18 +8,16 @@ import {
 import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
 import { MessagePattern } from '@nestjs/microservices';
-import { WithoutPassword, HashPassword } from './decorator/users.decorator';
+import { WithoutPassword } from './decorator/users.decorator';
 import { SERVICE_CMD } from '../global';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @HashPassword()
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_USER })
   public async createUser(@Body(ValidationPipe) user: CreatedUserRequest) {
-    const res = this.usersService.createUser(user);
-    return res;
+    return this.usersService.createUser(user);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_USER })

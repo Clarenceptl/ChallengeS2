@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
+import { ErrorsInterceptor } from './global/error.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -19,6 +20,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
+  app.useGlobalInterceptors(new ErrorsInterceptor());
   await app.listen();
 }
 bootstrap();

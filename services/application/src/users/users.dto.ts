@@ -3,7 +3,8 @@ import {
   IsDefined,
   IsEmail,
   IsStrongPassword,
-  IsOptional
+  IsOptional,
+  MinLength
 } from 'class-validator';
 
 export class CreatedUserRequest {
@@ -14,13 +15,21 @@ export class CreatedUserRequest {
 
   @IsString()
   @IsDefined()
+  @MinLength(8)
   @IsStrongPassword()
   password: string;
 
   @IsString()
   @IsDefined()
-  @IsStrongPassword()
-  confirmPassword: string;
+  firstname: string;
+
+  @IsString()
+  @IsDefined()
+  lastname: string;
+
+  @IsString()
+  @IsDefined()
+  birthdate: string;
 }
 
 export class UpdatedUserRequest {
@@ -41,4 +50,10 @@ export class UpdatedUserRequest {
   @IsStrongPassword()
   @IsOptional()
   confirmPassword: string;
+}
+
+export interface SendEmailRequest {
+  email: string;
+  token: string;
+  firstname: string;
 }
