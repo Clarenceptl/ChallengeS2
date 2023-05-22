@@ -10,7 +10,7 @@ export class AuthController {
 
   @MessagePattern({ cmd: SERVICE_CMD.REGISTER_USER })
   public register(@Body(ValidationPipe) registerRequest: CreatedUserRequest) {
-    this.authService.register(registerRequest);
+    return this.authService.register(registerRequest);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.LOGIN_USER })
