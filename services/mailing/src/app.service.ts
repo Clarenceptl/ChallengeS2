@@ -1,24 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { RegisterMailRequest } from './models/dto';
 
 @Injectable()
 export class AppService {
   constructor(private readonly mailerService: MailerService) {}
 
-  public example(): void {
-    this.mailerService
-      .sendMail({
-        to: 'test@test.com',
+  public async register(data: RegisterMailRequest): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: data.email,
         from: 'noreply@nestjs.com',
-        subject: 'Testing Nest Mailermodule with template ✔',
-        template: 'test', // The `.hbs` extension is appended automatically.
+        subject: 'Veuillez confirmer votre email ✔',
+        template: 'registerMail', // The `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
-          code: 'cf1a3f828287',
-          username: 'john doe'
+          token: data.token,
+          firstname: data.firstname
         }
-      })
-      .then(() => console.log('Email sent'))
-      .catch((e) => console.log('Error sending email', e));
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

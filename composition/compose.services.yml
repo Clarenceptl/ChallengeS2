@@ -40,6 +40,8 @@ services:
     volumes:
       - ../services/mailing:/mailing-service
       - /mailing-service/node_modules
+    ports:
+      - "3023:3023"
 
   mailcatcher:
     image: schickling/mailcatcher

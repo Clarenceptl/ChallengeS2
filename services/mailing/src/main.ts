@@ -8,7 +8,8 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
-      host: 'mailing-service'
+      host: 'mailing-service',
+      port: 3024
     }
   });
   await app.startAllMicroservices();
