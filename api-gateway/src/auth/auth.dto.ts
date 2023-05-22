@@ -12,6 +12,18 @@ export class CreatedUserRequest {
   @IsString()
   @IsDefined()
   confirmPassword: string;
+
+  @IsString()
+  @IsDefined()
+  firstname: string;
+
+  @IsString()
+  @IsDefined()
+  lastname: string;
+
+  @IsString()
+  @IsDefined()
+  birthdate: string;
 }
 
 export class LoginRequest {

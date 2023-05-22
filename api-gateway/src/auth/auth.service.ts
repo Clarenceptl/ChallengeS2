@@ -10,8 +10,16 @@ export class AuthService {
     @Inject(SERVICE_NAME.AUTH) private readonly client: ClientProxy
   ) {}
 
-  public register(data: CreatedUserRequest) {
-    return this.client.send({ cmd: SERVICE_CMD.REGISTER_USER }, data);
+  public async register(data: CreatedUserRequest) {
+    let res;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.REGISTER_USER }, data)
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+    return res;
   }
 
   public async login(data: LoginRequest) {
