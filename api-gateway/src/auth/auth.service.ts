@@ -17,6 +17,7 @@ export class AuthService {
         this.client.send({ cmd: SERVICE_CMD.REGISTER_USER }, data)
       );
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error.message);
     }
     return res;
@@ -27,6 +28,19 @@ export class AuthService {
     try {
       res = await lastValueFrom(
         this.client.send({ cmd: SERVICE_CMD.LOGIN_USER }, data)
+      );
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+
+    return { token: res };
+  }
+
+  public async verifyAccount(token: string) {
+    let res: string;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.VERIFY_ACCOUNT }, token)
       );
     } catch (error) {
       throw new BadRequestException(error.message);

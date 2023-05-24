@@ -48,6 +48,22 @@ export class UsersService {
     return { success: true, message: 'User created' };
   }
 
+  public async verifyUser(token: string) {
+    const user = await this.userRepository.findOneBy({ token });
+    if (!user) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Token invalid'
+      });
+    }
+
+    user.isVerified = true;
+    user.token = null;
+
+    await this.userRepository.save(user);
+    return { success: true, message: 'User verified' };
+  }
+
   public async getUsers() {
     return await this.userRepository.find();
   }

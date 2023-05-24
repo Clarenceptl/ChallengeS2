@@ -20,6 +20,11 @@ export class UsersController {
     return this.usersService.createUser(user);
   }
 
+  @MessagePattern({ cmd: SERVICE_CMD.VERIFY_ACCOUNT })
+  public async verifyUser(@Body(ValidationPipe) token: string) {
+    return this.usersService.verifyUser(token);
+  }
+
   @MessagePattern({ cmd: SERVICE_CMD.GET_USER })
   @WithoutPassword()
   public getUsers() {

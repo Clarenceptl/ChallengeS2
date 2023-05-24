@@ -69,4 +69,19 @@ export class AuthService {
 
     return res;
   }
+
+  public async verifyAccount(token: string) {
+    if (!token) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Token is required'
+      });
+    }
+
+    const res = await lastValueFrom(
+      this.client.send({ cmd: SERVICE_CMD.VERIFY_ACCOUNT }, token)
+    );
+
+    return res;
+  }
 }

@@ -6,7 +6,11 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreatedUserRequest, LoginRequest } from './auth.dto';
+import {
+  CreatedUserRequest,
+  LoginRequest,
+  VerifyAccountRequest
+} from './auth.dto';
 import { isPublic } from '../global';
 
 @Controller('auth')
@@ -25,5 +29,13 @@ export class AuthController {
   @HttpCode(200)
   public login(@Body(ValidationPipe) data: LoginRequest) {
     return this.authService.login(data);
+  }
+
+  @Post('verify-account')
+  @isPublic()
+  @HttpCode(200)
+  public verifyAccount(@Body(ValidationPipe) data: VerifyAccountRequest) {
+    if (!data.token) throw new Error('Token is required');
+    return this.authService.verifyAccount(data.token);
   }
 }
