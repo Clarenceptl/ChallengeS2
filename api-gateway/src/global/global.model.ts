@@ -1,10 +1,20 @@
-export interface ErrorModel {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class ErrorModel {
+  @ApiProperty({ default: 400 })
   statusCode: number;
-  message: string;
+
+  @ApiProperty({ type: [String] })
+  message: string | string[];
 }
 
-export interface SuccessResponse {
+export class SuccessResponse {
+  @ApiProperty()
   success: boolean;
+
+  @ApiProperty({ required: false })
   message?: string;
+
+  @ApiProperty({ required: false })
   data?: any;
 }

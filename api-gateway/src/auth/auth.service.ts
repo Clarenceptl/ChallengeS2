@@ -4,7 +4,7 @@ import { CreatedUserRequest, LoginRequest } from './auth.dto';
 import {
   SERVICE_CMD,
   SERVICE_NAME,
-  SuccessResponse,
+  type SuccessResponse,
   handleErrors
 } from 'src/global';
 import { lastValueFrom } from 'rxjs';
