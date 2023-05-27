@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ErrorModel } from '../../global';
+import type { ErrorModel } from '../../global';
 
 export const handleErrors = (err: ErrorModel) => {
   if (err.statusCode) {
