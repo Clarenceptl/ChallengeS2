@@ -11,6 +11,7 @@ import { SERVICE_CMD, SERVICE_NAME } from 'src/global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { createRandToken } from 'src/helpers';
 import { lastValueFrom } from 'rxjs';
+import type { ErrorModel } from '../global';
 
 @Injectable()
 export class UsersService {
@@ -28,22 +29,23 @@ export class UsersService {
       const createUser = this.userRepository.create(userWithToken);
       await this.userRepository.save(createUser);
     } catch (error) {
-      throw new RpcException('Email already exist');
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Email already exist'
+      });
     }
     const dataEmail: SendEmailRequest = {
       email: user.email,
       token,
       firstname: user.firstname
     };
-    console.log('envoi email');
-    const res = await lastValueFrom(
+
+    await lastValueFrom(
       this.mailingService.emit<SendEmailRequest>(
         SERVICE_CMD.GET_REGISTER_MAIL,
         dataEmail
       )
     );
-
-    console.log('ress email', res);
 
     return { success: true, message: 'User created' };
   }
@@ -52,9 +54,9 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ token });
     if (!user) {
       throw new RpcException({
-        statusCode: 400,
-        message: 'Token invalid'
-      });
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
     }
 
     user.isVerified = true;

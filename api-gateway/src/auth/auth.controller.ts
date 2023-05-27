@@ -35,7 +35,6 @@ export class AuthController {
   @isPublic()
   @HttpCode(200)
   public verifyAccount(@Body(ValidationPipe) data: VerifyAccountRequest) {
-    if (!data.token) throw new Error('Token is required');
-    return this.authService.verifyAccount(data.token);
+    return this.authService.verifyAccount(data?.token);
   }
 }
