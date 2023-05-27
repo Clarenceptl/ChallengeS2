@@ -17,4 +17,9 @@ export class AuthController {
   public login(@Body(ValidationPipe) loginRequest: LoginRequest) {
     return this.authService.login(loginRequest);
   }
+
+  @MessagePattern({ cmd: SERVICE_CMD.VERIFY_ACCOUNT })
+  public verifyAccount(@Body(ValidationPipe) token: string) {
+    return this.authService.verifyAccount(token);
+  }
 }

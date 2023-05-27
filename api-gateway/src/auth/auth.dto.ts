@@ -35,3 +35,9 @@ export class LoginRequest {
   @IsDefined()
   password: string;
 }
+
+export class VerifyAccountRequest {
+  @IsString()
+  @IsDefined()
+  token: string;
+}

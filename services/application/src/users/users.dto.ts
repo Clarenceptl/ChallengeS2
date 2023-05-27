@@ -4,31 +4,37 @@ import {
   IsEmail,
   IsStrongPassword,
   IsOptional,
-  MinLength
+  MinLength,
+  IsNotEmpty
 } from 'class-validator';
 
 export class CreatedUserRequest {
   @IsString()
   @IsDefined()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
   @IsDefined()
   @MinLength(8)
   @IsStrongPassword()
+  @IsNotEmpty()
   password: string;
 
   @IsString()
   @IsDefined()
+  @IsNotEmpty()
   firstname: string;
 
   @IsString()
   @IsDefined()
+  @IsNotEmpty()
   lastname: string;
 
   @IsString()
   @IsDefined()
+  @IsNotEmpty()
   birthdate: string;
 }
 

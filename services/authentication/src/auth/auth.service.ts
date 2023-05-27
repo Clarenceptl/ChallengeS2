@@ -21,14 +21,14 @@ export class AuthService {
 
     if (!user) {
       throw new RpcException({
-        error: 400,
+        statusCode: 400,
         message: 'Email or password invalid'
       });
     }
 
     if (!user.isVerified) {
       throw new RpcException({
-        error: 400,
+        statusCode: 400,
         message: 'Your account is not verified'
       });
     }
@@ -36,7 +36,7 @@ export class AuthService {
     const isValidPassword = await compare(data.password, user.password);
     if (!isValidPassword) {
       throw new RpcException({
-        error: 400,
+        statusCode: 400,
         message: 'Email or password invalid'
       });
     }
@@ -45,7 +45,7 @@ export class AuthService {
       id: user.id
     });
 
-    return token;
+    return { success: true, token };
   }
 
   public async register(data: CreatedUserRequest) {
@@ -55,17 +55,30 @@ export class AuthService {
         message: 'Password and confirm password must be equal'
       });
     }
+    delete data.confirmPassword;
+
     data.birthdate = formatDate(data.birthdate);
     const check = checkDate(data.birthdate);
     if (!check) {
       throw new RpcException({ statusCode: 400, message: 'Birthdate invalid' });
     }
 
-    delete data.confirmPassword;
-
     const res = await lastValueFrom(
       this.client.send({ cmd: SERVICE_CMD.CREATE_USER }, data)
     );
+
+    return res;
+  }
+
+  public async verifyAccount(token: string) {
+    let res;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.VERIFY_ACCOUNT }, token)
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
 
     return res;
   }

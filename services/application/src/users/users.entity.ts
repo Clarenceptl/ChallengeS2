@@ -99,10 +99,4 @@ export class User {
   public emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  public async hashPassword() {
-    this.password = await hash(this.password, 10);
-  }
 }

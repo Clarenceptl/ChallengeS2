@@ -5,7 +5,8 @@ export enum SERVICE_CMD {
   UPDATE_USER = 'update-user',
   DELETE_USER = 'delete-user',
   CREATE_USER = 'create-user',
-  GET_REGISTER_MAIL = 'get-mail-register'
+  GET_REGISTER_MAIL = 'get-mail-register',
+  VERIFY_ACCOUNT = 'auth_verify_account'
 }
 
 export enum SERVICE_NAME {
