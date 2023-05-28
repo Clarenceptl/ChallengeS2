@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UsersModule } from './users/users.module';
       synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true
     }),
-    UsersModule
+    UsersModule,
+    SeedModule
   ],
   controllers: [],
   providers: []

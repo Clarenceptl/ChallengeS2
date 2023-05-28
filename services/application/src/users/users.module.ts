@@ -21,6 +21,7 @@ import { SERVICE_NAME } from 'src/global';
     ])
   ],
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
+  exports: [UsersService]
 })
 export class UsersModule {}
