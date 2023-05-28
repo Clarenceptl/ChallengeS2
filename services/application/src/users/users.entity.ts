@@ -5,8 +5,12 @@ import {
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
-import { hash } from 'bcrypt';
-type UserRoleType = 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_USER';
+
+export enum UserRole {
+  ROLE_USER = 'ROLE_USER',
+  ROLE_EMPLOYEUR = 'ROLE_EMPLOYEUR',
+  ROLE_ADMIN = 'ROLE_ADMIN'
+}
 
 @Entity()
 export class User {
@@ -36,7 +40,7 @@ export class User {
     update: true,
     default: 'ROLE_USER'
   })
-  roles: UserRoleType[];
+  roles: UserRole[];
 
   @Column({
     type: 'varchar',
