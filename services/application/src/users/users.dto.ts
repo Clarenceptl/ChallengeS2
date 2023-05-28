@@ -54,6 +54,6 @@ export class UpdatedUserRequest {
 
 export interface SendEmailRequest {
   email: string;
-  token: string;
+  token?: string;
   firstname: string;
 }

@@ -6,7 +6,7 @@ import {
   BeforeUpdate
 } from 'typeorm';
 import { hash } from 'bcrypt';
-type UserRoleType = 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_USER';
+type UserRoleType = 'ROLE_USER' | 'ROLE_ADMIN';
 
 @Entity()
 export class User {

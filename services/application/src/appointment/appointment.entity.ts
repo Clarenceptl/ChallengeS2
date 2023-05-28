@@ -1,24 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm';
+
+import { User } from '../users/users.entity';
+import { JobAds } from '../job-ads/job-ads.entity';
 @Entity()
 export class Appointment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-    update: true
-  })
-  candidate: string;
+  @ManyToOne(() => User, (user) => user)
+  @JoinColumn()
+  candidate?: User;
 
-  @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-    update: true
-  })
-  job: string;
+  @ManyToOne(() => JobAds, (job) => job)
+  job: JobAds;
 
   @Column({
     type: 'timestamp',

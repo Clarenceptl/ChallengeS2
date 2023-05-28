@@ -1,14 +1,8 @@
 import { IsBoolean, IsDefined, IsNotEmpty, IsString } from 'class-validator';
 export class AppointmentDto {
-  @IsString()
-  @IsDefined()
-  @IsNotEmpty()
-  candidate: string;
+  candidate: any;
 
-  @IsString()
-  @IsString()
-  @IsDefined()
-  job: string;
+  job: any;
 
   time: Date;
 

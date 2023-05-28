@@ -18,7 +18,7 @@ export class CompanyDto {
   description: string;
 
   @IsNotEmpty()
-  founder: string;
+  founder: any;
 
   createdAt: Date;
 
