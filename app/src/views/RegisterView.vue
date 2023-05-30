@@ -37,6 +37,14 @@
             counter="10"
             variant="outlined"
           />
+          <label>Date of birth</label>
+          <v-text-field
+            clearable
+            v-model="user.dateOfBirth"
+            type="date"
+            color="appgrey"
+            variant="outlined"
+          />
           <label>Password</label>
           <v-text-field
           clearable

@@ -5,16 +5,16 @@
     </div>
     <v-row>
       <v-col cols="5" offset="1">
-        <v-text-field clearable type="text" color="appgrey" counter="10" variant="outlined" label="Search a particular job"/>
+        <v-text-field clearable type="text" color="appgrey" variant="outlined" label="Search a particular job"/>
       </v-col>
       <v-col cols="5">
-        <v-text-field clearable type="text" color="appgrey" counter="10" variant="outlined" label="Look for a particular field"/>
+        <v-text-field clearable type="text" color="appgrey" variant="outlined" label="Look for a particular field"/>
       </v-col>
     </v-row>
     <v-divider class="mb-4" />
     <v-row>
       <v-col cols="4" class="column-scrollable">
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -31,7 +31,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -48,7 +48,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -65,7 +65,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -82,7 +82,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -99,7 +99,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
@@ -116,7 +116,7 @@
             </p>
           </v-card-text>
         </v-card>
-        <v-card variant="outlined" class="mb-2">
+        <v-card variant="outlined" class="mb-2 bg-green-200">
           <v-card-title>Développeur Web</v-card-title>
           <v-card-text>
             <v-list-item class="mb-4">
