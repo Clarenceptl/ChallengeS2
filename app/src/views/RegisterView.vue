@@ -6,7 +6,7 @@
     <v-col cols="6">
       <h1 class="mt-16">Create Your Account</h1>
       <div class="mb-10">
-        Already have an account ? <a href="#">Login</a>
+        Already have an account ? <a href="/login">Login</a>
       </div>
       <div class="form-width">
         <v-form>
