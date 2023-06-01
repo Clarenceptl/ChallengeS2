@@ -1,95 +1,80 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AdminView from '../views/admin/AdminView.vue'
-import CompanyInformation from '../views/admin/CompanyInformation.vue'
-import NewCompanyInformation from '../views/admin/NewCompanyInformation.vue'
-import UsersList from '../views/admin/UsersList.vue'
-
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import RegisterView from '../views/RegisterView.vue'
-import RegisterCompany from '../views/RegisterCompany.vue'
-import JobOffers from '../views/JobOffers.vue'
-import ProfileView from '../views/ProfileView.vue'
-import ResetPassword from '../views/ResetPassword.vue'
-import ValidateAccount from '../views/ValidateAccount.vue'
-import NotFound from '../views/404NotFound.vue'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/login',
       name: 'Login',
-      component: LoginView
+      component: () => import('@/views/auth/LoginView.vue')
     },
     {
       path: '/register',
       name: 'Register',
-      component: () => RegisterView
+      component: () => import('@/views/auth/RegisterView.vue')
     },
     {
       path: '/:token/reset-password',
       name: 'ResetPassword',
-      component: () => ResetPassword
+      component: () => import('@/views/auth/ResetPassword.vue')
     },
     {
       path: '/:token/validate-account',
       name: 'ValidateAccount',
-      component: () => ValidateAccount
+      component: () => import('@/views/auth/ValidateAccount.vue')
     },
     {
       path: '/profile',
       name: 'Profile',
-      component: ProfileView
+      component: () => import('@/views/ProfileView.vue')
     },
     {
       path: '/register-company',
       name: 'RegisterCompany',
-      component: () => RegisterCompany
+      component: () => import('@/views/RegisterCompany.vue')
     },
     {
       path: '/job-offers',
       name: 'JobOffers',
-      component: () => JobOffers
+      component: () => import('@/views/JobOffers.vue')
     },
     {
       path: '/admin/',
-      name: 'Admin',
       children: [
         {
           path: '',
-          component: () => AdminView
+          name: 'Admin',
+          component: () => import('@/views/admin/AdminView.vue')
         },
         {
           path: 'users/',
           name: 'UsersList',
-          component: () => UsersList
+          component: () => import('@/views/admin/UsersList.vue')
         },
         {
           path: 'company-information/',
           children: [
             {
               path: '',
-              component: () => CompanyInformation
+              component: () => import('@/views/admin/CompanyInformation.vue')
             },
             {
               path: 'new',
-              component: () => NewCompanyInformation
-            },
-          ],
+              component: () => import('@/views/admin/NewCompanyInformation.vue')
+            }
+          ]
         }
-      ],
+      ]
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: () => NotFound
+      component: () => import('@/views/404NotFound.vue')
     }
   ]
 })
