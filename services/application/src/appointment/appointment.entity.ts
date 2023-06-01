@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { User } from '../users/users.entity';
 import { JobAds } from '../job-ads/job-ads.entity';
@@ -14,7 +8,6 @@ export class Appointment {
   id: number;
 
   @ManyToOne(() => User, (user) => user)
-  @JoinColumn()
   candidate?: User;
 
   @ManyToOne(() => JobAds, (job) => job)

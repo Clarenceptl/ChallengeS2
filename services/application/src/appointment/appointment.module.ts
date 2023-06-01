@@ -7,10 +7,12 @@ import { UsersController } from '../users/users.controller';
 import { UsersService } from '../users/users.service';
 import { AppointmentService } from './appointment.service';
 import { AppointmentController } from './appointment.controller';
+import { User } from '../users/users.entity';
+import { JobAds } from '../job-ads/job-ads.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Appointment]),
+    TypeOrmModule.forFeature([Appointment, User, JobAds]),
     ClientsModule.register([
       {
         name: SERVICE_NAME.MAILING,

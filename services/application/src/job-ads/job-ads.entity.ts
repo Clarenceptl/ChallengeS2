@@ -1,5 +1,6 @@
 import {
   CreateDateColumn,
+  Entity,
   JoinColumn,
   ManyToMany,
   ManyToOne,
@@ -11,9 +12,9 @@ import { Company } from '../company/company.entity';
 import { User } from '../users/users.entity';
 import { Appointment } from '../appointment/appointment.entity';
 
+@Entity()
 export class JobAds {
   @PrimaryGeneratedColumn('uuid')
-  @JoinColumn()
   id;
 
   @ManyToOne(() => Company, (company) => company)

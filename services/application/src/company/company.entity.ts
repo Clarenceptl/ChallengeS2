@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,11 +12,10 @@ import { CompanyRevenueOptions } from '../company-revenue-options/company-revenu
 import { CompanySizeOptions } from '../company-size-options/company-size-option.entity';
 import { CompanySectorOptions } from '../company-sector-options/company-sector-options.entity';
 import { JobAds } from '../job-ads/job-ads.entity';
-import { Appointment } from '../appointment/appointment.entity';
 @Entity()
 export class Company {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({
     type: 'varchar',
@@ -28,12 +26,12 @@ export class Company {
   name: string;
 
   @Column({
-    type: 'datetime',
+    type: 'date',
     nullable: false,
     update: true,
     default: () => 'CURRENT_TIMESTAMP'
   })
-  creationDate: Date = null;
+  creationDate: Date;
 
   @Column({
     type: 'varchar',
@@ -60,7 +58,6 @@ export class Company {
   description: string;
 
   @ManyToOne(() => User, (user) => user)
-  @JoinColumn()
   founder?: User;
 
   @CreateDateColumn({
@@ -87,24 +84,20 @@ export class Company {
     () => CompanySizeOptions,
     (companySizeOptions) => companySizeOptions
   )
-  @JoinColumn()
   size?: CompanySizeOptions;
 
   @ManyToOne(
     () => CompanyRevenueOptions,
     (companyRevenueOptions) => companyRevenueOptions
   )
-  @JoinColumn()
   revenue?: CompanySizeOptions;
 
   @OneToMany(
     () => CompanySectorOptions,
     (companySectorOptions) => companySectorOptions
   )
-  @JoinColumn()
   sector?: CompanySectorOptions;
 
   @OneToMany(() => JobAds, (jobAds) => jobAds)
-  @JoinColumn()
   jobAds?: JobAds[];
 }

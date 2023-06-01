@@ -6,7 +6,6 @@ import { SERVICE_CMD, SERVICE_NAME } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { AppointmentDto } from './appointment.dto';
 import { SendEmailRequest } from '../users/users.dto';
-import { createRandToken } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 
 export class AppointmentService {
