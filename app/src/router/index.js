@@ -44,6 +44,16 @@ const router = createRouter({
       component: () => import('@/views/JobOffers.vue')
     },
     {
+      path: '/applied-list',
+      name: 'AppliedList',
+      component: () => AppliedList
+    },
+    {
+      path: '/appointment-list',
+      name: 'AppointmentList',
+      component: () => AppointmentList
+    },
+    {
       path: '/admin/',
       children: [
         {
@@ -70,6 +80,29 @@ const router = createRouter({
           ]
         }
       ]
+    },
+    {
+      path: '/employer/',
+      name: 'Employer',
+      children: [
+        {
+          path: 'appointments',
+          component: () => Appointments
+        },
+        {
+          path: 'jobs/',
+          children: [
+            {
+              path: '',
+              component: () => Jobs
+            },
+            {
+              path: ':id/candidates',
+              component: () => Candidates
+            },
+          ],
+        },
+      ],
     },
     {
       path: '/:pathMatch(.*)*',
