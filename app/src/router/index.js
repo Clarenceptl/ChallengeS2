@@ -46,12 +46,12 @@ const router = createRouter({
     {
       path: '/applied-list',
       name: 'AppliedList',
-      component: () => AppliedList
+      component: () => import('@/views/AppliedList.vue')
     },
     {
       path: '/appointment-list',
       name: 'AppointmentList',
-      component: () => AppointmentList
+      component: () => import('@/views/AppointmentList.vue')
     },
     {
       path: '/admin/',
@@ -87,18 +87,18 @@ const router = createRouter({
       children: [
         {
           path: 'appointments',
-          component: () => Appointments
+          component: () => import('@/views/employer/Appointments.vue')
         },
         {
           path: 'jobs/',
           children: [
             {
               path: '',
-              component: () => Jobs
+              component: () => import ('@/views/employer/Jobs.vue')
             },
             {
               path: ':id/candidates',
-              component: () => Candidates
+              component: () => import ('@/views/employer/Candidates.vue')
             },
           ],
         },
