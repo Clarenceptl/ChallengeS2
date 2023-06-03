@@ -15,10 +15,12 @@
   "dependencies": {
     "@mdi/font": "^7.2.96",
     "pinia": "^2.0.32",
+    "vee-validate": "^4.9.6",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vuetify": "^3.1.10",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
@@ -30,7 +32,6 @@
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^9.9.0",
     "jsdom": "^21.1.0",
-    "node-sass": "^9.0.0",
     "prettier": "^2.8.4",
     "sass": "^1.62.1",
     "sass-loader": "^13.3.1",
