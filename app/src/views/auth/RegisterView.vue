@@ -41,8 +41,8 @@
           <v-text-field
             class="mb-3"
             clearable
-            v-model="user.dateOfBirth.value.value"
-            :error-messages="errorBag.dateOfBirth"
+            v-model="user.birthdate.value.value"
+            :error-messages="errorBag.birthdate"
             type="date"
             color="appgrey"
             variant="outlined"
@@ -83,6 +83,7 @@
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import { object, string, ref as yupRef } from 'yup'
+import { useUserStore } from '@/stores'
 
 const schema = object({
   firstname: string()
@@ -94,7 +95,7 @@ const schema = object({
     .required('Le champ nom est requis.')
     .min(3, 'Le nom doit contenir au moins 3 caractères.'),
   email: string().required('Le champ email est requis.').email().trim(),
-  dateOfBirth: string().required('Le champ date de naissance est requis.').trim(),
+  birthdate: string().required('Le champ date de naissance est requis.').trim(),
   password: string()
     .required('Le champ mot de passe est requis.')
     .matches(
@@ -112,16 +113,18 @@ const schema = object({
 const show1 = ref(false)
 const show2 = ref(false)
 
+const userStore = useUserStore()
+
 const initValues = {
   firstname: '',
   lastname: '',
   email: '',
-  dateOfBirth: '',
+  birthdate: '',
   password: '',
   confirmPassword: ''
 }
 
-const { errorBag, handleSubmit } = useForm({
+const { errorBag, handleSubmit, resetForm } = useForm({
   initialValues: initValues,
   validationSchema: schema
 })
@@ -130,15 +133,20 @@ const user = {
   firstname: useField('firstname'),
   lastname: useField('lastname'),
   email: useField('email'),
-  dateOfBirth: useField('dateOfBirth'),
+  birthdate: useField('birthdate'),
   password: useField('password'),
   confirmPassword: useField('confirmPassword')
 }
 
-console.log(user)
-
-const submit = handleSubmit((values) => {
+const submit = handleSubmit(async (values) => {
   console.log(values)
+  const res = await userStore.register(values)
+  if (res.success) {
+    console.log(res, 'ok')
+    resetForm()
+  } else {
+    console.log(res, 'ko')
+  }
 })
 </script>
 
