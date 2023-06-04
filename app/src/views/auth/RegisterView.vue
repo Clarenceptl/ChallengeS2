@@ -82,38 +82,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
-import { object, string, ref as yupRef } from 'yup'
-import { useUserStore } from '@/stores'
+import { useUserStore, useToastStore } from '@/stores'
+import { registerSchema } from "@/models";
 
-const schema = object({
-  firstname: string()
-    .required('Le champ prénom est requis.')
-    .min(3, 'Le prénom doit contenir au moins 3 caractères.')
-    .trim()
-    .lowercase(),
-  lastname: string()
-    .required('Le champ nom est requis.')
-    .min(3, 'Le nom doit contenir au moins 3 caractères.'),
-  email: string().required('Le champ email est requis.').email().trim(),
-  birthdate: string().required('Le champ date de naissance est requis.').trim(),
-  password: string()
-    .required('Le champ mot de passe est requis.')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      'Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial'
-    )
-    .min(8, 'Le mot de passe doit contenir au moins 8 caractères.')
-    .trim(),
-  confirmPassword: string()
-    .required('Le champ confiramtion de mot de passe est requis.')
-    .oneOf([yupRef('password'), null], 'Les mots de passe doivent être identiques.')
-    .trim()
-})
+const stores = {
+  user: useUserStore(),
+  toast: useToastStore()
+}
 
 const show1 = ref(false)
 const show2 = ref(false)
-
-const userStore = useUserStore()
 
 const initValues = {
   firstname: '',
@@ -126,7 +104,7 @@ const initValues = {
 
 const { errorBag, handleSubmit, resetForm } = useForm({
   initialValues: initValues,
-  validationSchema: schema
+  validationSchema: registerSchema
 })
 
 const user = {
@@ -139,13 +117,19 @@ const user = {
 }
 
 const submit = handleSubmit(async (values) => {
-  console.log(values)
-  const res = await userStore.register(values)
+  const res = await stores.user.register(values)
   if (res.success) {
     console.log(res, 'ok')
     resetForm()
+    return stores.toast.createToast({
+      message: res.message,
+      type: 'success'
+    })
   } else {
-    console.log(res, 'ko')
+    return stores.toast.createToast({
+      message: res.message,
+      type: 'error'
+    })
   }
 })
 </script>
