@@ -34,7 +34,6 @@ export class AuthService {
 
   static async verifyEmail(data) {
     try {
-      console.log(data)
       const response = await fetch(`${API_GATEWAY_URL}/auth/verify-account`, {
         method: 'PUT',
         headers: {
