@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: () => import('@/views/HomeView.vue')
     },
     {
@@ -19,12 +19,12 @@ const router = createRouter({
       component: () => import('@/views/auth/RegisterView.vue')
     },
     {
-      path: '/:token/reset-password',
+      path: '/reset-password/:token',
       name: 'ResetPassword',
       component: () => import('@/views/auth/ResetPassword.vue')
     },
     {
-      path: '/:token/validate-account',
+      path: '/validate-account/:token',
       name: 'ValidateAccount',
       component: () => import('@/views/auth/ValidateAccount.vue')
     },

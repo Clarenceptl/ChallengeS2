@@ -11,7 +11,11 @@ export const encryptPassword = (pwd: string): string => {
 };
 
 export const createRandToken = (): string => {
-  const randNb = Math.random().toString(36);
-  const randomString = randNb.substring(2, randNb.length);
-  return bcrypt.hashSync(randomString, 10);
+  let randomString = '';
+  for (let i = 0; i < 4; i++) {
+    const randNb = Math.random().toString(36);
+    randomString += randNb.substring(2, randNb.length);
+  }
+
+  return randomString;
 };

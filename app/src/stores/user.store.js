@@ -15,5 +15,9 @@ export const useUserStore = defineStore('userStore', () => {
     return await AuthService.registerUser(body)
   }
 
-  return { count, doubleCount, increment, register }
+  const verifyEmail = async (token) => {
+    return await AuthService.verifyEmail({ token })
+  }
+
+  return { count, doubleCount, increment, register, verifyEmail }
 })
