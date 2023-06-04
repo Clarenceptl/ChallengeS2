@@ -7,9 +7,9 @@ import {
   UpdatedUserRequest,
   SendEmailRequest
 } from './users.dto';
-import { SERVICE_CMD, SERVICE_NAME } from 'src/global';
+import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { createRandToken, encryptPassword } from 'src/helpers';
+import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
 
@@ -65,12 +65,21 @@ export class UsersService {
     return { success: true, message: 'User verified' };
   }
 
-  public async getUsers() {
+  public async getUsers(): Promise<User[]> {
     return await this.userRepository.find();
   }
 
-  public async getUser(id: string): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+  public async getUser(id: string): Promise<SuccessResponse> {
+    let res: User;
+    try {
+      res = await this.userRepository.findOneBy({ id });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    return { success: true, data: res };
   }
 
   public async getUserByEmail(email: string): Promise<User | null> {

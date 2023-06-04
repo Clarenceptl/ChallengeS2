@@ -1,0 +1,98 @@
+$styles: 'heading-l', 'heading-m', 'heading-s', 'heading-xs', 'body-l', 'body-m', 'body-s', 'label-m', 'label-s', 'button-s', 'button-m', 'body-xs';
+$weights: 'bold', 'semibold';
+
+html, :root {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-feature-settings: 'lnum' 1;
+  -webkit-font-feature-settings: 'lnum';
+  -moz-font-feature-settings: 'lnum';
+}
+
+.fw-bold {
+  font-weight: 700 !important;
+}
+
+.fw-semibold {
+  font-weight: 600 !important;
+}
+
+.text-heading-l {
+  font-size: 2rem;
+  letter-spacing: normal !important;
+  line-height: 1.25;
+}
+
+.text-heading-m {
+  font-family: 'Poppins';
+  font-size: 1.4rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.5 !important;
+}
+
+.text-heading-s {
+  font-family: 'Poppins';
+  font-size: 1.125rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.6 !important;
+}
+.text-heading-xs {
+  font-family: 'Poppins';
+  font-size: 1rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.4 !important;
+}
+
+.text-body-l {
+  font-size: 1.125rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.44444 !important;
+}
+.text-body-m {
+  font-size: 1rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.5 !important;
+}
+.text-body-s {
+  font-size: 0.875rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.715 !important;
+}
+.text-body-xs {
+  font-size: 0.75rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.3333333 !important;
+}
+.text-label-m {
+  font-size: 0.875rem !important;
+  letter-spacing: normal !important;
+  text-transform: uppercase;
+  line-height: 1.715 !important;
+}
+.text-label-s {
+  font-size: 0.625rem !important;
+  letter-spacing: normal !important;
+  text-transform: uppercase;
+  line-height: 1.6 !important;
+}
+.text-button-s {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 0.875rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.142 !important;
+}
+.text-button-m {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1rem !important;
+  letter-spacing: normal !important;
+  line-height: 1.5 !important;
+}
+
+@each $style in $styles {
+  @each $weight in $weights {
+    .text-#{$style}-#{$weight} {
+      @extend .text-#{$style};
+      @extend .fw-#{$weight};
+    }
+  }
+}

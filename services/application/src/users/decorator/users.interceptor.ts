@@ -6,24 +6,28 @@ import {
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { User } from '../users.entity';
-import { removePassword } from '../../helpers';
+import { removeDataSensibleUser } from '../../helpers';
+import { SuccessResponse } from '../../global';
 
 @Injectable()
-export class RemovePassword implements NestInterceptor {
+export class CleanResponseUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data: User[] | User) => {
+      map((res: SuccessResponse) => {
+        const { data } = res;
+        let newData: User | User[];
         if (Array.isArray(data)) {
-          return data.map((user) => {
+          newData = data.map((user) => {
             if (typeof user === 'object' && user.password) {
-              return removePassword(user);
+              return removeDataSensibleUser(user);
             }
           });
         } else {
           if (typeof data === 'object' && data.password) {
-            return removePassword(data);
+            newData = removeDataSensibleUser(data);
           }
         }
+        return { ...res, data: newData };
       })
     );
   }

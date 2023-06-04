@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  Put,
   ValidationPipe
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -45,7 +46,7 @@ export class AuthController {
     return this.authService.login(data);
   }
 
-  @Post('verify-account')
+  @Put('verify-account')
   @isPublic()
   @HttpCode(200)
   @ApiResponse({
