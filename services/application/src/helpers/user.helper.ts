@@ -1,8 +1,9 @@
 import { User } from 'src/users/users.entity';
 import * as bcrypt from 'bcrypt';
 
-export const removePassword = (user: User): User => {
+export const removeDataSensibleUser = (user: User): User => {
   delete user.password;
+  delete user.token;
   return user;
 };
 

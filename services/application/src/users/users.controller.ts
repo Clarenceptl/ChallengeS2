@@ -8,7 +8,7 @@ import {
 import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
 import { MessagePattern } from '@nestjs/microservices';
-import { HashPassword, WithoutPassword } from './decorator/users.decorator';
+import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
 import { SERVICE_CMD } from '../global';
 
 @Controller()
@@ -26,14 +26,15 @@ export class UsersController {
     return this.usersService.verifyUser(token);
   }
 
-  @MessagePattern({ cmd: SERVICE_CMD.GET_USER })
-  @WithoutPassword()
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
+  @CleanResponseUser()
   public getUsers() {
     return this.usersService.getUsers();
   }
 
-  @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
-  public getUser(@Param('uuid', ParseUUIDPipe) uuid: string) {
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USER })
+  @CleanResponseUser()
+  public getUser(@Body(ValidationPipe) uuid: string) {
     return this.usersService.getUser(uuid);
   }
 

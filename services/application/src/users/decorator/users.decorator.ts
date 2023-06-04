@@ -1,6 +1,7 @@
 import { UseInterceptors, UseGuards } from '@nestjs/common';
-import { RemovePassword } from './users.interceptor';
+import { CleanResponseUserInterceptor } from './users.interceptor';
 import { HashPasswordGuard } from './users.guard';
 
-export const WithoutPassword = () => UseInterceptors(RemovePassword);
+export const CleanResponseUser = () =>
+  UseInterceptors(CleanResponseUserInterceptor);
 export const HashPassword = () => UseGuards(HashPasswordGuard);
