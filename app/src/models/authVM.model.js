@@ -9,7 +9,7 @@ export const registerSchema = object({
   lastname: string()
     .required('Le champ nom est requis.')
     .min(3, 'Le nom doit contenir au moins 3 caractères.'),
-  email: string().required('Le champ email est requis.').email().trim(),
+  email: string().required('Le champ email est requis.').email("L'email doit être valide.").trim(),
   birthdate: string().required('Le champ date de naissance est requis.').trim(),
   password: string()
     .required('Le champ mot de passe est requis.')
@@ -22,5 +22,13 @@ export const registerSchema = object({
   confirmPassword: string()
     .required('Le champ confiramtion de mot de passe est requis.')
     .oneOf([ref('password'), null], 'Les mots de passe doivent être identiques.')
+    .trim()
+})
+
+export const loginSchema = object({
+  email: string().required('Le champ email est requis.').email("L'email doit être valide.").trim(),
+  password: string()
+    .required('Le champ mot de passe est requis.')
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractères.')
     .trim()
 })
