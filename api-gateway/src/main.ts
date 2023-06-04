@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import * as compression from 'compression';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // const corsOptions = {
@@ -13,7 +12,7 @@ async function bootstrap() {
   // };
   app.use(compression());
   app.enableVersioning({
-    type: VersioningType.URI,
+    type: VersioningType.URI
   });
   app.enableCors();
   if (process.env.NODE_ENV === 'development') {

@@ -17,23 +17,9 @@ import { ErrorModel, isPublic, SuccessResponse } from '../global';
 import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
-@Controller({path: 'auth', version: '1'})
+@Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Get()
-  @isPublic()
-  getUser() {
-    return "Hello test"
-  }
-
-  @Get()
-  @isPublic()
-  @Version('2')
-  getUserv2() {
-    return "Hello test v2"
-  }
-
 
   @Post('register')
   @isPublic()
