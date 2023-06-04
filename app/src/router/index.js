@@ -24,7 +24,7 @@ const router = createRouter({
       component: () => import('@/views/auth/ResetPassword.vue')
     },
     {
-      path: '/validate-account/:token',
+      path: '/verify-account/:token',
       name: 'ValidateAccount',
       component: () => import('@/views/auth/ValidateAccount.vue')
     },

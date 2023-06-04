@@ -21,7 +21,17 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+
+const userStore = useUserStore()
+const user = userStore.getContextUser
+onMounted(async () => {
+  await userStore.loadContextUser()
+  console.log(user)
+})
+</script>
 
 <style scoped>
 .div-background {
