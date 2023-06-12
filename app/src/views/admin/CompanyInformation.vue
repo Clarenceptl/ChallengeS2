@@ -1,54 +1,102 @@
 <template>
   <div>
-    <h1 class="text-center mb-4">Company Informations</h1>
+    <h1 class="text-center my-10">Company Informations</h1>
     <div class="text-center">
-      <v-btn color="appgrey mb-4" @click="router.push('company-information/new')">Add new company information</v-btn>
+      <v-btn color="appgrey mb-4" @click="router.push('company-information/new')" prepend-icon="mdi-plus" >Add new company information</v-btn>
     </div>
     <v-row class="pa-5">
+
+
       <v-col cols="4" class="text-center scrollable">
-        <h2>Revenues</h2>
-        <div
-          v-for="revenue in revenues"
-          :key="revenue.id"
-          class="d-flex justify-center text-style mb-2"
-        >
-          <v-card class="w-100 pa-2 bg-yellow-100" variant="outlined" elevation="4">
-            <h3>{{ revenue.name }}</h3>
-            <div>
-              <v-btn class="w-50 mb-2" color="blue-500">Edit</v-btn>
-            </div>
-            <div>
-              <v-btn class="w-50" color="red-500">Delete</v-btn>
-            </div>
-          </v-card>
+        <div class=" justify-center mb-2">
+          <div class="container">
+            <v-card class="mx-auto">
+              <v-toolbar color="appgrey">
+                <v-toolbar-title class="text-center">Revenues</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+
+              <v-simple-table dense>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="revenue in revenues" :key="revenue.id">
+                      <td class="py-4 px-4">{{revenue.name}}</td>
+                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
+                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </div>
         </div>
       </v-col>
+
       <v-col cols="4" class="text-center scrollable">
-        <h2>Sectors</h2>
-        <div v-for="sector in sectors" :key="sector.id" class="text-style mb-2">
-          <v-card class="w-100 pa-2 bg-yellow-100" variant="outlined" elevation="4">
-            <h3>{{ sector.name }}</h3>
-            <div>
-              <v-btn class="w-50 mb-2" color="blue-500">Edit</v-btn>
-            </div>
-            <div>
-              <v-btn class="w-50" color="red-500">Delete</v-btn>
-            </div>
-          </v-card>
+        <div class=" justify-center mb-2">
+          <div class="container">
+            <v-card class="mx-auto">
+              <v-toolbar color="appgrey">
+                <v-toolbar-title class="text-center">Sectors</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+
+              <v-simple-table dense>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="sector in sectors" :key="sector.id">
+                      <td class="py-4 px-4">{{sector.name}}</td>
+                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
+                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </div>
         </div>
       </v-col>
+
       <v-col cols="4" class="text-center scrollable">
-        <h2>Sizes</h2>
-        <div v-for="size in sizes" :key="size.id" class="text-style mb-2">
-          <v-card class="w-100 pa-2 bg-yellow-100" variant="outlined" elevation="4">
-            <h3>{{ size.name }}</h3>
-            <div>
-              <v-btn class="w-50 mb-2" color="blue-500">Edit</v-btn>
-            </div>
-            <div>
-              <v-btn class="w-50" color="red-500">Delete</v-btn>
-            </div>
-          </v-card>
+        <div class=" justify-center mb-2">
+          <div class="container">
+            <v-card class="mx-auto">
+              <v-toolbar color="appgrey">
+                <v-toolbar-title class="text-center">Sizes</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+
+              <v-simple-table dense>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="size in sizes" :key="size.id">
+                      <td class="py-4 px-4">{{size.name}}</td>
+                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
+                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </div>
         </div>
       </v-col>
     </v-row>
