@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1 class="text-center my-10">Company Informations</h1>
+    <div class="text-center justify-center my-10">
+      <v-btn color="grey lighten-4" :to="{ name: 'Admin' }">Back to dashboard</v-btn>
+    </div>
+
     <div class="text-center">
       <v-btn color="appgrey mb-4" @click="router.push('company-information/new')" prepend-icon="mdi-plus" >Add new company information</v-btn>
     </div>

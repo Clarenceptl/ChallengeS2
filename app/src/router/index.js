@@ -71,6 +71,7 @@ const router = createRouter({
           children: [
             {
               path: '',
+              name: 'CompanyInformationsList',
               component: () => import('@/views/admin/CompanyInformation.vue')
             },
             {

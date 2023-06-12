@@ -5,8 +5,8 @@
       <v-col cols="12" class="text-center">
         <div class="d-flex justify-center mb-2">
           <div class="container">
-            <h3 class="my-10 text-center">The current page displays the user list, providing options to delete or modify
-              users.</h3>
+            <v-btn color="grey lighten-4" :to="{ name: 'Admin' }">Back to dashboard</v-btn>
+            <h3 class="my-10 text-center">The current page displays the user list, providing options to delete or modify users.</h3>
             <v-card class="mx-auto">
               <v-toolbar color="appgrey">
                 <v-toolbar-title></v-toolbar-title>
