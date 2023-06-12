@@ -25,4 +25,9 @@ export class UserController {
   public getUser(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.userService.getUser(uuid);
   }
+
+  @Get('/getSelf')
+  public getSelfUser() {
+    return this.userService.getSelfUser();
+  }
 }

@@ -26,4 +26,18 @@ export class UserService {
     }
     return res;
   }
+
+  public async getSelfUser() {
+    let res: SuccessResponse;
+
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.GET_SELF_USER }, {})
+      );
+    } catch (error) {
+      console.log('error', error);
+      handleErrors(error);
+    }
+    return res;
+  }
 }
