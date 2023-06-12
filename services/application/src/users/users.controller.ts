@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   ParseUUIDPipe,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -24,6 +25,13 @@ export class UsersController {
   @MessagePattern({ cmd: SERVICE_CMD.VERIFY_ACCOUNT })
   public async verifyUser(@Body(ValidationPipe) token: string) {
     return this.usersService.verifyUser(token);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
+  @CleanResponseUser()
+  public getSelfUser(@Req() req: any) {
+    const { id } = req.user;
+    return this.usersService.getUser(id ?? '');
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
