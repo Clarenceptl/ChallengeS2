@@ -25,15 +25,10 @@ export const useUserStore = defineStore('userStore', () => {
       const accessToken = jwtDecode(token)
       const { id } = accessToken
       const res = await UserService.getUser(id)
-      console.log(res, 'res')
       if (res?.success) {
-        contextUser.id = res.data.id
-        contextUser.firstname = res.data.firstname
-        contextUser.lastname = res.data.lastname
-        contextUser.email = res.data.email
-        contextUser.birthdate = res.data.birthdate
+        Object.assign(contextUser, res.data)
       }
-      return
+      return true
     }
   }
 
@@ -44,7 +39,6 @@ export const useUserStore = defineStore('userStore', () => {
 
   const login = async (data) => {
     const res = await AuthService.loginUser(data)
-    console.log(res, 'res')
     if (res?.success) {
       localStorage.setItem('bearer-token', res.token)
     }

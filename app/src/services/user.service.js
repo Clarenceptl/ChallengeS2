@@ -16,4 +16,20 @@ export class UserService {
       return error.response
     }
   }
+
+  static async getSelfUser() {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/user/getSelf`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('bearer-token')}`
+        }
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }

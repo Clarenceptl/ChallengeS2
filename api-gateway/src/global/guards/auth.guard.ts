@@ -54,6 +54,7 @@ export class AuthGuard implements CanActivate {
     if (!res.success) {
       throw new BadRequestException('User is invalid');
     }
+    request['user'] = res.data;
     return true;
     // TODO : user service
     // const roles = this.reflector.get<UserRole[]>(
