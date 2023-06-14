@@ -52,4 +52,17 @@ export class AuthService {
 
     return { success: true, message: 'Votre email est vérifié' };
   }
+
+  public async getRefreshToken(refreshToken: string | undefined) {
+    if (!refreshToken) throw new BadRequestException('Token is required');
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.GET_REFRESH_TOKEN }, refreshToken)
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
 }

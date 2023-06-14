@@ -58,4 +58,10 @@ export class AuthController {
   public verifyAccount(@Body(ValidationPipe) data: VerifyAccountRequest) {
     return this.authService.verifyAccount(data?.token);
   }
+
+  @Post('refresh-token')
+  @HttpCode(200)
+  public refreshToken(@Body(ValidationPipe) data: { refreshToken: string }) {
+    return this.authService.getRefreshToken(data.refreshToken);
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Req, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { SERVICE_CMD } from '../enum';
@@ -21,5 +21,16 @@ export class AuthController {
   @MessagePattern({ cmd: SERVICE_CMD.VERIFY_ACCOUNT })
   public verifyAccount(@Body(ValidationPipe) token: string) {
     return this.authService.verifyAccount(token);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_REFRESH_TOKEN })
+  public getRefreshToken(
+    @Body(ValidationPipe) refreshToken: string,
+    context: any
+  ) {
+    // TODO : fix bug with req
+    console.log(context, 'req');
+    console.log(refreshToken, 'refreshToken');
+    return this.authService.getRefreshToken(null, refreshToken);
   }
 }

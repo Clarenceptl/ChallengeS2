@@ -14,6 +14,32 @@ export class AuthService {
     @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
   ) {}
 
+  public getRefreshToken(req: any, refreshToken: string) {
+    const payload = this.jwtService.verify(refreshToken);
+    const { id, email } = payload;
+    console.log('payload', payload);
+    console.log('req.user', req.user);
+    if (!email || email !== req.user.email) {
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Unauthorized'
+      });
+    }
+    const newToken = this.jwtService.sign(
+      {
+        id
+      },
+      {
+        expiresIn: '30m'
+      }
+    );
+    const data = {
+      refreshToken,
+      token: newToken
+    };
+    return { success: true, data };
+  }
+
   public async login(data: LoginRequest) {
     const user = await lastValueFrom(
       this.client.send({ cmd: SERVICE_CMD.GET_USER_BY_EMAIL }, data.email)
@@ -41,11 +67,30 @@ export class AuthService {
       });
     }
 
-    const token = this.jwtService.sign({
-      id: user.id
-    });
+    const token = this.jwtService.sign(
+      {
+        id: user.id
+      },
+      {
+        expiresIn: '12m'
+      }
+    );
 
-    return { success: true, token };
+    const refreshToken = this.jwtService.sign(
+      {
+        id: user.email
+      },
+      {
+        expiresIn: '1d'
+      }
+    );
+
+    const response = {
+      refreshToken,
+      token
+    };
+
+    return { success: true, data: response };
   }
 
   public async register(data: CreatedUserRequest) {
