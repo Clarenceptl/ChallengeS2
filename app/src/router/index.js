@@ -9,7 +9,10 @@ const router = createRouter({
       name: 'Home',
       component: () => import('@/views/HomeView.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next() : next({ name: 'Login' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
       }
     },
     {
@@ -17,7 +20,10 @@ const router = createRouter({
       name: 'Login',
       component: () => import('@/views/auth/LoginView.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next({ name: 'Home' }) : next()
+        if (!(await isConnected())) {
+          return next()
+        }
+        return next({ name: 'Home' })
       }
     },
     {
@@ -25,7 +31,10 @@ const router = createRouter({
       name: 'Register',
       component: () => import('@/views/auth/RegisterView.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next({ name: 'Home' }) : next()
+        if (!(await isConnected())) {
+          return next()
+        }
+        return next({ name: 'Home' })
       }
     },
     {
@@ -33,7 +42,10 @@ const router = createRouter({
       name: 'ResetPassword',
       component: () => import('@/views/auth/ResetPassword.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next({ name: 'Home' }) : next()
+        if (!(await isConnected())) {
+          return next()
+        }
+        return next({ name: 'Home' })
       }
     },
     {
@@ -41,7 +53,10 @@ const router = createRouter({
       name: 'ValidateAccount',
       component: () => import('@/views/auth/ValidateAccount.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next({ name: 'Home' }) : next()
+        if (!(await isConnected())) {
+          return next()
+        }
+        return next({ name: 'Home' })
       }
     },
     {
@@ -49,7 +64,10 @@ const router = createRouter({
       name: 'Profile',
       component: () => import('@/views/ProfileView.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next() : next({ name: 'Login' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
       }
     },
     {
@@ -57,7 +75,10 @@ const router = createRouter({
       name: 'RegisterCompany',
       component: () => import('@/views/RegisterCompany.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next() : next({ name: 'Login' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
       }
     },
     {
@@ -65,13 +86,19 @@ const router = createRouter({
       name: 'JobOffers',
       component: () => import('@/views/JobOffers.vue'),
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next() : next({ name: 'Login' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
       }
     },
     {
       path: '/admin/',
       beforeEnter: async (to, from, next) => {
-        isConnected() ? next() : next({ name: 'Login' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
       },
       children: [
         {
