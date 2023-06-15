@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { SERVICE_CMD } from '../enum';
 import { CreatedUserRequest, LoginRequest } from './auth.dto';
+import { User } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,12 +26,8 @@ export class AuthController {
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_REFRESH_TOKEN })
   public getRefreshToken(
-    @Body(ValidationPipe) refreshToken: string,
-    context: any
+    @Body(ValidationPipe) data: { user: User; refreshToken: string }
   ) {
-    // TODO : fix bug with req
-    console.log(context, 'req');
-    console.log(refreshToken, 'refreshToken');
-    return this.authService.getRefreshToken(null, refreshToken);
+    return this.authService.getRefreshToken(data);
   }
 }

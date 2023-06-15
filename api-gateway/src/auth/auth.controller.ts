@@ -4,6 +4,7 @@ import {
   HttpCode,
   Post,
   Put,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -61,7 +62,10 @@ export class AuthController {
 
   @Post('refresh-token')
   @HttpCode(200)
-  public refreshToken(@Body(ValidationPipe) data: { refreshToken: string }) {
-    return this.authService.getRefreshToken(data.refreshToken);
+  public refreshToken(
+    @Body(ValidationPipe) data: { refreshToken: string },
+    @Req() req: Request
+  ) {
+    return this.authService.getRefreshToken(req, data.refreshToken);
   }
 }

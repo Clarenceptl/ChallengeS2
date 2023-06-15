@@ -6,6 +6,26 @@ import {
   MinLength
 } from 'class-validator';
 
+enum UserRole {
+  ROLE_USER = 'ROLE_USER',
+  ROLE_EMPLOYEUR = 'ROLE_EMPLOYEUR',
+  ROLE_ADMIN = 'ROLE_ADMIN'
+}
+
+export class User {
+  id: string;
+  email: string;
+  password: string;
+  roles: UserRole[];
+  firstname: string;
+  lastname: string;
+  birthdate: string;
+  isVerified: boolean;
+  premium: boolean;
+  token: string;
+  createdAt: string;
+}
+
 export class CreatedUserRequest {
   @IsString()
   @IsDefined()
