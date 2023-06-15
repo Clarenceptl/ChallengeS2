@@ -6,6 +6,7 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginRequest, CreatedUserRequest } from './auth.dto';
 import { checkDate, formatDate } from 'src/helpers';
+import { User } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
   ) {}
+
+  public getRefreshToken(data: { user: User; refreshToken: string }) {
+    const { refreshToken, user } = data;
+    const payload = this.jwtService.verify(refreshToken);
+    const { email } = payload;
+    if (!email || email !== user.email) {
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Unauthorized'
+      });
+    }
+    const newToken = this.jwtService.sign(
+      {
+        id: user.id
+      },
+      {
+        expiresIn: '30m'
+      }
+    );
+    const res = {
+      refreshToken,
+      token: newToken
+    };
+    return { success: true, data: res };
+  }
 
   public async login(data: LoginRequest) {
     const user = await lastValueFrom(
@@ -41,11 +67,30 @@ export class AuthService {
       });
     }
 
-    const token = this.jwtService.sign({
-      id: user.id
-    });
+    const token = this.jwtService.sign(
+      {
+        id: user.id
+      },
+      {
+        expiresIn: '30m'
+      }
+    );
 
-    return { success: true, token };
+    const refreshToken = this.jwtService.sign(
+      {
+        email: user.email
+      },
+      {
+        expiresIn: '1d'
+      }
+    );
+
+    const response = {
+      refreshToken,
+      token
+    };
+
+    return { success: true, data: response };
   }
 
   public async register(data: CreatedUserRequest) {

@@ -40,7 +40,8 @@ export const useUserStore = defineStore('userStore', () => {
   const login = async (data) => {
     const res = await AuthService.loginUser(data)
     if (res?.success) {
-      localStorage.setItem('bearer-token', res.token)
+      localStorage.setItem('bearer-token', res.data.token)
+      localStorage.setItem('refresh-token', res.data.refreshToken)
     }
     return res
   }
