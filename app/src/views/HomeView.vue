@@ -29,7 +29,7 @@ const userStore = useUserStore()
 const user = userStore.getContextUser
 onMounted(async () => {
   await userStore.loadContextUser()
-  console.log(user)
+  console.log(user, 'user')
 })
 </script>
 
