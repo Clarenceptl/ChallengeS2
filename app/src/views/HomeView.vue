@@ -17,7 +17,17 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+
+const userStore = useUserStore()
+const user = userStore.getContextUser
+onMounted(async () => {
+  await userStore.loadContextUser()
+  console.log(user, 'user')
+})
+</script>
 
 <style scoped>
 .div-background {
@@ -37,14 +47,17 @@
   .catch-phrase {
     font-size: 4rem;
     font-weight: 700;
+    color: #338573;
   }
   .small-text {
     font-size: 1.5rem;
     font-weight: 400;
+    color: #338573;
   }
   .smaller-text {
     font-size: 1rem;
     font-weight: 400;
+    color: #338573;
   }
 }
 
@@ -57,10 +70,12 @@
   .catch-phrase {
     font-size: 1rem;
     font-weight: 700;
+    color: #338573;
   }
   .small-text {
     font-size: 0.5rem;
     font-weight: 400;
+    color: #338573;
   }
 }
 </style>

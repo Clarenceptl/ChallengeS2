@@ -2,17 +2,12 @@ FROM node:18.15-alpine As development
 
 WORKDIR /auth-service
 
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
 
 # Bundle app source
-COPY --chown=node:node . .
-
-# Use the node user from the image (instead of the root user)
-USER node
-
-EXPOSE 3022
+COPY . .
 
 CMD ["npm", "run", "start:dev"]
