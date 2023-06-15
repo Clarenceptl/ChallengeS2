@@ -6,6 +6,7 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginRequest, CreatedUserRequest } from './auth.dto';
 import { checkDate, formatDate } from 'src/helpers';
+import { User } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,12 +15,11 @@ export class AuthService {
     @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
   ) {}
 
-  public getRefreshToken(req: any, refreshToken: string) {
+  public getRefreshToken(data: { user: User; refreshToken: string }) {
+    const { refreshToken, user } = data;
     const payload = this.jwtService.verify(refreshToken);
-    const { id, email } = payload;
-    console.log('payload', payload);
-    console.log('req.user', req.user);
-    if (!email || email !== req.user.email) {
+    const { email } = payload;
+    if (!email || email !== user.email) {
       throw new RpcException({
         statusCode: 401,
         message: 'Unauthorized'
@@ -27,17 +27,17 @@ export class AuthService {
     }
     const newToken = this.jwtService.sign(
       {
-        id
+        id: user.id
       },
       {
         expiresIn: '30m'
       }
     );
-    const data = {
+    const res = {
       refreshToken,
       token: newToken
     };
-    return { success: true, data };
+    return { success: true, data: res };
   }
 
   public async login(data: LoginRequest) {
@@ -72,13 +72,13 @@ export class AuthService {
         id: user.id
       },
       {
-        expiresIn: '12m'
+        expiresIn: '30m'
       }
     );
 
     const refreshToken = this.jwtService.sign(
       {
-        id: user.email
+        email: user.email
       },
       {
         expiresIn: '1d'
