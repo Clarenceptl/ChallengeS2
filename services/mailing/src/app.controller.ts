@@ -10,7 +10,6 @@ export class AppController {
 
   @EventPattern(SERVICE_CMD.GET_REGISTER_MAIL)
   public async register(data: RegisterMailRequest): Promise<void> {
-    console.log('register mail', data);
     await this.appService.register(data);
   }
 }

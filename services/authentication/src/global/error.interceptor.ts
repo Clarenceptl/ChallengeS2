@@ -18,11 +18,9 @@ export class ErrorsInterceptor implements NestInterceptor {
           return throwError(() => err);
         }
         if (err instanceof BadRequestException) {
-          return throwError(
-            () => new RpcException({ message: err['response'].message })
-          );
+          return throwError(() => new RpcException(err.getResponse()));
         }
-        return throwError(() => new RpcException({ message: err.message }));
+        return throwError(() => new RpcException(err));
       })
     );
   }

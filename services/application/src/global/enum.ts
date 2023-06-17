@@ -14,7 +14,8 @@ export enum SERVICE_CMD {
   GET_COMPANY_BY_ID = 'get-company-by-id',
   DELETE_COMPANY = 'delete-company',
   UPDATE_COMPANY = 'update-company',
-  GET_COMPANIES = 'get-companies'
+  GET_COMPANIES = 'get-companies',
+  VERIFY_ACCOUNT = 'auth_verify_account'
 }
 
 export enum SERVICE_NAME {

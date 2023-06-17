@@ -5,16 +5,16 @@ import {
   Injectable
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-// import { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 // import { JsonWebTokenError } from 'jsonwebtoken';
-// import { UsersService } from 'src/users/users.service';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   public constructor(
-    // private readonly jwtService: JwtService,
-    // private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly usersService: UserService,
     private readonly reflector: Reflector
   ) {}
 
@@ -43,27 +43,32 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new BadRequestException('Token is empty');
     }
+    let res;
+    try {
+      const payload = this.jwtService.verify(token);
+      res = await this.usersService.getUser(payload.id);
+    } catch (error) {
+      throw new BadRequestException('Token is invalid');
+    }
 
-    // try {
-    //   // const payload = this.jwtService.verify(token);
-    //   // const user = await this.usersService.getUser(payload.id);
+    if (!res.success) {
+      throw new BadRequestException('User is invalid');
+    }
+    request['user'] = res.data;
+    return true;
+    // TODO : user service
+    // const roles = this.reflector.get<UserRole[]>(
+    //   'roles',
+    //   context.getHandler()
+    // );
 
-    //   // if (!user) {
-    //   //   throw new BadRequestException('User is invalid');
-    //   // }
-    //   // TODO : user service
-    //   // const roles = this.reflector.get<UserRole[]>(
-    //   //   'roles',
-    //   //   context.getHandler()
-    //   // );
-
-    //   // if (roles) {
-    //   //   if (!roles.includes(user.role)) {
-    //   //     throw new ForbiddenException(
-    //   //       'User is not allowed to access this resource'
-    //   //     );
-    //   //   }
-    //   // }
+    // if (roles) {
+    //   if (!roles.includes(user.role)) {
+    //     throw new ForbiddenException(
+    //       'User is not allowed to access this resource'
+    //     );
+    //   }
+    // }
 
     //   return true;
     // } catch (error) {

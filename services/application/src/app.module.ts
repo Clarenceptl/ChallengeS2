@@ -7,12 +7,13 @@ import { CompanyRevenueOptionsModule } from './company-revenue-options/company-r
 import { CompanySectorOptionsModule } from './company-sector-options/company-sector-options.module';
 import { CompanySizeOptionsModule } from './company-size-options/company-size-options.module';
 import { JobAdsModule } from './job-ads/job-ads.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'postgresdb',
+      host: process.env.DATABASE_POSTGRES_HOST,
       port: 5432,
       username: process.env.DATABASE_POSTGRES_USER,
       password: process.env.DATABASE_POSTGRES_PASSWORD,
@@ -26,7 +27,8 @@ import { JobAdsModule } from './job-ads/job-ads.module';
     CompanyRevenueOptionsModule,
     CompanySectorOptionsModule,
     CompanySizeOptionsModule,
-    JobAdsModule
+    JobAdsModule,
+    SeedModule
   ],
   controllers: [],
   providers: []

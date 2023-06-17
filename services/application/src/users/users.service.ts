@@ -1,16 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './users.entity';
+import { User, UserRole } from './users.entity';
 import {
   CreatedUserRequest,
   UpdatedUserRequest,
   SendEmailRequest
 } from './users.dto';
-import { SERVICE_CMD, SERVICE_NAME } from 'src/global';
+import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { createRandToken } from 'src/helpers';
+import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
+import type { ErrorModel } from '../global';
 
 @Injectable()
 export class UsersService {
@@ -25,35 +26,60 @@ export class UsersService {
     const userWithToken = { ...user, token };
 
     try {
-      const createUser = this.userRepository.create(userWithToken);
-      await this.userRepository.save(createUser);
+      await this.userRepository.insert(userWithToken);
     } catch (error) {
-      throw new RpcException('Email already exist');
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Email already exist'
+      });
     }
     const dataEmail: SendEmailRequest = {
       email: user.email,
       token,
       firstname: user.firstname
     };
-    console.log('envoi email');
-    const res = await lastValueFrom(
+
+    await lastValueFrom(
       this.mailingService.emit<SendEmailRequest>(
         SERVICE_CMD.GET_REGISTER_MAIL,
         dataEmail
       )
     );
 
-    console.log('ress email', res);
-
     return { success: true, message: 'User created' };
   }
 
-  public async getUsers() {
+  public async verifyUser(token: string) {
+    const user = await this.userRepository.findOneBy({ token });
+    if (!user) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+
+    user.isVerified = true;
+    user.token = null;
+
+    await this.userRepository.save(user);
+    return { success: true, message: 'User verified' };
+  }
+
+  public async getUsers(): Promise<User[]> {
     return await this.userRepository.find();
   }
 
-  public async getUser(id: string): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+  public async getUser(id: string): Promise<SuccessResponse> {
+    let res: User;
+    try {
+      res = await this.userRepository.findOneBy({ id });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    return { success: true, data: res };
   }
 
   public async getUserByEmail(email: string): Promise<User | null> {
@@ -67,5 +93,40 @@ export class UsersService {
   public async deleteUser(id: string) {
     await this.userRepository.delete({ id });
     return { success: true, message: 'User delete' };
+  }
+
+  public async seed() {
+    await this.userRepository.clear();
+    const password: string = encryptPassword('password');
+    let user = new User();
+    user = Object.assign(user, {
+      email: 'admin@admin.com',
+      password: password,
+      firstname: 'Admin',
+      lastname: 'Jhon',
+      birthdate: '01/01/1990',
+      role: UserRole.ROLE_ADMIN,
+      isVerified: true
+    });
+
+    const administrator = this.userRepository.create(user);
+
+    user = Object.assign(user, {
+      email: 'user@user.com',
+      firstname: 'User',
+      role: UserRole.ROLE_USER
+    });
+
+    const basicUser = this.userRepository.create(user);
+
+    user = Object.assign(user, {
+      email: 'employeur@employeur.com',
+      firstname: 'Employeur',
+      role: UserRole.ROLE_ADMIN
+    });
+
+    const employeur = this.userRepository.create(user);
+
+    await this.userRepository.save([administrator, basicUser, employeur]);
   }
 }
