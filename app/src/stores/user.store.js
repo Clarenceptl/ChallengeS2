@@ -1,32 +1,32 @@
 import { computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { AuthService, UserService } from '@/services'
-import { formatDateToApi } from '@/helpers'
+import { formatDateToApi, clearTokens } from '@/helpers'
 import jwtDecode from 'jwt-decode'
-import { useToastStore } from './toast.store'
-
-const { createToast } = useToastStore()
 
 export const useUserStore = defineStore('userStore', () => {
   //#region values
-  const contextUser = reactive({})
+  const contextUser = reactive({
+    user: {}
+  })
   //#endregion
 
   //#region getters
-  const getContextUser = computed(() => contextUser)
+  const getContextUser = computed(() => contextUser.user)
+  const isConnected = computed(() => !!contextUser.user?.id)
   //#endregion
 
   //#region Services methods
   const loadContextUser = async () => {
-    if (!contextUser.id) {
+    if (!contextUser.user?.id) {
       const token = localStorage.getItem('bearer-token')
-      if (!token) return createToast({ message: 'No token found', type: 'error' })
+      if (!token) return null
 
       const accessToken = jwtDecode(token)
       const { id } = accessToken
       const res = await UserService.getUser(id)
       if (res?.success) {
-        Object.assign(contextUser, res.data)
+        Object.assign(contextUser.user, res.data)
       }
       return true
     }
@@ -46,9 +46,14 @@ export const useUserStore = defineStore('userStore', () => {
     return res
   }
 
+  const logout = () => {
+    clearTokens()
+    contextUser.user = {}
+  }
+
   const verifyEmail = async (token) => {
     return await AuthService.verifyEmail({ token })
   }
   //#endregion
-  return { register, verifyEmail, login, loadContextUser, getContextUser }
+  return { register, verifyEmail, login, loadContextUser, getContextUser, isConnected, logout }
 })
