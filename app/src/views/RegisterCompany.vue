@@ -64,7 +64,7 @@
           <label>SIRET</label>
           <v-text-field
             clearable
-            v-model="companyData.SIRET"
+            v-model="companyData.siret"
             type="text"
             color="appgrey"
             counter="10"
@@ -117,7 +117,7 @@ let companyData = ref({
   website: '',
   description: '',
   founder: '',
-  SIRET: '',
+  siret: '',
   size: '',
   revenue: '',
   sector: '',
