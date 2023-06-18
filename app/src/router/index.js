@@ -127,6 +127,35 @@ const router = createRouter({
       ]
     },
     {
+      path: '/employer/',
+      name: 'Employer',
+      beforeEnter: async (to, from, next) => {
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
+      },
+      children: [
+        {
+          path: 'appointments',
+          component: () => import('@/views/employer/Appointments.vue')
+        },
+        {
+          path: 'jobs/',
+          children: [
+            {
+              path: '',
+              component: () => import('@/views/employer/Jobs.vue')
+            },
+            {
+              path: ':id/candidates',
+              component: () => import('@/views/employer/Candidates.vue')
+            }
+          ]
+        }
+      ]
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/views/404NotFound.vue')
