@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="6" class="text-center justify-content-center">
-      <img src="../assets/bulle.svg" alt="bulle" class="logo"/>
+      <img src="@/assets/bulle.svg" alt="bulle" class="logo"/>
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16 mb-10">Create Your Company</h1>
@@ -130,7 +130,7 @@ max-width: 500px;
 }
 
 .col-bg-image {
-background-image: url('../assets/bulle.svg');
+background-image: url('@/assets/bulle.svg');
 background-repeat: no-repeat;
 background-size: cover;
 background-position: center;

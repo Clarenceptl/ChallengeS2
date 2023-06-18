@@ -38,9 +38,9 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import UsersSvg from "../../assets/users.svg";
-import CompaniesSvg from "../../assets/companies.svg";
-import JobsSvg from "../../assets/jobs.svg";
+import UsersSvg from "@/assets/users.svg";
+import CompaniesSvg from "@/assets/companies.svg";
+import JobsSvg from "@/assets/jobs.svg";
 
 const router = useRouter();
 </script>

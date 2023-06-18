@@ -31,7 +31,7 @@ onMounted(async () => {
 
 <style scoped>
 .div-background {
-  background-image: url('../assets/landing-background.png');
+  background-image: url('@/assets/landing-background.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

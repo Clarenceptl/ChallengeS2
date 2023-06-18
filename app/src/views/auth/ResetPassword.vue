@@ -1,11 +1,7 @@
 <template>
   <v-row>
     <v-col cols="6" class="text-center justify-content-center">
-<<<<<<< HEAD
-      <img src="../../assets/bulle.svg" alt="bulle" class="logo"/>
-=======
-      <img src="../assets/bulle.svg" alt="bulle" class="logo"/>
->>>>>>> origin/develop
+      <img src="@/assets/bulle.svg" alt="bulle" class="logo"/>
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16 mb-10">Reset your password</h1>
