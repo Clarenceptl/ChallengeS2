@@ -5,7 +5,9 @@
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16">Login</h1>
-      <div class="mb-10">Don't have an account ? <a href="/register">Create new account</a></div>
+      <div class="mb-10">
+        Don't have an account ? <router-link to="/register">Create new account</router-link>
+      </div>
       <div class="form-width">
         <v-form @submit.prevent="submit">
           <v-text-field
@@ -122,9 +124,6 @@ const submit = handleSubmit(async (values) => {
   background-position: center;
   width: 100%;
   height: 100vh;
-}
-
-@media (min-width: 768px) {
 }
 
 @media (max-width: 768px) {

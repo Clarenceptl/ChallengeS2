@@ -5,7 +5,9 @@
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16">Create Your Account</h1>
-      <div class="mb-10">Already have an account ? <a href="/login">Login</a></div>
+      <div class="mb-10">
+        Already have an account ? <router-link to="/login">Login</router-link>
+      </div>
       <div class="form-width">
         <v-form @submit.prevent="submit">
           <v-text-field
@@ -83,7 +85,7 @@
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import { useUserStore, useToastStore } from '@/stores'
-import { registerSchema } from "@/models";
+import { registerSchema } from '@/models'
 
 const stores = {
   user: useUserStore(),

@@ -3,7 +3,7 @@
     <div class="text-center mb-4">
       <h1 class="mt-2">Profile</h1>
       <v-avatar size="250" color="appgrey">
-        <img src="../assets/avatar.svg" alt="bulle" class="logo"/>
+        <img src="@/assets/avatar.svg" alt="bulle" class="logo"/>
       </v-avatar>
     </div>
     <v-row>

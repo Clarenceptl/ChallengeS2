@@ -1,17 +1,9 @@
 <template>
   <div class="pa-10">
     <div class="text-center mb-2">
-      <h1>Job Offers</h1>
+      <h1>My Job Offers</h1>
+      <v-btn color="appgrey mb-4" @click="newJobDialog = true">Add a new job offer</v-btn>
     </div>
-    <v-row>
-      <v-col cols="5" offset="1">
-        <v-text-field clearable type="text" color="appgrey" variant="outlined" label="Search a particular job"/>
-      </v-col>
-      <v-col cols="5">
-        <v-text-field clearable type="text" color="appgrey" variant="outlined" label="Look for a particular field"/>
-      </v-col>
-    </v-row>
-    <v-divider class="mb-4" />
     <v-row>
       <v-col cols="4" class="column-scrollable">
         <v-card variant="outlined" class="mb-2 bg-green-200">
@@ -142,7 +134,8 @@
               Job Offer
             </div>
             <div>
-              <v-btn color="appgrey" @click="applyDialog = true">Apply</v-btn>
+              <v-btn color="blue-500" @click="editDialog = true">Edit</v-btn>
+              <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
             </div>
           </v-card-title>
           <v-card-text>
@@ -171,16 +164,136 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="applyDialog" max-width="600">
+    <v-dialog v-model="editDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Apply to this job</h2>
+          <h2>Edit this job</h2>
         </v-card-title>
         <v-card-subtitle>
           Are you sure you want to apply to this job ?
         </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <label>Job Title</label>
+            <v-text-field
+              clearable
+              placeholder="Title"
+              type="text"
+            />
+            <label>Job Description</label>
+            <v-textarea
+              clearable
+              placeholder="Description"
+              type="text"
+            />
+            <label>Job City</label>
+            <v-text-field
+              clearable
+              placeholder="City"
+              type="text"
+            />
+            <label>Job Country</label>
+            <v-text-field
+              clearable
+              placeholder="Country"
+              type="text"
+            />
+            <label>Job Contract Type</label>
+            <v-text-field
+              clearable
+              placeholder="Contract Type"
+              type="text"
+            />
+            <label>Job Salary</label>
+            <v-text-field
+              clearable
+              placeholder="Salary"
+              type="text"
+            />
+            <label>Job Duration</label>
+            <v-text-field
+              clearable
+              placeholder="Duration"
+              type="text"
+            />
+          </v-form>
+        </v-card-text>
         <v-card-actions>
-          <v-btn color="red-500" text @click="applyDialog = false">Cancel</v-btn>
+          <v-btn color="red-500" text @click="editDialog = false">Cancel</v-btn>
+          <v-btn color="blue-800" text>Yes</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="deleteDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Delete this job</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to delete this job ?
+        </v-card-subtitle>
+        <v-card-actions>
+          <v-btn color="red-500" text @click="deleteDialog = false">Cancel</v-btn>
+          <v-btn color="blue-800" text>Yes</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="newJobDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Create Job</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to create this job ?
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <label>Job Title</label>
+            <v-text-field
+              clearable
+              placeholder="Title"
+              type="text"
+            />
+            <label>Job Description</label>
+            <v-textarea
+              clearable
+              placeholder="Description"
+              type="text"
+            />
+            <label>Job City</label>
+            <v-text-field
+              clearable
+              placeholder="City"
+              type="text"
+            />
+            <label>Job Country</label>
+            <v-text-field
+              clearable
+              placeholder="Country"
+              type="text"
+            />
+            <label>Job Contract Type</label>
+            <v-text-field
+              clearable
+              placeholder="Contract Type"
+              type="text"
+            />
+            <label>Job Salary</label>
+            <v-text-field
+              clearable
+              placeholder="Salary"
+              type="text"
+            />
+            <label>Job Duration</label>
+            <v-text-field
+              clearable
+              placeholder="Duration"
+              type="text"
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="red-500" text @click="newJobDialog = false">Cancel</v-btn>
           <v-btn color="blue-800" text>Yes</v-btn>
         </v-card-actions>
       </v-card>
@@ -191,7 +304,9 @@
 <script setup>
 import { ref } from 'vue';
 
-let applyDialog = ref(false);
+let editDialog = ref(false);
+let deleteDialog = ref(false);
+let newJobDialog = ref(false);
 </script>
 
 <style scoped>

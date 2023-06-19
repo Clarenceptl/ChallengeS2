@@ -12,8 +12,8 @@ import 'vue-toast-notification/dist/theme-sugar.css'
 const app = createApp(App)
 
 app.use(ToastPlugin)
-app.use(createPinia())
 app.use(vuetify)
 app.use(router)
+app.use(createPinia())
 
 app.mount('#app')
