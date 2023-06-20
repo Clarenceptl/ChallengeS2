@@ -53,8 +53,10 @@ export class CompanyService {
         throw new RpcException('Company not found');
       }
       const resultCompanyEmail: SendEmailRequest = {
-        email: company.founder.email,
-        firstname: company.founder.firstname
+        // email: company.founder.email,
+        email: 'toto@gmail.com',
+        // firstname: company.founder.firstname
+        firstname: 'toto'
       };
 
       console.log('envoi email');

@@ -5,6 +5,8 @@ import { AuthGuard } from './global';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AdminModule } from './admin/admin.module';
+import { CompanySizeOptionsModule } from './company-size-options/company-size-options.module';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { JwtModule } from '@nestjs/jwt';
       ttl: 60,
       limit: 10
     }),
-    UserModule
+    UserModule,
+    AdminModule,
+    CompanySizeOptionsModule
   ],
 
   controllers: [],

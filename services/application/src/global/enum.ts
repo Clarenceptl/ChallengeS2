@@ -15,6 +15,7 @@ export enum SERVICE_CMD {
   DELETE_COMPANY = 'delete-company',
   UPDATE_COMPANY = 'update-company',
   GET_COMPANIES = 'get-companies',
+  GET_COMPANY_SIZE_OPTIONS = 'get-company-size-options',
   VERIFY_ACCOUNT = 'auth_verify_account'
 }
 

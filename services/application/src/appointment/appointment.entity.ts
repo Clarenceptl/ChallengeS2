@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  IsNull,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 
 import { User } from '../users/users.entity';
 import { JobAds } from '../job-ads/job-ads.entity';
@@ -7,8 +13,11 @@ export class Appointment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user)
-  candidate?: User;
+  // @ManyToOne(() => User, (user) => user, {
+  //   nullable: true,
+  //   onDelete: 'CASCADE'
+  // })
+  // candidate?: User;
 
   @ManyToOne(() => JobAds, (job) => job)
   job: JobAds;

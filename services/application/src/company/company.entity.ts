@@ -57,8 +57,11 @@ export class Company {
   })
   description: string;
 
-  @ManyToOne(() => User, (user) => user)
-  founder?: User;
+  // @ManyToOne(() => User, (user) => user, {
+  //   nullable: true,
+  //   onDelete: 'CASCADE'
+  // })
+  // founder?: User;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -1,5 +1,10 @@
-export class CompanySizeOptionsDto {
-  size: any;
+import { IsNotEmpty, IsString } from 'class-validator';
+import { CompanyDto } from '../company/company.dto';
 
-  companies: any;
+export class CompanySizeOptionsDto {
+  @IsString()
+  @IsNotEmpty()
+  size: string;
+
+  companies: CompanyDto[];
 }

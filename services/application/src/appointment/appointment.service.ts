@@ -51,8 +51,10 @@ export class AppointmentService {
         throw new RpcException('Appointment not found');
       }
       const resultAppointmailEmail: SendEmailRequest = {
-        email: appointment.candidate.email,
-        firstname: appointment.candidate.firstname
+        // email: appointment.candidate.email,
+        // firstname: appointment.candidate.firstname
+        email: 'toto@gmail.com',
+        firstname: 'toto'
       };
 
       console.log('envoi email');
