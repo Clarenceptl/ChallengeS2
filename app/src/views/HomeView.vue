@@ -17,11 +17,21 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+
+const userStore = useUserStore()
+const user = userStore.getContextUser
+onMounted(async () => {
+  await userStore.loadContextUser()
+  console.log(user, 'user')
+})
+</script>
 
 <style scoped>
 .div-background {
-  background-image: url('../assets/landing-background.png');
+  background-image: url('@/assets/landing-background.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
