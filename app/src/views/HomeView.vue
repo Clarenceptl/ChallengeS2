@@ -47,17 +47,14 @@ onMounted(async () => {
   .catch-phrase {
     font-size: 4rem;
     font-weight: 700;
-    color: #338573;
   }
   .small-text {
     font-size: 1.5rem;
     font-weight: 400;
-    color: #338573;
   }
   .smaller-text {
     font-size: 1rem;
     font-weight: 400;
-    color: #338573;
   }
 }
 
@@ -70,12 +67,10 @@ onMounted(async () => {
   .catch-phrase {
     font-size: 1rem;
     font-weight: 700;
-    color: #338573;
   }
   .small-text {
     font-size: 0.5rem;
     font-weight: 400;
-    color: #338573;
   }
 }
 </style>

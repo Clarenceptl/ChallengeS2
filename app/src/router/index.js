@@ -84,13 +84,35 @@ const router = createRouter({
     {
       path: '/job-offers',
       name: 'JobOffers',
-      component: () => import('@/views/JobOffers.vue'),
       beforeEnter: async (to, from, next) => {
         if (!(await isConnected())) {
           return next({ name: 'Login' })
         }
         return next()
-      }
+      },
+      component: () => import('@/views/JobOffers.vue')
+    },
+    {
+      path: '/applied-list',
+      name: 'AppliedList',
+      beforeEnter: async (to, from, next) => {
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
+      },
+      component: () => import('@/views/AppliedList.vue')
+    },
+    {
+      path: '/appointment-list',
+      name: 'AppointmentList',
+      beforeEnter: async (to, from, next) => {
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        return next()
+      },
+      component: () => import('@/views/AppointmentList.vue')
     },
     {
       path: '/admin/',
@@ -116,6 +138,7 @@ const router = createRouter({
           children: [
             {
               path: '',
+              name: 'CompanyInformationsList',
               component: () => import('@/views/admin/CompanyInformation.vue')
             },
             {

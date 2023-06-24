@@ -125,24 +125,27 @@ let companyData = ref({
 
 <style scoped>
 .form-width {
-  max-width: 500px;
+max-width: 500px;
 }
 
 .col-bg-image {
-  background-image: url('@/assets/bulle.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100vh;
+background-image: url('../assets/bulle.svg');
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center;
+width: 100%;
+height: 100vh;
+}
+
+@media (min-width: 768px) {
 }
 
 @media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
-  }
+.logo {
+  width: 100%;
+}
+.form-width {
+max-width: 200px;
+}
 }
 </style>
