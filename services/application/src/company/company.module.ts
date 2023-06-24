@@ -34,6 +34,7 @@ import { User } from '../users/users.entity';
   ],
 
   controllers: [CompanyController],
-  providers: [CompanyService]
+  providers: [CompanyService],
+  exports: [CompanyService]
 })
 export class CompanyModule {}

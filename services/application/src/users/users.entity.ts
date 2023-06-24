@@ -1,9 +1,11 @@
+import { Company } from 'src/company/company.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  ManyToOne
 } from 'typeorm';
 
 export enum UserRole {
@@ -97,6 +99,12 @@ export class User {
     default: () => 'now()'
   })
   createdAt: string;
+
+  @ManyToOne(() => Company, (company) => company.employees, {
+    nullable: true,
+    onDelete: 'SET NULL'
+  })
+  company?: Company | null;
 
   @BeforeInsert()
   @BeforeUpdate()

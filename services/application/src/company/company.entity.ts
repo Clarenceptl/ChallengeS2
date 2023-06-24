@@ -63,6 +63,20 @@ export class Company {
   // })
   // founder?: User;
 
+  @OneToMany(() => User, (user) => user, {
+    nullable: true,
+    onDelete: 'SET NULL'
+  })
+  employees?: User[] | null;
+
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: false,
+    update: true
+  })
+  founder: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)'

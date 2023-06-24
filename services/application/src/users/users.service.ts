@@ -106,7 +106,8 @@ export class UsersService {
       lastname: 'Jhon',
       birthdate: '01/01/1990',
       role: UserRole.ROLE_ADMIN,
-      isVerified: true
+      isVerified: true,
+      company: null
     });
 
     const administrator = this.userRepository.create(user);

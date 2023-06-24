@@ -89,4 +89,18 @@ export class CompanyService {
       throw new RpcException('Company not found');
     }
   }
+
+  public async seed() {
+    await this.companyRepository.clear();
+    const company = this.companyRepository.create({
+      name: 'Company 1',
+      creationDate: new Date(),
+      address: '1 rue de la paix',
+      website: 'www.company1.com',
+      founder: 'elodie 1',
+      siret: 123456789,
+      employees: null
+    });
+    await this.companyRepository.save(company);
+  }
 }
