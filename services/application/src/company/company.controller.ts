@@ -2,7 +2,7 @@ import { CompanyService } from './company.service';
 import { SERVICE_CMD } from '../global';
 import { MessagePattern } from '@nestjs/microservices';
 import { CompanyDto } from './company.dto';
-import { Body, Param, ValidationPipe } from '@nestjs/common';
+import { Body, ValidationPipe } from '@nestjs/common';
 
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
