@@ -1,18 +1,38 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './global';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { UserModule } from './user/user.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    // ClientsModule.register([
-    //   {
-    //     name: 'APPLICATION_SERVICE',
-    //     transport: Transport.TCP
-    //   }
-    // ])
+    AuthModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.JSON_WEB_TOKEN_SECRET,
+      signOptions: {
+        expiresIn: '1d'
+      }
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10
+    }),
+    UserModule
   ],
-  controllers: [AppController],
-  providers: [AppService]
+
+  controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    }
+  ]
 })
 export class AppModule {}

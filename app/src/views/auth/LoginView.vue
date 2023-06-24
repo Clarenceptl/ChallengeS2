@@ -1,36 +1,40 @@
 <template>
   <v-row>
     <v-col cols="6" class="text-center justify-content-center">
-      <img src="../../assets/bulle.svg" alt="bulle" class="logo"/>
+      <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16">Login</h1>
       <div class="mb-10">
-        Don't have an account ? <a href="/register">Create new account</a>
+        Don't have an account ? <router-link to="/register">Create new account</router-link>
       </div>
       <div class="form-width">
-        <v-form>
-          <label>Email</label>
+        <v-form @submit.prevent="submit">
           <v-text-field
+            class="mb-3"
             clearable
-            v-model="user.email"
+            v-model="user.email.value.value"
+            :error-messages="errorBag.email"
             type="email"
             color="appgrey"
-            counter="10"
             variant="outlined"
+            label="Email"
           />
-          <label>Password</label>
           <v-text-field
-          clearable
-          v-model="user.password"
-          type="password"
-          color="appgrey"
-          variant="outlined"
+            class="mb-3"
+            v-model="user.password.value.value"
+            :error-messages="errorBag.password"
+            :type="show1 ? 'text' : 'password'"
+            color="appgrey"
+            variant="outlined"
+            :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append-inner="show1 = !show1"
+            label="Mot de passe"
           />
-        <div>
-          <v-btn class="w-100 mb-3" color="appgrey">Login</v-btn>
-        </div>
-        <v-btn variant="text" @click="forgotPassword = true">Forgot Password ?</v-btn>
+          <div>
+            <v-btn type="submit" class="w-100 mb-3" color="appgrey">Login</v-btn>
+          </div>
+          <v-btn variant="text" @click="forgotPassword = true">Forgot Password ?</v-btn>
         </v-form>
       </div>
     </v-col>
@@ -44,16 +48,15 @@
         </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <label>Email</label>
             <v-text-field
+              class="mb-3"
               clearable
-              v-model="user.email"
-              placeholder="example@example.com"
+              v-model="user.email.value.value"
+              :error-messages="errorBag.email"
               type="email"
               color="appgrey"
-              counter="10"
               variant="outlined"
-              required
+              label="Email"
             />
           </v-form>
         </v-card-text>
@@ -67,27 +70,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { onMounted } from 'vue';
+import { ref } from 'vue'
+import { useToastStore, useUserStore } from '@/stores'
+import { useForm, useField } from 'vee-validate'
+import { loginSchema } from '@/models'
+import { useRouter } from 'vue-router'
 
-let forgotPassword = ref(false);
+const router = useRouter()
+const stores = {
+  user: useUserStore(),
+  toast: useToastStore()
+}
 
-let user = ref({
-  email: '',
-  password: '',
-});
+const show1 = ref(false)
+const forgotPassword = ref(false)
 
-onMounted(() => {
-  console.log('mounted');
-});
-// const isMobile = computed(() => {
-//   const width = window.innerWidth
-//   if (width < 768) {
-//     return true
-//   } else {
-//     return false
-//   }
-// });
+const { errorBag, handleSubmit, resetForm } = useForm({
+  initialValues: {
+    email: '',
+    password: ''
+  },
+  validationSchema: loginSchema
+})
+
+const user = {
+  email: useField('email'),
+  password: useField('password')
+}
+
+const submit = handleSubmit(async (values) => {
+  const res = await stores.user.login(values)
+  if (res.success) {
+    resetForm()
+    router.push({ name: 'Home' })
+  } else {
+    return stores.toast.createToast({
+      message: res.message,
+      type: 'error'
+    })
+  }
+})
 </script>
 
 <style scoped>
@@ -104,15 +126,12 @@ onMounted(() => {
   height: 100vh;
 }
 
-@media (min-width: 768px) {
-}
-
 @media (max-width: 768px) {
   .logo {
     width: 100%;
   }
   .form-width {
-  max-width: 200px;
-}
+    max-width: 200px;
+  }
 }
 </style>

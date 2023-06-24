@@ -41,25 +41,25 @@
         </div>
       </v-col>
     </v-row>
+    <v-dialog v-model="showDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Edit user {{ selectedUser.firstname }} {{ selectedUser.lastname }}</h2>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field clearable v-model="selectedUser.firstname" type="text" color="appgrey" variant="outlined"
+            required />
+          <v-text-field clearable v-model="selectedUser.lastname" type="text" color="appgrey" variant="outlined" required />
+          <v-text-field clearable v-model="selectedUser.birthdate" type="date" color="appgrey" variant="outlined"
+            required />
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="red-500" text @click="showDialog = false; selectedUser = null">Cancel</v-btn>
+          <v-btn color="blue-800" text>Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
-  <v-dialog v-model="showDialog" max-width="600">
-    <v-card class="pa-5 bg-green-300" variant="outlined">
-      <v-card-title>
-        <h2>Edit user {{ selectedUser.firstname }} {{ selectedUser.lastname }}</h2>
-      </v-card-title>
-      <v-card-text>
-        <v-text-field clearable v-model="selectedUser.firstname" type="text" color="appgrey" variant="outlined"
-          required />
-        <v-text-field clearable v-model="selectedUser.lastname" type="text" color="appgrey" variant="outlined" required />
-        <v-text-field clearable v-model="selectedUser.birthdate" type="date" color="appgrey" variant="outlined"
-          required />
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="red-500" text @click="showDialog = false; selectedUser = null">Cancel</v-btn>
-        <v-btn color="blue-800" text>Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 </template>
 
 <script setup>

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="6" class="text-center justify-content-center">
-      <img src="../assets/bulle.svg" alt="bulle" class="logo"/>
+      <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
     <v-col cols="6">
       <h1 class="mt-16 mb-10">Create Your Company</h1>
@@ -64,7 +64,7 @@
           <label>SIRET</label>
           <v-text-field
             clearable
-            v-model="companyData.SIRET"
+            v-model="companyData.siret"
             type="text"
             color="appgrey"
             counter="10"
@@ -97,18 +97,17 @@
             counter="10"
             variant="outlined"
           />
-        <div>
-          <v-btn disabled class="w-100 mb-3" color="appgrey">Register</v-btn>
-        </div>
+          <div>
+            <v-btn disabled class="w-100 mb-3" color="appgrey">Register</v-btn>
+          </div>
         </v-form>
-        
       </div>
     </v-col>
   </v-row>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 let companyData = ref({
   name: '',
@@ -117,10 +116,10 @@ let companyData = ref({
   website: '',
   description: '',
   founder: '',
-  SIRET: '',
+  siret: '',
   size: '',
   revenue: '',
-  sector: '',
+  sector: ''
 })
 </script>
 
