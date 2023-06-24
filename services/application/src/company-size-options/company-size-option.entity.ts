@@ -8,6 +8,8 @@ export class CompanySizeOptions {
   @Column()
   size: string;
 
-  @OneToMany(() => Company, (company) => company)
-  companies: Company[];
+  @OneToMany(() => Company, (company) => company, {
+    onDelete: 'SET NULL'
+  })
+  companies: Company[] | null;
 }

@@ -15,6 +15,10 @@ export class CompanySizeOptionsService {
     private readonly companySizeOptionsRepository: Repository<CompanySizeOptions>
   ) {}
 
+  public async findOne(): Promise<CompanySizeOptions> {
+    return await this.companySizeOptionsRepository.findOne({ where: {} });
+  }
+
   public async getCompanySizeOptions(): Promise<SuccessResponse> {
     let res: CompanySizeOptions[];
     try {
@@ -29,5 +33,20 @@ export class CompanySizeOptionsService {
       success: true,
       data: res
     };
+  }
+
+  public async seed() {
+    await this.companySizeOptionsRepository.delete({});
+    const newOption = new CompanySizeOptions();
+    newOption.size = '1-10';
+    const option1 = this.companySizeOptionsRepository.create(newOption);
+
+    newOption.size = '11-50';
+    const option2 = this.companySizeOptionsRepository.create(newOption);
+
+    newOption.size = '51-200';
+    const option3 = this.companySizeOptionsRepository.create(newOption);
+
+    await this.companySizeOptionsRepository.save([option1, option2, option3]);
   }
 }

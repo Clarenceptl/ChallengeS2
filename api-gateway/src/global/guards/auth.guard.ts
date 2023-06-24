@@ -44,16 +44,10 @@ export class AuthGuard implements CanActivate {
       throw new BadRequestException('Token is empty');
     }
     let res;
-    console.log('token', token);
-    // const payload = this.jwtService.verify(token);
-    console.log('payload', this.jwtService.verify(token));
-    // res = await this.usersService.getUser(payload.id);
-    console.log('res', res);
+
     try {
       const payload = this.jwtService.verify(token);
-      console.log('payload', payload);
       res = await this.usersService.getUser(payload.id);
-      console.log('res', res);
     } catch (error) {
       throw new BadRequestException('Token is invalid');
     }

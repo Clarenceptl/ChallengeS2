@@ -106,8 +106,7 @@ export class UsersService {
       lastname: 'Jhon',
       birthdate: '01/01/1990',
       role: UserRole.ROLE_ADMIN,
-      isVerified: true,
-      company: null
+      isVerified: true
     });
 
     const administrator = this.userRepository.create(user);
@@ -121,13 +120,13 @@ export class UsersService {
     const basicUser = this.userRepository.create(user);
 
     user = Object.assign(user, {
-      email: 'employeur@employeur.com',
-      firstname: 'Employeur',
-      role: UserRole.ROLE_ADMIN
+      email: 'user@user2.com',
+      firstname: 'User2',
+      role: UserRole.ROLE_USER
     });
 
-    const employeur = this.userRepository.create(user);
+    const basicUser2 = this.userRepository.create(user);
 
-    await this.userRepository.save([administrator, basicUser, employeur]);
+    await this.userRepository.save([administrator, basicUser, basicUser2]);
   }
 }

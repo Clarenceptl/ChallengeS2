@@ -7,7 +7,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CompanyDto } from './company.dto';
 import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
+import { User, UserRole } from 'src/users/users.entity';
+import { encryptPassword } from 'src/helpers';
+import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
+import { CompanySectorOptions } from 'src/company-sector-options/company-sector-options.entity';
+import { CompanyRevenueOptions } from 'src/company-revenue-options/company-revenue-options.entity';
 
+interface CompanyOptions {
+  companySizeOptions: CompanySizeOptions;
+  companyRevenueOptions: CompanyRevenueOptions;
+  companySectorOptions: CompanySectorOptions;
+}
 export class CompanyService {
   public constructor(
     @InjectRepository(Company)
@@ -90,17 +100,59 @@ export class CompanyService {
     }
   }
 
-  public async seed() {
-    await this.companyRepository.clear();
-    const company = this.companyRepository.create({
+  public async seed(options: CompanyOptions) {
+    await this.companyRepository.delete({});
+    const { companyRevenueOptions, companySectorOptions, companySizeOptions } =
+      options;
+    const employeur = new User();
+    const password: string = encryptPassword('password');
+    Object.assign(employeur, {
+      email: 'employeur@employeur.com',
+      password: password,
+      firstname: 'employeur',
+      lastname: 'John',
+      birthdate: '01/01/1990',
+      role: UserRole.ROLE_EMPLOYEUR,
+      isVerified: true
+    });
+
+    const company1 = this.companyRepository.create({
       name: 'Company 1',
+      description: 'lorem ipsum dolar sit amet',
       creationDate: new Date(),
       address: '1 rue de la paix',
       website: 'www.company1.com',
       founder: 'elodie 1',
       siret: 123456789,
-      employees: null
+      size: companySizeOptions,
+      sector: companySectorOptions,
+      revenue: companyRevenueOptions
     });
-    await this.companyRepository.save(company);
+    const company2 = this.companyRepository.create({
+      name: 'Company 2',
+      description: 'lorem ipsum dolar sit amet',
+      creationDate: new Date(),
+      address: '2 rue de la paix',
+      website: 'www.company2.com',
+      founder: employeur.getFullName(),
+      siret: 123456789,
+      employees: [employeur],
+      size: companySizeOptions,
+      sector: companySectorOptions,
+      revenue: companyRevenueOptions
+    });
+    const company3 = this.companyRepository.create({
+      name: 'Company 3',
+      description: 'lorem ipsum dolar sit amet',
+      creationDate: new Date(),
+      address: '3 rue de la paix',
+      website: 'www.company3.com',
+      founder: 'elodie 3',
+      siret: 123456789,
+      size: companySizeOptions,
+      sector: companySectorOptions,
+      revenue: companyRevenueOptions
+    });
+    await this.companyRepository.save([company1, company2, company3]);
   }
 }

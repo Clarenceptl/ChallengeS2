@@ -57,17 +57,11 @@ export class Company {
   })
   description: string;
 
-  // @ManyToOne(() => User, (user) => user, {
-  //   nullable: true,
-  //   onDelete: 'CASCADE'
-  // })
-  // founder?: User;
-
-  @OneToMany(() => User, (user) => user, {
-    nullable: true,
+  @OneToMany(() => User, (user) => user.company, {
+    cascade: true,
     onDelete: 'SET NULL'
   })
-  employees?: User[] | null;
+  employees: User[];
 
   @Column({
     type: 'varchar',
@@ -99,22 +93,25 @@ export class Company {
 
   @ManyToOne(
     () => CompanySizeOptions,
-    (companySizeOptions) => companySizeOptions
+    (companySizeOptions) => companySizeOptions,
+    { nullable: true, onDelete: 'SET NULL' }
   )
   size?: CompanySizeOptions;
 
   @ManyToOne(
     () => CompanyRevenueOptions,
-    (companyRevenueOptions) => companyRevenueOptions
+    (companyRevenueOptions) => companyRevenueOptions,
+    { nullable: true, onDelete: 'SET NULL' }
   )
   revenue?: CompanySizeOptions;
 
-  @OneToMany(
+  @ManyToOne(
     () => CompanySectorOptions,
-    (companySectorOptions) => companySectorOptions
+    (companySectorOptions) => companySectorOptions,
+    { nullable: true, onDelete: 'SET NULL' }
   )
   sector?: CompanySectorOptions;
 
-  @OneToMany(() => JobAds, (jobAds) => jobAds)
+  @OneToMany(() => JobAds, (jobAds) => jobAds, { cascade: true })
   jobAds?: JobAds[];
 }

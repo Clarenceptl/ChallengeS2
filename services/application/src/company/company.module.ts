@@ -5,22 +5,10 @@ import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SERVICE_NAME } from '../global';
-import { CompanySizeOptions } from '../company-size-options/company-size-option.entity';
-import { JobAds } from '../job-ads/job-ads.entity';
-import { CompanyRevenueOptions } from '../company-revenue-options/company-revenue-options.entity';
-import { CompanySectorOptions } from '../company-sector-options/company-sector-options.entity';
-import { User } from '../users/users.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Company,
-      CompanySizeOptions,
-      CompanySectorOptions,
-      CompanyRevenueOptions,
-      JobAds,
-      User
-    ]),
+    TypeOrmModule.forFeature([Company]),
     ClientsModule.register([
       {
         name: SERVICE_NAME.MAILING,

@@ -101,14 +101,17 @@ export class User {
   createdAt: string;
 
   @ManyToOne(() => Company, (company) => company.employees, {
-    nullable: true,
     onDelete: 'SET NULL'
   })
-  company?: Company | null;
+  company: Company | null;
 
   @BeforeInsert()
   @BeforeUpdate()
   public emailToLowerCase() {
     this.email = this.email.toLowerCase();
+  }
+
+  public getFullName(): string {
+    return `${this.firstname} ${this.lastname}`;
   }
 }
