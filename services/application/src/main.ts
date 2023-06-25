@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
+import { RolesAndOwnerGlobalGuard } from './global';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -19,6 +20,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
+  app.useGlobalGuards(new RolesAndOwnerGlobalGuard(new Reflector()));
   await app.listen();
 }
 bootstrap();

@@ -3,6 +3,7 @@ export enum SERVICE_CMD {
   LOGIN_USER = 'auth_login',
   VERIFY_ACCOUNT = 'auth_verify_account',
   GET_USER = 'get-user',
+  GET_USERS = 'get-users',
   GET_SELF_USER = 'get-self-user',
   GET_REFRESH_TOKEN = 'get-refresh-token',
   GET_COMPANY_SIZE_OPTIONS = 'get-company-size-options'
