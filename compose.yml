@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  # mongodb:
-  #   extends:
-  #     file: ./composition/compose.databases.yml
-  #     service: mongodb
+  mongodb:
+    extends:
+      file: ./composition/compose.databases.yml
+      service: mongodb
 
   postgresdb:
     extends:
@@ -46,10 +46,10 @@ services:
       file: ./composition/compose.services.yml
       service: mailing-service
 
-  # bo-analytics:
-  #   extends:
-  #     file: ./composition/compose.bo-analytics.yml
-  #     service: bo-analytics
+  bo-analytics:
+    extends:
+      file: ./composition/compose.bo-analytics.yml
+      service: bo-analytics
 
   mailcatcher:
     extends:
