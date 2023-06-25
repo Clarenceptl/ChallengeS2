@@ -3,14 +3,14 @@ import {
   Controller,
   Param,
   ParseUUIDPipe,
-  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
-import { SERVICE_CMD } from '../global';
+import { Roles, SERVICE_CMD, SelfUpdate } from '../global';
+import { UserRole } from './users.entity';
 
 @Controller()
 export class UsersController {
@@ -18,23 +18,23 @@ export class UsersController {
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_USER })
   @HashPassword()
-  public async createUser(@Body(ValidationPipe) user: CreatedUserRequest) {
+  public async createUser(@Payload(ValidationPipe) user: CreatedUserRequest) {
     return this.usersService.createUser(user);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.VERIFY_ACCOUNT })
-  public async verifyUser(@Body(ValidationPipe) token: string) {
+  public async verifyUser(@Payload(ValidationPipe) token: string) {
     return this.usersService.verifyUser(token);
   }
 
-  @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
+  @MessagePattern({ cmd: SERVICE_CMD.GET_SELF_USER })
   @CleanResponseUser()
-  public getSelfUser(@Req() req: any) {
-    const { id } = req.user;
-    return this.usersService.getUser(id ?? '');
+  public getSelfUser(@Payload(ValidationPipe) id: string) {
+    return this.usersService.getUser(id);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_USERS })
+  @Roles(UserRole.ROLE_ADMIN)
   @CleanResponseUser()
   public getUsers() {
     return this.usersService.getUsers();
@@ -42,21 +42,21 @@ export class UsersController {
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_USER })
   @CleanResponseUser()
-  public getUser(@Body(ValidationPipe) uuid: string) {
+  public getUser(@Payload(ValidationPipe) uuid: string) {
     return this.usersService.getUser(uuid);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_USER_BY_EMAIL })
-  public getUserByEmail(@Body(ValidationPipe) email: string) {
+  public getUserByEmail(@Payload(ValidationPipe) email: string) {
     return this.usersService.getUserByEmail(email);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
   public updateUser(
     @Param('user', ParseUUIDPipe) user: string,
-    @Body(ValidationPipe) body: UpdatedUserRequest
+    @Payload(ValidationPipe) payload: UpdatedUserRequest
   ) {
-    return this.usersService.updateUser(user, body);
+    return this.usersService.updateUser(user, payload);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })

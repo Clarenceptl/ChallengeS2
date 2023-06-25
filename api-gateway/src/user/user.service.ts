@@ -27,12 +27,26 @@ export class UserService {
     return res;
   }
 
-  public async getSelfUser() {
+  public async getSelfUser(id: string | null) {
     let res: SuccessResponse;
 
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.GET_SELF_USER }, {})
+        this.client.send({ cmd: SERVICE_CMD.GET_SELF_USER }, id)
+      );
+    } catch (error) {
+      console.log('error', error);
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async getUsers(tokenUser: any) {
+    let res: SuccessResponse;
+
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.GET_USERS }, { tokenUser })
       );
     } catch (error) {
       console.log('error', error);
