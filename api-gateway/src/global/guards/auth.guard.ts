@@ -44,6 +44,7 @@ export class AuthGuard implements CanActivate {
       throw new BadRequestException('Token is empty');
     }
     let res;
+
     try {
       const payload = this.jwtService.verify(token);
       res = await this.usersService.getUser(payload.id);

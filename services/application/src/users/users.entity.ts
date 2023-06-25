@@ -1,9 +1,11 @@
+import { Company } from 'src/company/company.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   BeforeInsert,
-  BeforeUpdate
+  BeforeUpdate,
+  ManyToOne
 } from 'typeorm';
 
 export enum UserRole {
@@ -98,9 +100,18 @@ export class User {
   })
   createdAt: string;
 
+  @ManyToOne(() => Company, (company) => company.employees, {
+    onDelete: 'SET NULL'
+  })
+  company: Company | null;
+
   @BeforeInsert()
   @BeforeUpdate()
   public emailToLowerCase() {
     this.email = this.email.toLowerCase();
+  }
+
+  public getFullName(): string {
+    return `${this.firstname} ${this.lastname}`;
   }
 }

@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { CompanyModule } from './company/company.module';
+import { CompanyRevenueOptionsModule } from './company-revenue-options/company-revenue-options.module';
+import { CompanySectorOptionsModule } from './company-sector-options/company-sector-options.module';
+import { CompanySizeOptionsModule } from './company-size-options/company-size-options.module';
+import { JobAdsModule } from './job-ads/job-ads.module';
 import { SeedModule } from './seed/seed.module';
 
 @Module({
@@ -16,6 +22,12 @@ import { SeedModule } from './seed/seed.module';
       autoLoadEntities: true
     }),
     UsersModule,
+    AppointmentModule,
+    CompanyModule,
+    CompanyRevenueOptionsModule,
+    CompanySectorOptionsModule,
+    CompanySizeOptionsModule,
+    JobAdsModule,
     SeedModule
   ],
   controllers: [],

@@ -30,7 +30,7 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: analytics-service
-  
+
   app-service:
     extends:
       file: ./composition/compose.services.yml
@@ -40,12 +40,12 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: auth-service
-  
+
   mailing-service:
     extends:
       file: ./composition/compose.services.yml
       service: mailing-service
-  
+
   bo-analytics:
     extends:
       file: ./composition/compose.bo-analytics.yml
