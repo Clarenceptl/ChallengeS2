@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { User, UserRole } from 'src/users/users.entity';
+import { UserRole } from 'src/users/users.entity';
 import { checkRole, checkSelfUpdate } from '../helpers/global.helper';
 import { RpcException } from '@nestjs/microservices';
 import { ErrorModel } from '../global.model';
