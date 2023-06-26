@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompanySectorOptions } from './company-sector-options.entity';
 import { Repository } from 'typeorm';
+import { SuccessResponse } from 'src/global';
+import { RpcException } from '@nestjs/microservices';
+import { CreateCompanySectorOptionRequest } from './company-sector-options.dto';
 
 @Injectable()
 export class CompanySectorOptionsService {
@@ -12,6 +15,128 @@ export class CompanySectorOptionsService {
 
   public async findOne(): Promise<CompanySectorOptions> {
     return await this.companySectorRepository.findOne({ where: {} });
+  }
+
+  public async getCompanySectorOptions(): Promise<SuccessResponse> {
+    let res: CompanySectorOptions[];
+    try {
+      res = await this.companySectorRepository.find({
+        order: {
+          id: 'ASC'
+        }
+      });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async getCompanySectorOptionsById(
+    id: string
+  ): Promise<SuccessResponse> {
+    let res: CompanySectorOptions;
+    try {
+      res = await this.companySectorRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company Sector Option not found'
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async createCompanySectorOptions(
+    data: CreateCompanySectorOptionRequest
+  ): Promise<SuccessResponse> {
+    let res: CompanySectorOptions;
+    try {
+      const newOption = new CompanySectorOptions();
+      newOption.sector = data.sector;
+      res = await this.companySectorRepository.save(newOption);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async updateCompanySectorOptions(
+    sector: string,
+    id: string
+  ): Promise<SuccessResponse> {
+    let res: CompanySectorOptions;
+    try {
+      const companySectorOptionToUpdate =
+        await this.companySectorRepository.findOneBy({ id: parseInt(id) });
+      if (!companySectorOptionToUpdate) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company Sector Option not found'
+        });
+      }
+      companySectorOptionToUpdate.sector = sector;
+      res = await this.companySectorRepository.save(
+        companySectorOptionToUpdate
+      );
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async deleteCompanySectorOptions(
+    id: string
+  ): Promise<SuccessResponse> {
+    let res: CompanySectorOptions;
+    try {
+      const companySectorOptionToDelete =
+        await this.companySectorRepository.findOneBy({ id: parseInt(id) });
+      if (!companySectorOptionToDelete) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company Sector Option not found'
+        });
+      }
+      res = await this.companySectorRepository.remove(
+        companySectorOptionToDelete
+      );
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
   }
 
   public async seed() {

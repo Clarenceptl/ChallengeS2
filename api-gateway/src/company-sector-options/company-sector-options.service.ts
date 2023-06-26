@@ -1,23 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 import {
   SERVICE_CMD,
   SERVICE_NAME,
-  type SuccessResponse,
+  SuccessResponse,
   handleErrors
 } from 'src/global';
-import { lastValueFrom } from 'rxjs';
-import { CreateCompanySizeOptionRequest } from './company-size-options.dto';
+import { CreateCompanySectorOptionRequest } from './company-sector-options.dto';
 
 @Injectable()
-export class CompanySizeOptionsService {
+export class CompanySectorOptionsService {
   constructor(@Inject(SERVICE_NAME.APP) private readonly client: ClientProxy) {}
 
-  public async getCompanySizeOptions(): Promise<SuccessResponse> {
+  public async getCompanySectorOptions(): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS }, {})
+        this.client.send({ cmd: SERVICE_CMD.GET_COMPANY_SECTOR_OPTIONS }, {})
       );
     } catch (error) {
       handleErrors(error);
@@ -25,12 +25,12 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async getCompanySizeOptionsById(id: string): Promise<SuccessResponse> {
+  public async getCompanySectorOptionById(id: string) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID },
+          { cmd: SERVICE_CMD.GET_COMPANY_SECTOR_OPTIONS_BY_ID },
           { id }
         )
       );
@@ -40,31 +40,15 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async createCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest
-  ): Promise<SuccessResponse> {
+  public async createCompanySectorOption(
+    data: CreateCompanySectorOptionRequest
+  ) {
     let res: SuccessResponse;
     try {
-      res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS }, data)
-      );
-    } catch (error) {
-      handleErrors(error);
-    }
-    return res;
-  }
-
-  public async updateCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest,
-    id: string
-  ): Promise<SuccessResponse> {
-    let res: SuccessResponse;
-    try {
-      const { size } = data;
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.UPDATE_COMPANY_SIZE_OPTIONS },
-          { size, id }
+          { cmd: SERVICE_CMD.CREATE_COMPANY_SECTOR_OPTIONS },
+          data
         )
       );
     } catch (error) {
@@ -73,12 +57,34 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async deleteCompanySizeOptions(id: string): Promise<SuccessResponse> {
+  public async updateCompanySectorOption(
+    data: CreateCompanySectorOptionRequest,
+    id: string
+  ): Promise<SuccessResponse> {
+    let res: SuccessResponse;
+    try {
+      const { sector } = data;
+      console.log(sector);
+      console.log(id);
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_COMPANY_SECTOR_OPTIONS },
+          { sector, id }
+        )
+      );
+    } catch (error) {
+      console.log('error');
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async deleteCompanySectorOption(id: string): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.DELETE_COMPANY_SIZE_OPTIONS },
+          { cmd: SERVICE_CMD.DELETE_COMPANY_SECTOR_OPTIONS },
           { id }
         )
       );
