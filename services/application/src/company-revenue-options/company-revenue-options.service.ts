@@ -4,6 +4,7 @@ import { CompanyRevenueOptions } from './company-revenue-options.entity';
 import { Repository } from 'typeorm';
 import { SuccessResponse } from 'src/global';
 import { RpcException } from '@nestjs/microservices';
+import { CreateCompanyRevenueOptionRequest } from './company-revenue-options.dto';
 
 @Injectable()
 export class CompanyRevenueOptionsService {
@@ -55,7 +56,7 @@ export class CompanyRevenueOptionsService {
   }
 
   public async createCompanyRevenueOptions(
-    companyRevenueOptions: CompanyRevenueOptions
+    companyRevenueOptions: CreateCompanyRevenueOptionRequest
   ): Promise<SuccessResponse> {
     let res: CompanyRevenueOptions;
     try {

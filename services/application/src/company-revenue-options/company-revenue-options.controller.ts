@@ -1,11 +1,13 @@
 import { Controller, ValidationPipe } from '@nestjs/common';
 import { CompanyRevenueOptionsService } from './company-revenue-options.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SERVICE_CMD } from 'src/global';
+import { Roles, SERVICE_CMD } from 'src/global';
 import {
+  CreateCompanyRevenueOptionRequest,
   GetCompanyRevenueOptionsByIdRequest,
   UpdateCompanyRevenueOptionRequest
 } from './company-revenue-options.dto';
+import { UserRole } from 'src/users/users.entity';
 
 @Controller('company-revenue-options')
 export class CompanyRevenueOptionsController {
@@ -29,13 +31,18 @@ export class CompanyRevenueOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_COMPANY_REVENUE_OPTIONS })
-  public async createCompanyRevenueOptions(data: any) {
+  @Roles(UserRole.ROLE_ADMIN)
+  public async createCompanyRevenueOptions(
+    data: CreateCompanyRevenueOptionRequest
+  ) {
+    console.log(data);
     return await this.companyRevenueOptionsService.createCompanyRevenueOptions(
       data
     );
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_COMPANY_REVENUE_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public async updateCompanyRevenueOptions(
     @Payload(ValidationPipe)
     payload: UpdateCompanyRevenueOptionRequest
@@ -48,6 +55,7 @@ export class CompanyRevenueOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_COMPANY_REVENUE_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public async deleteCompanyRevenueOptions(
     payload: GetCompanyRevenueOptionsByIdRequest
   ) {

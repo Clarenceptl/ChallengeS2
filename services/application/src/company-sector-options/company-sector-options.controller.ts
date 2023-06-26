@@ -6,7 +6,8 @@ import {
   GetCompanySectorOptionsByIdRequest,
   UpdateCompanySectorOptionRequest
 } from './company-sector-options.dto';
-import { SERVICE_CMD } from 'src/global';
+import { Roles, SERVICE_CMD } from 'src/global';
+import { UserRole } from 'src/users/users.entity';
 
 @Controller('company-sector-options')
 export class CompanySectorOptionsController {
@@ -28,11 +29,13 @@ export class CompanySectorOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_COMPANY_SECTOR_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public createCompanySizeOptions(data: CreateCompanySectorOptionRequest) {
     return this.companySectorOptionsService.createCompanySectorOptions(data);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_COMPANY_SECTOR_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public updateCompanySectorOptions(
     @Payload(ValidationPipe)
     payload: UpdateCompanySectorOptionRequest
@@ -45,6 +48,7 @@ export class CompanySectorOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_COMPANY_SECTOR_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public deleteCompanySectorOptions(
     @Payload(ValidationPipe) payload: GetCompanySectorOptionsByIdRequest
   ) {
