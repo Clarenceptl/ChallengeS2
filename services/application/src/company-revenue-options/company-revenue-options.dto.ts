@@ -1,13 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CompanyRevenueOptionsDto {
-  @IsString()
-  @IsNotEmpty()
-  revenue: any;
-
-  companies: any;
-}
-
 export class CreateCompanyRevenueOptionRequest {
   @IsString()
   @IsNotEmpty()

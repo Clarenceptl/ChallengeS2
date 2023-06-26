@@ -64,8 +64,6 @@ export class CompanySectorOptionsService {
     let res: SuccessResponse;
     try {
       const { sector } = data;
-      console.log(sector);
-      console.log(id);
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.UPDATE_COMPANY_SECTOR_OPTIONS },

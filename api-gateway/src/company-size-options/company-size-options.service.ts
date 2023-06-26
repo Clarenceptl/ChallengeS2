@@ -31,7 +31,7 @@ export class CompanySizeOptionsService {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID },
-          { id }
+          id
         )
       );
     } catch (error) {

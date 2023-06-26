@@ -37,8 +37,6 @@ export class CompanySectorOptionsController {
     @Payload(ValidationPipe)
     payload: UpdateCompanySectorOptionRequest
   ) {
-    console.log('updateCompanySizeOptions');
-    console.log(payload);
     const { sector, id } = payload;
     return this.companySectorOptionsService.updateCompanySectorOptions(
       sector,

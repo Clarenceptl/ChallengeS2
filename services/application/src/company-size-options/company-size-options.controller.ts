@@ -20,15 +20,15 @@ export class CompanySizeOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID })
-  public getCompanySizeOptionsById(
-    @Payload(ValidationPipe) payload: GetCompanySizeOptionsByIdRequest
-  ) {
-    const { id } = payload;
+  public getCompanySizeOptionsById(@Payload(ValidationPipe) id: string) {
     return this.companySizeOptionsService.getCompanySizeOptionsById(id);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS })
-  public createCompanySizeOptions(data: CreateCompanySizeOptionRequest) {
+  public createCompanySizeOptions(
+    @Payload(ValidationPipe)
+    data: CreateCompanySizeOptionRequest
+  ) {
     return this.companySizeOptionsService.createCompanySizeOptions(data);
   }
 

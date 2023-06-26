@@ -47,7 +47,6 @@ export class CompanySectorOptionsController {
     @Body(ValidationPipe) data: CreateCompanySectorOptionRequest,
     @Param('id') id: string
   ) {
-    console.log(data);
     return this.companySectorOptionsService.updateCompanySectorOption(data, id);
   }
 
