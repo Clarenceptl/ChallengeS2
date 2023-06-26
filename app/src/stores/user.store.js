@@ -2,7 +2,6 @@ import { computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { AuthService, UserService } from '@/services'
 import { formatDateToApi, clearTokens } from '@/helpers'
-import jwtDecode from 'jwt-decode'
 
 export const useUserStore = defineStore('userStore', () => {
   //#region values
@@ -22,14 +21,18 @@ export const useUserStore = defineStore('userStore', () => {
       const token = localStorage.getItem('bearer-token')
       if (!token) return null
 
-      const accessToken = jwtDecode(token)
-      const { id } = accessToken
-      const res = await UserService.getUser(id)
+      const res = await UserService.getSelfUser()
       if (res?.success) {
         Object.assign(contextUser.user, res.data)
       }
       return true
     }
+  }
+
+  const getUsers = async () => {
+    const res = await UserService.getUsers()
+    console.log(res)
+    return res
   }
 
   const register = async (user) => {
@@ -55,5 +58,14 @@ export const useUserStore = defineStore('userStore', () => {
     return await AuthService.verifyEmail({ token })
   }
   //#endregion
-  return { register, verifyEmail, login, loadContextUser, getContextUser, isConnected, logout }
+  return {
+    register,
+    verifyEmail,
+    login,
+    loadContextUser,
+    getContextUser,
+    isConnected,
+    logout,
+    getUsers
+  }
 })

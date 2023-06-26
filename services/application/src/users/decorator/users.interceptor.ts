@@ -18,12 +18,12 @@ export class CleanResponseUserInterceptor implements NestInterceptor {
         let newData: User | User[];
         if (Array.isArray(data)) {
           newData = data.map((user) => {
-            if (typeof user === 'object' && user.password) {
+            if (typeof user === 'object' && user?.password) {
               return removeDataSensibleUser(user);
             }
           });
         } else {
-          if (typeof data === 'object' && data.password) {
+          if (typeof data === 'object' && data?.password) {
             newData = removeDataSensibleUser(data);
           }
         }
