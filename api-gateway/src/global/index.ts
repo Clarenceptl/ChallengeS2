@@ -12,3 +12,5 @@ export * from './helpers/error.helper';
 
 // INTERFACES
 export * from './global.model';
+
+export * from './request-logger.middleware';
