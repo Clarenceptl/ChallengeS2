@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { CompanyRevenueOptionsService } from './company-revenue-options.service';
 import { CreateCompanyRevenueOptionRequest } from './company-revenue-options.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Company Revenue Options')
+@ApiBearerAuth()
 @Controller({
   path: 'company-revenue-options',
   version: '1'

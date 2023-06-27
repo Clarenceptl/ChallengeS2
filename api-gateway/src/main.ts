@@ -43,6 +43,7 @@ async function bootstrap() {
   app.enableCors();
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
+      .addBearerAuth()
       .setTitle('Api Mailing')
       .setDescription("Les requêtes de l'api mailing")
       .setVersion('1.0')

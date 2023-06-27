@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { CompanySectorOptionsService } from './company-sector-options.service';
 import { CreateCompanySectorOptionRequest } from './company-sector-options.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Company Sector Options')
+@ApiBearerAuth()
 @Controller({
   path: 'company-sector-options',
   version: '1'

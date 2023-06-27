@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { CompanySizeOptionsService } from './company-size-options.service';
 import { CreateCompanySizeOptionRequest } from './company-size-options.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Company Size Options')
+@ApiBearerAuth()
 @Controller({
   path: 'company-size-options',
   version: '1'
