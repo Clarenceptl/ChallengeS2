@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { CompanySizeOptionsService } from './company-size-options.service';
@@ -38,9 +39,14 @@ export class CompanySizeOptionsController {
   @Post()
   @HttpCode(201)
   public createCompanySizeOptions(
-    @Body(ValidationPipe) data: CreateCompanySizeOptionRequest
+    @Body(ValidationPipe) data: CreateCompanySizeOptionRequest,
+    @Req() req: any
   ) {
-    return this.companySizeOptionsService.createCompanySizeOptions(data);
+    const tokenUser = req?.user ?? null;
+    return this.companySizeOptionsService.createCompanySizeOptions(
+      data,
+      tokenUser
+    );
   }
 
   @Put(':id')

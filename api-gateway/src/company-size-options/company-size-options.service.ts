@@ -41,12 +41,16 @@ export class CompanySizeOptionsService {
   }
 
   public async createCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest
+    data: CreateCompanySizeOptionRequest,
+    tokenUser
   ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS }, data)
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS },
+          { size: data.size, tokenUser }
+        )
       );
     } catch (error) {
       handleErrors(error);

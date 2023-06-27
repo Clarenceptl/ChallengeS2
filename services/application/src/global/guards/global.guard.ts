@@ -23,16 +23,21 @@ export class RolesAndOwnerGlobalGuard implements CanActivate {
       context.getHandler()
     );
 
-    const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
+    const roles: UserRole[] | null = this.reflector.get<UserRole[]>(
+      'roles',
+      context.getHandler()
+    );
+    // if tokenUser -> data is object
     const { tokenUser, ...params } = context.switchToRpc().getData();
 
     let hasRole = false;
     let selfUpdateRes = false;
 
-    if (!selfUpdate && roles?.length === 0) {
+    if (!selfUpdate && !roles) {
       return true;
     }
 
+    if (!tokenUser) throw this.error;
     if (selfUpdate) {
       selfUpdateRes = checkSelfUpdate(tokenUser, params);
     }
