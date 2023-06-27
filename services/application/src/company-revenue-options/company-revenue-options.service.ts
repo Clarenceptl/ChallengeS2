@@ -42,6 +42,12 @@ export class CompanyRevenueOptionsService {
     let res: CompanyRevenueOptions;
     try {
       res = await this.companyRevenueRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company Revenue Options not found'
+        });
+      }
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

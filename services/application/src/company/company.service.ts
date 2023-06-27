@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
 import { Company } from './company.entity';
 import { Inject } from '@nestjs/common';
-import { SERVICE_CMD, SERVICE_NAME } from '../global';
+import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyDto } from './company.dto';
+import { CompanyDto, CreateCompanyRequest } from './company.dto';
 import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
 import { User, UserRole } from 'src/users/users.entity';
@@ -26,78 +26,70 @@ export class CompanyService {
     private readonly mailingService: ClientProxy
   ) {}
 
-  public async createCompany(company: CompanyDto) {
+  public async createCompany(
+    company: CreateCompanyRequest
+  ): Promise<SuccessResponse> {
+    let res: Company;
     try {
-      const savedCompany = this.companyRepository.create(company);
-      await this.companyRepository.save(savedCompany);
+      const newCompany = this.companyRepository.create(company);
+      res = await this.companyRepository.save(newCompany);
     } catch (error) {
-      throw new RpcException('error');
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
     }
-    const resultCompanyEmail: SendEmailRequest = {
-      email: company.founder.email,
-      firstname: company.founder.firstname
+    return {
+      success: true,
+      data: res
     };
-
-    console.log('envoi email');
-    const res = await lastValueFrom(
-      this.mailingService.emit<SendEmailRequest>(
-        SERVICE_CMD.GET_REGISTER_MAIL,
-        resultCompanyEmail
-      )
-    );
-    console.log('response email', res);
-    return { success: true, message: 'Company' };
   }
 
   public async getCompanyById(id) {
     return this.companyRepository.findOne(id);
   }
 
-  public async getCompanies() {
-    return this.companyRepository.find();
-  }
-  public async deleteCompany(id) {
+  public async getCompanies(): Promise<SuccessResponse> {
+    let res: Company[];
     try {
-      const company = await this.companyRepository.findOne(id);
-      if (!company) {
-        throw new RpcException('Company not found');
-      }
-      const resultCompanyEmail: SendEmailRequest = {
-        // email: company.founder.email,
-        email: 'toto@gmail.com',
-        // firstname: company.founder.firstname
-        firstname: 'toto'
-      };
-
-      console.log('envoi email');
-      const res = await lastValueFrom(
-        this.mailingService.emit<SendEmailRequest>(
-          SERVICE_CMD.GET_REGISTER_MAIL,
-          resultCompanyEmail
-        )
-      );
-      console.log('response email', res);
-      return this.companyRepository.delete(id);
-    } catch (error) {
-      throw new RpcException('Company not found');
-    }
-  }
-
-  public async updateCompany(id, company: CompanyDto) {
-    try {
-      const companyToUpdate = await this.companyRepository.findOne(id);
-      if (!companyToUpdate) {
-        throw new RpcException('Company not found');
-      }
-      const updatedCompany = this.companyRepository.create({
-        ...companyToUpdate,
-        ...company
+      res = await this.companyRepository.find({
+        order: {
+          id: 'ASC'
+        }
       });
-      await this.companyRepository.save(updatedCompany);
-      return updatedCompany;
+      console.log('res', res);
     } catch (error) {
-      throw new RpcException('Company not found');
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
     }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async getCompany(id: string): Promise<SuccessResponse> {
+    let res: Company;
+    try {
+      res = await this.companyRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company not found'
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
   }
 
   public async seed(options: CompanyOptions) {
