@@ -41,14 +41,15 @@ export class CompanySectorOptionsService {
   }
 
   public async createCompanySectorOption(
-    data: CreateCompanySectorOptionRequest
+    data: CreateCompanySectorOptionRequest,
+    tokenUser
   ) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.CREATE_COMPANY_SECTOR_OPTIONS },
-          data
+          { sector: data.sector, tokenUser }
         )
       );
     } catch (error) {
@@ -59,17 +60,16 @@ export class CompanySectorOptionsService {
 
   public async updateCompanySectorOption(
     data: CreateCompanySectorOptionRequest,
-    id: string
+    id: string,
+    tokenUser
   ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       const { sector } = data;
-      console.log(sector);
-      console.log(id);
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.UPDATE_COMPANY_SECTOR_OPTIONS },
-          { sector, id }
+          { sector, id, tokenUser }
         )
       );
     } catch (error) {
@@ -79,13 +79,16 @@ export class CompanySectorOptionsService {
     return res;
   }
 
-  public async deleteCompanySectorOption(id: string): Promise<SuccessResponse> {
+  public async deleteCompanySectorOption(
+    id: string,
+    tokenUser
+  ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.DELETE_COMPANY_SECTOR_OPTIONS },
-          { id }
+          { id, tokenUser }
         )
       );
     } catch (error) {

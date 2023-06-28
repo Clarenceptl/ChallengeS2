@@ -7,11 +7,15 @@ import {
   Param,
   Post,
   Put,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { CompanyRevenueOptionsService } from './company-revenue-options.service';
 import { CreateCompanyRevenueOptionRequest } from './company-revenue-options.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Company Revenue Options')
+@ApiBearerAuth()
 @Controller({
   path: 'company-revenue-options',
   version: '1'
@@ -36,26 +40,38 @@ export class CompanyRevenueOptionsController {
   @Post()
   @HttpCode(201)
   public createCompanyRevenueOptions(
-    @Body(ValidationPipe) data: CreateCompanyRevenueOptionRequest
+    @Body(ValidationPipe) data: CreateCompanyRevenueOptionRequest,
+    @Req() req: any
   ) {
-    return this.companyRevenueOptionsService.createCompanyRevenueOptions(data);
+    const tokenUser = req?.user ?? null;
+    return this.companyRevenueOptionsService.createCompanyRevenueOptions(
+      data,
+      tokenUser
+    );
   }
 
   @Put(':id')
   @HttpCode(200)
   public updateCompanyRevenueOptions(
     @Body(ValidationPipe) data: CreateCompanyRevenueOptionRequest,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @Req() req: any
   ) {
+    const tokenUser = req?.user ?? null;
     return this.companyRevenueOptionsService.updateCompanyRevenueOptions(
       data,
-      id
+      id,
+      tokenUser
     );
   }
 
   @Delete(':id')
   @HttpCode(200)
-  public deleteCompanyRevenueOptions(@Param('id') id: string) {
-    return this.companyRevenueOptionsService.deleteCompanyRevenueOptions(id);
+  public deleteCompanyRevenueOptions(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.companyRevenueOptionsService.deleteCompanyRevenueOptions(
+      id,
+      tokenUser
+    );
   }
 }

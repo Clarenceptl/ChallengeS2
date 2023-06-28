@@ -14,7 +14,12 @@ import {
   VerifyAccountRequest
 } from './auth.dto';
 import { ErrorModel, isPublic, SuccessResponse } from '../global';
-import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller({ path: 'auth', version: '1' })
@@ -60,6 +65,7 @@ export class AuthController {
     return this.authService.verifyAccount(data?.token);
   }
 
+  @ApiBearerAuth()
   @Post('refresh-token')
   @HttpCode(200)
   public refreshToken(

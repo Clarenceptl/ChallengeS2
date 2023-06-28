@@ -31,7 +31,7 @@ export class CompanySizeOptionsService {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID },
-          { id }
+          id
         )
       );
     } catch (error) {
@@ -41,12 +41,16 @@ export class CompanySizeOptionsService {
   }
 
   public async createCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest
+    data: CreateCompanySizeOptionRequest,
+    tokenUser
   ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS }, data)
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS },
+          { size: data.size, tokenUser }
+        )
       );
     } catch (error) {
       handleErrors(error);
@@ -56,7 +60,8 @@ export class CompanySizeOptionsService {
 
   public async updateCompanySizeOptions(
     data: CreateCompanySizeOptionRequest,
-    id: string
+    id: string,
+    tokenUser
   ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
@@ -64,7 +69,7 @@ export class CompanySizeOptionsService {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.UPDATE_COMPANY_SIZE_OPTIONS },
-          { size, id }
+          { size, id, tokenUser }
         )
       );
     } catch (error) {
@@ -73,13 +78,16 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async deleteCompanySizeOptions(id: string): Promise<SuccessResponse> {
+  public async deleteCompanySizeOptions(
+    id: string,
+    tokenUser
+  ): Promise<SuccessResponse> {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.DELETE_COMPANY_SIZE_OPTIONS },
-          { id }
+          { id, tokenUser }
         )
       );
     } catch (error) {

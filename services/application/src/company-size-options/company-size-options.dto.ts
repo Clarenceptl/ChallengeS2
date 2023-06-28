@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { CompanyDto } from '../company/company.dto';
-import e from 'express';
+import { User } from 'src/users/users.entity';
 
 export class CompanySizeOptionsDto {
   @IsString()
@@ -11,6 +11,9 @@ export class CompanySizeOptionsDto {
 }
 
 export class CreateCompanySizeOptionRequest {
+  @IsNotEmpty()
+  tokenUser: User | null;
+
   @IsString()
   @IsNotEmpty()
   size: string;

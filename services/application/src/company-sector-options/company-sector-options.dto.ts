@@ -1,11 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CompanySectorOptionsDto {
-  sector: any;
-
-  companies: any;
-}
-
 export class GetCompanySectorOptionsByIdRequest {
   @IsString()
   @IsNotEmpty()

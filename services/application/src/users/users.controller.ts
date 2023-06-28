@@ -9,7 +9,7 @@ import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
-import { Roles, SERVICE_CMD, SelfUpdate } from '../global';
+import { Roles, SERVICE_CMD } from '../global';
 import { UserRole } from './users.entity';
 
 @Controller()

@@ -1,12 +1,13 @@
 import { Controller, ValidationPipe } from '@nestjs/common';
 import { CompanySizeOptionsService } from './company-size-options.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SERVICE_CMD } from 'src/global';
+import { Roles, SERVICE_CMD } from 'src/global';
 import {
   CreateCompanySizeOptionRequest,
   GetCompanySizeOptionsByIdRequest,
   UpdateCompanySizeOptionRequest
 } from './company-size-options.dto';
+import { UserRole } from 'src/users/users.entity';
 
 @Controller()
 export class CompanySizeOptionsController {
@@ -20,19 +21,21 @@ export class CompanySizeOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID })
-  public getCompanySizeOptionsById(
-    @Payload(ValidationPipe) payload: GetCompanySizeOptionsByIdRequest
-  ) {
-    const { id } = payload;
+  public getCompanySizeOptionsById(@Payload(ValidationPipe) id: string) {
     return this.companySizeOptionsService.getCompanySizeOptionsById(id);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS })
-  public createCompanySizeOptions(data: CreateCompanySizeOptionRequest) {
+  @Roles(UserRole.ROLE_ADMIN)
+  public createCompanySizeOptions(
+    @Payload(ValidationPipe)
+    data: CreateCompanySizeOptionRequest
+  ) {
     return this.companySizeOptionsService.createCompanySizeOptions(data);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_COMPANY_SIZE_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public updateCompanySizeOptions(
     @Payload(ValidationPipe)
     payload: UpdateCompanySizeOptionRequest
@@ -42,6 +45,7 @@ export class CompanySizeOptionsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_COMPANY_SIZE_OPTIONS })
+  @Roles(UserRole.ROLE_ADMIN)
   public deleteCompanySizeOptions(
     @Payload(ValidationPipe) payload: GetCompanySizeOptionsByIdRequest
   ) {

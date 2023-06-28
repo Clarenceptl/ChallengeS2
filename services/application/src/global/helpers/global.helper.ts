@@ -12,7 +12,10 @@ export const checkRole = (
   return false;
 };
 
-export const checkSelfUpdate = (user: User, params: any): boolean => {
+export const checkSelfUpdate = (user: User | null, params: any): boolean => {
+  if (!user) {
+    return false;
+  }
   for (const key in params) {
     if (user[key] === params[key]) {
       return true;

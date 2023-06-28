@@ -6,11 +6,17 @@ import {
   ParseUUIDPipe,
   Req
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { SuccessResponse, ErrorModel } from '../global';
 
 @ApiTags('User')
+@ApiBearerAuth()
 @Controller({ path: 'users', version: '1' })
 export class UserController {
   constructor(private readonly userService: UserService) {}
