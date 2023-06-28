@@ -41,14 +41,15 @@ export class CompanyRevenueOptionsService {
   }
 
   public async createCompanyRevenueOptions(
-    data: CreateCompanyRevenueOptionRequest
+    data: CreateCompanyRevenueOptionRequest,
+    tokenUser
   ) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.CREATE_COMPANY_REVENUE_OPTIONS },
-          data
+          { revenue: data.revenue, tokenUser }
         )
       );
     } catch (error) {
@@ -59,7 +60,8 @@ export class CompanyRevenueOptionsService {
 
   public async updateCompanyRevenueOptions(
     data: CreateCompanyRevenueOptionRequest,
-    id: string
+    id: string,
+    tokenUser
   ) {
     let res: SuccessResponse;
     try {
@@ -67,7 +69,7 @@ export class CompanyRevenueOptionsService {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.UPDATE_COMPANY_REVENUE_OPTIONS },
-          { revenue, id }
+          { revenue, id, tokenUser }
         )
       );
     } catch (error) {
@@ -76,13 +78,13 @@ export class CompanyRevenueOptionsService {
     return res;
   }
 
-  public async deleteCompanyRevenueOptions(id: string) {
+  public async deleteCompanyRevenueOptions(id: string, tokenUser) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.DELETE_COMPANY_REVENUE_OPTIONS },
-          { id }
+          { id, tokenUser }
         )
       );
     } catch (error) {

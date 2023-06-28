@@ -53,14 +53,24 @@ export class CompanySizeOptionsController {
   @HttpCode(200)
   public updateCompanySizeOptions(
     @Body(ValidationPipe) data: CreateCompanySizeOptionRequest,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @Req() req: any
   ) {
-    return this.companySizeOptionsService.updateCompanySizeOptions(data, id);
+    const tokenUser = req?.user ?? null;
+    return this.companySizeOptionsService.updateCompanySizeOptions(
+      data,
+      id,
+      tokenUser
+    );
   }
 
   @Delete(':id')
   @HttpCode(200)
-  public deleteCompanySizeOptions(@Param('id') id: string) {
-    return this.companySizeOptionsService.deleteCompanySizeOptions(id);
+  public deleteCompanySizeOptions(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.companySizeOptionsService.deleteCompanySizeOptions(
+      id,
+      tokenUser
+    );
   }
 }

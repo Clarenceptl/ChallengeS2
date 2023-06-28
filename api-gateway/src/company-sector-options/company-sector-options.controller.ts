@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { CompanySectorOptionsService } from './company-sector-options.service';
@@ -39,23 +40,38 @@ export class CompanySectorOptionsController {
   @Post()
   @HttpCode(201)
   public createCompanySectorOption(
-    @Body(ValidationPipe) data: CreateCompanySectorOptionRequest
+    @Body(ValidationPipe) data: CreateCompanySectorOptionRequest,
+    @Req() req: any
   ) {
-    return this.companySectorOptionsService.createCompanySectorOption(data);
+    const tokenUser = req?.user ?? null;
+    return this.companySectorOptionsService.createCompanySectorOption(
+      data,
+      tokenUser
+    );
   }
 
   @Put(':id')
   @HttpCode(200)
   public updateCompanySectorOption(
     @Body(ValidationPipe) data: CreateCompanySectorOptionRequest,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @Req() req: any
   ) {
-    return this.companySectorOptionsService.updateCompanySectorOption(data, id);
+    const tokenUser = req?.user ?? null;
+    return this.companySectorOptionsService.updateCompanySectorOption(
+      data,
+      id,
+      tokenUser
+    );
   }
 
   @Delete(':id')
   @HttpCode(200)
-  public deleteCompanySectorOption(@Param('id') id: string) {
-    return this.companySectorOptionsService.deleteCompanySectorOption(id);
+  public deleteCompanySectorOption(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.companySectorOptionsService.deleteCompanySectorOption(
+      id,
+      tokenUser
+    );
   }
 }
