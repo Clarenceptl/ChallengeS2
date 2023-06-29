@@ -19,7 +19,7 @@ export class CreateCompanyRequest {
   description: string;
 
   @IsNotEmpty()
-  founder: any;
+  founder: string;
 
   @IsString()
   @IsNotEmpty()
