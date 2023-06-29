@@ -5,8 +5,8 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
-  Put,
   Req,
   ValidationPipe
 } from '@nestjs/common';
@@ -49,7 +49,7 @@ export class CompanySizeOptionsController {
     );
   }
 
-  @Put(':id')
+  @Patch(':id')
   @HttpCode(200)
   public updateCompanySizeOptions(
     @Body(ValidationPipe) data: CreateCompanySizeOptionRequest,
