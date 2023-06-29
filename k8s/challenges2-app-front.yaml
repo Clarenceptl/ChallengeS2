@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-front-service
+  labels:
+    app: app-front-service
+    spec:
+    replicas: 1
