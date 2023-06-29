@@ -35,7 +35,6 @@ export class CompanyRevenueOptionsController {
   public async createCompanyRevenueOptions(
     data: CreateCompanyRevenueOptionRequest
   ) {
-    console.log(data);
     return await this.companyRevenueOptionsService.createCompanyRevenueOptions(
       data
     );
