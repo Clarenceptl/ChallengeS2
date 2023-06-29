@@ -60,21 +60,19 @@ export class JobAds {
   salary: number;
 
   @ManyToOne(() => Company, (company) => company, {
-    eager: true
+    eager: true,
+    onDelete: 'SET NULL'
   })
-  @JoinColumn()
   company: Company;
 
-  @ManyToMany(() => User, (user) => user, {
-    eager: true
+  @ManyToMany(() => User, (user) => user.candidatures, {
+    eager: true,
+    onDelete: 'SET NULL'
   })
   @JoinTable()
   candidates: User[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment, {
-    eager: true
-  })
-  @JoinColumn()
+  @OneToMany(() => Appointment, (appointment) => appointment)
   appointments: Appointment[];
 
   @CreateDateColumn({

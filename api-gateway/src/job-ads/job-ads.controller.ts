@@ -1,15 +1,17 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Req,
   ValidationPipe
 } from '@nestjs/common';
 import { JobAdsService } from './job-ads.service';
-import { CreateJobAdsRequest } from './job-ads.dto';
+import { CreateJobAdsRequest, UpdateJobAdsRequest } from './job-ads.dto';
 
 @Controller({
   path: 'job-ads',
@@ -36,7 +38,25 @@ export class JobAdsController {
     @Body(ValidationPipe) data: CreateJobAdsRequest,
     @Req() req: any
   ) {
-    const user = req?.user ?? null;
-    return this.jobAdsService.createJobAds(data, user);
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.createJobAds(data, tokenUser);
+  }
+
+  @Patch(':id')
+  @HttpCode(200)
+  public updateJobAds(
+    @Body(ValidationPipe) data: UpdateJobAdsRequest,
+    @Param('id') id: string,
+    @Req() req: any
+  ) {
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.updateJobAds(data, id, tokenUser);
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  public deleteJobAds(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.deleteJobAds(id, tokenUser);
   }
 }

@@ -29,7 +29,6 @@ export class RolesAndOwnerGlobalGuard implements CanActivate {
     );
     // if tokenUser -> data is object
     const { tokenUser, ...params } = context.switchToRpc().getData();
-
     let hasRole = false;
     let selfUpdateRes = false;
 

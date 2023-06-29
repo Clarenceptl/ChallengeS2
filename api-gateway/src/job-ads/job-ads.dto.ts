@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateJobAdsRequest {
   @IsString()
@@ -22,12 +22,27 @@ export class CreateJobAdsRequest {
 
   @IsNotEmpty()
   salary: number;
+}
+export class UpdateJobAdsRequest {
+  @IsString()
+  @IsOptional()
+  title: string;
 
-  company: any;
+  @IsString()
+  @IsOptional()
+  description: string;
 
-  createdAt?: Date;
+  @IsString()
+  @IsOptional()
+  city: string;
 
-  updatedAt?: Date;
+  @IsString()
+  @IsOptional()
+  country: string;
 
-  applicants: any;
+  @IsOptional()
+  contractType: any;
+
+  @IsOptional()
+  salary: number;
 }

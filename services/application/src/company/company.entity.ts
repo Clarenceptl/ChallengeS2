@@ -116,6 +116,9 @@ export class Company {
   )
   sector?: CompanySectorOptions;
 
-  @OneToMany(() => JobAds, (jobAds) => jobAds, { cascade: true })
+  @OneToMany(() => JobAds, (jobAds) => jobAds, {
+    cascade: true,
+    onDelete: 'SET NULL'
+  })
   jobAds?: JobAds[];
 }

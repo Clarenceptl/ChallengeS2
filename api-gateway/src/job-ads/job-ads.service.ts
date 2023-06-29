@@ -7,6 +7,7 @@ import {
   SuccessResponse,
   handleErrors
 } from 'src/global';
+import { CreateJobAdsRequest, UpdateJobAdsRequest } from './job-ads.dto';
 
 @Injectable()
 export class JobAdsService {
@@ -36,11 +37,45 @@ export class JobAdsService {
     return res;
   }
 
-  public async createJobAds(data: any, user: any) {
+  public async createJobAds(data: CreateJobAdsRequest, tokenUser: any) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_JOB_ADS }, { data, user })
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_JOB_ADS },
+          { data, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async updateJobAds(
+    data: UpdateJobAdsRequest,
+    id: string,
+    tokenUser: any
+  ) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_JOB_ADS },
+          { data, id, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async deleteJobAds(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.DELETE_JOB_ADS }, { id, tokenUser })
       );
     } catch (error) {
       handleErrors(error);

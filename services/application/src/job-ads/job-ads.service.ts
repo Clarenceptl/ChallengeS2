@@ -20,6 +20,9 @@ export class JobAdsService {
       res = await this.jobAdsRepository.find({
         order: {
           id: 'ASC'
+        },
+        relations: {
+          candidates: true
         }
       });
     } catch (error) {
@@ -75,6 +78,80 @@ export class JobAdsService {
       newJobAds.created_at = new Date();
       newJobAds.updated_at = new Date();
       res = await this.jobAdsRepository.save(newJobAds);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async updateJobAds(
+    data: CreateJobAdsRequest,
+    id: string,
+    user: User
+  ): Promise<SuccessResponse> {
+    let res: JobAds;
+    try {
+      const jobAdsToUpdate = await this.jobAdsRepository.findOneBy({
+        id: parseInt(id)
+      });
+      if (!jobAdsToUpdate) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Job ad not found'
+        });
+      }
+      if (jobAdsToUpdate.company.id !== user.company.id) {
+        throw new RpcException({
+          statusCode: 403,
+          message: 'Forbidden'
+        });
+      }
+      jobAdsToUpdate.title = data.title || jobAdsToUpdate.title;
+      jobAdsToUpdate.description =
+        data.description || jobAdsToUpdate.description;
+      jobAdsToUpdate.city = data.city || jobAdsToUpdate.city;
+      jobAdsToUpdate.country = data.country || jobAdsToUpdate.country;
+      jobAdsToUpdate.contractType =
+        data.contractType || jobAdsToUpdate.contractType;
+      jobAdsToUpdate.salary = data.salary || jobAdsToUpdate.salary;
+      res = await this.jobAdsRepository.save(jobAdsToUpdate);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async deleteJobAds(id: string, user: User): Promise<SuccessResponse> {
+    let res: JobAds;
+    try {
+      res = await this.jobAdsRepository.findOneBy({
+        id: parseInt(id)
+      });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Job ad not found'
+        });
+      }
+      if (res.company.id !== user.company.id) {
+        throw new RpcException({
+          statusCode: 403,
+          message: 'Forbidden'
+        });
+      }
+      res = await this.jobAdsRepository.remove(res);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
