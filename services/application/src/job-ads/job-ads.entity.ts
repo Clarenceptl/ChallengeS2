@@ -1,7 +1,9 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -14,18 +16,64 @@ import { Appointment } from '../appointment/appointment.entity';
 
 @Entity()
 export class JobAds {
-  @PrimaryGeneratedColumn('uuid')
-  id;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @ManyToOne(() => Company, (company) => company)
+  @Column({
+    type: 'varchar',
+    length: 50,
+    update: true
+  })
+  title: string;
+
+  @Column({
+    type: 'text',
+    update: true
+  })
+  description: string;
+
+  @Column({
+    type: 'varchar',
+    length: 50,
+    update: true
+  })
+  city: string;
+
+  @Column({
+    type: 'varchar',
+    length: 50,
+    update: true
+  })
+  country: string;
+
+  @Column({
+    type: 'varchar',
+    length: 15,
+    update: true
+  })
+  contractType: string;
+
+  @Column({
+    type: 'int',
+    update: true
+  })
+  salary: number;
+
+  @ManyToOne(() => Company, (company) => company, {
+    eager: true
+  })
   @JoinColumn()
   company: Company;
 
-  @ManyToMany(() => User, (user) => user)
-  @JoinColumn()
+  @ManyToMany(() => User, (user) => user, {
+    eager: true
+  })
+  @JoinTable()
   candidates: User[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment)
+  @OneToMany(() => Appointment, (appointment) => appointment, {
+    eager: true
+  })
   @JoinColumn()
   appointments: Appointment[];
 

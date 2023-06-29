@@ -25,10 +25,8 @@ export class CreateJobAdsRequest {
 
   company: any;
 
-  @IsNotEmpty()
   createdAt?: Date;
 
-  @IsNotEmpty()
   updatedAt?: Date;
 
   applicants: any;
