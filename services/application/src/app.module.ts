@@ -21,9 +21,9 @@ import { SeedModule } from './seed/seed.module';
       synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true
     }),
+    CompanyModule,
     UsersModule,
     AppointmentModule,
-    CompanyModule,
     CompanyRevenueOptionsModule,
     CompanySectorOptionsModule,
     CompanySizeOptionsModule,

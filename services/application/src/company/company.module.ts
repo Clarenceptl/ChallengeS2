@@ -5,10 +5,11 @@ import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SERVICE_NAME } from '../global';
+import { User } from 'src/users/users.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Company]),
+    TypeOrmModule.forFeature([Company, User]),
     ClientsModule.register([
       {
         name: SERVICE_NAME.MAILING,

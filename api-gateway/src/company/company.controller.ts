@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Req,
   ValidationPipe
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
@@ -31,7 +32,11 @@ export class CompanyController {
 
   @Post()
   @HttpCode(201)
-  public createCompany(@Body(ValidationPipe) data: CreateCompanyRequest) {
-    return this.companyService.createCompany(data);
+  public createCompany(
+    @Body(ValidationPipe) data: CreateCompanyRequest,
+    @Req() req: any
+  ) {
+    const user = req?.user ?? null;
+    return this.companyService.createCompany(data, user);
   }
 }

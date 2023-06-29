@@ -37,11 +37,17 @@ export class CompanyService {
     return res;
   }
 
-  public async createCompany(data: CreateCompanyRequest) {
+  public async createCompany(data: CreateCompanyRequest, user) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_COMPANY }, data)
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_COMPANY },
+          {
+            data,
+            user
+          }
+        )
       );
     } catch (error) {
       handleErrors(error);

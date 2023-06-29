@@ -1,12 +1,10 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Company } from './company.entity';
-import { Inject } from '@nestjs/common';
-import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
+import { SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyDto, CreateCompanyRequest } from './company.dto';
-import { SendEmailRequest } from '../users/users.dto';
-import { lastValueFrom } from 'rxjs';
+import { CreateCompanyRequest } from './company.dto';
 import { User, UserRole } from 'src/users/users.entity';
 import { encryptPassword } from 'src/helpers';
 import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
@@ -18,21 +16,64 @@ interface CompanyOptions {
   companyRevenueOptions: CompanyRevenueOptions;
   companySectorOptions: CompanySectorOptions;
 }
+@Injectable()
 export class CompanyService {
   public constructor(
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @Inject(SERVICE_NAME.MAILING)
     private readonly mailingService: ClientProxy
   ) {}
 
   public async createCompany(
-    company: CreateCompanyRequest
+    company: CreateCompanyRequest,
+    user: User
   ): Promise<SuccessResponse> {
+    const isEmployer: boolean = user.roles.includes('ROLE_EMPLOYEUR');
+    if (isEmployer) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'You are not allowed to create a company'
+      });
+    } else {
+      let res: Company;
+      try {
+        const newCompany = this.companyRepository.create(company);
+        newCompany.created_at = new Date();
+        newCompany.updated_at = new Date();
+        res = await this.companyRepository.save(newCompany);
+        const userToUpdate = await this.userRepository.findOneBy({
+          id: user.id
+        });
+
+        userToUpdate.roles.push(UserRole.ROLE_EMPLOYEUR);
+        userToUpdate.company = res;
+        await this.userRepository.save(userToUpdate);
+      } catch (error) {
+        throw new RpcException({
+          statusCode: 500,
+          message: error.message
+        });
+      }
+      return {
+        success: true,
+        data: res
+      };
+    }
+  }
+
+  public async getCompanyById(id: string): Promise<SuccessResponse> {
     let res: Company;
     try {
-      const newCompany = this.companyRepository.create(company);
-      res = await this.companyRepository.save(newCompany);
+      res = await this.companyRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company not found'
+        });
+      }
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
@@ -45,10 +86,6 @@ export class CompanyService {
     };
   }
 
-  public async getCompanyById(id) {
-    return this.companyRepository.findOne(id);
-  }
-
   public async getCompanies(): Promise<SuccessResponse> {
     let res: Company[];
     try {
@@ -57,7 +94,6 @@ export class CompanyService {
           id: 'ASC'
         }
       });
-      console.log('res', res);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

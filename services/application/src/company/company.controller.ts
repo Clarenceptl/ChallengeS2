@@ -1,8 +1,10 @@
+import { Controller, ValidationPipe } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { SERVICE_CMD } from '../global';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateCompanyRequest } from './company.dto';
 
+@Controller()
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
@@ -22,7 +24,8 @@ export class CompanyController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_COMPANY })
-  public async createCompany(data: CreateCompanyRequest) {
-    return await this.companyService.createCompany(data);
+  public async createCompany(@Payload(ValidationPipe) payload) {
+    const { data, user } = payload;
+    return await this.companyService.createCompany(data, user);
   }
 }

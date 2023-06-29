@@ -42,7 +42,7 @@ export class User {
     update: true,
     default: 'ROLE_USER'
   })
-  roles: UserRole[];
+  roles: string[];
 
   @Column({
     type: 'varchar',
@@ -101,7 +101,8 @@ export class User {
   createdAt: string;
 
   @ManyToOne(() => Company, (company) => company.employees, {
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    eager: true
   })
   company: Company | null;
 
