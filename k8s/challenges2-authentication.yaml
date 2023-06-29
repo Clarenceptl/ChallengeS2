@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-service
+  labels:
+    app: authentication-service
+    spec:
+    replicas: 1
+    selector:
+    matchLabels:

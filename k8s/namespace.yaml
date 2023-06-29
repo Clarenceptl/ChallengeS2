@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: application-service
+  labels:
+    name: application-service
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: authentication-service
+  labels:
+    name: authentication-service
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mailing-service
+  labels:
+    name: mailing-service
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: analytics-service
+  labels:
+    name: analytics-service
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: api
+  labels:
+    name: api
