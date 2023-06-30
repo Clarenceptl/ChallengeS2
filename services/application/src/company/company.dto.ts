@@ -1,4 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { CompanyRevenueOptions } from 'src/company-revenue-options/company-revenue-options.entity';
+import { CompanySectorOptions } from 'src/company-sector-options/company-sector-options.entity';
+import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
 
 export class CompanyDto {
   @IsString()
@@ -27,13 +30,13 @@ export class CompanyDto {
   siret: number;
 
   @IsNotEmpty()
-  size: any;
+  size: CompanySizeOptions;
 
   @IsNotEmpty()
-  revenue: any;
+  revenue: CompanyRevenueOptions;
 
   @IsNotEmpty()
-  sector: any;
+  sector: CompanySectorOptions;
 
   jobAds: any;
 }
