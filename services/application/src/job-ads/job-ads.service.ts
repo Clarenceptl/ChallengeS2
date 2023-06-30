@@ -213,9 +213,6 @@ export class JobAdsService {
       const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
         id: parseInt(id)
       });
-      const currentUser = await this.userRepository.findOneBy({
-        id: user.id
-      });
       if (!jobAdsToUpdate) {
         throw new RpcException({
           statusCode: 404,
