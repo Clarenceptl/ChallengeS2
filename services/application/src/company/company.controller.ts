@@ -19,7 +19,7 @@ export class CompanyController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_COMPANY_BY_ID })
-  public async getCompanyById(id) {
+  public async getCompanyById(@Payload(ValidationPipe) id: string) {
     return await this.companyService.getCompanyById(id);
   }
 

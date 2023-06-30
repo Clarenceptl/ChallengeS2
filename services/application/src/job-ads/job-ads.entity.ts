@@ -17,15 +17,21 @@ export class JobAds {
   @PrimaryGeneratedColumn('uuid')
   id;
 
-  @ManyToOne(() => Company, (company) => company)
+  @ManyToOne(() => Company, (company) => company, {
+    onDelete: 'SET NULL'
+  })
   @JoinColumn()
   company: Company;
 
-  @ManyToMany(() => User, (user) => user)
-  @JoinColumn()
-  candidates: User[];
+  // @ManyToMany(() => User, (user) => user, {
+  //   onDelete: 'SET NULL'
+  // })
+  // @JoinColumn()
+  // candidates: User[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment)
+  @OneToMany(() => Appointment, (appointment) => appointment, {
+    onDelete: 'SET NULL'
+  })
   @JoinColumn()
   appointments: Appointment[];
 
