@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-mailing
+  name: challenges2-frontend
   namespace: challenges2
 spec:
   replicas: 2
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-mailing-service:latest
+          image: challenges2acr.azurecr.io/challenges2-app-front:latest
           ports:
-            - containerPort: 3023
+            - containerPort: 5173
 
