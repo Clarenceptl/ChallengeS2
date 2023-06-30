@@ -30,7 +30,8 @@ export enum SERVICE_CMD {
   UPDATE_JOB_ADS = 'update-job-ads',
   DELETE_JOB_ADS = 'delete-job-ads',
   APPLY_JOB_ADS = 'apply-job-ads',
-  CANCEL_APPLY_JOB_ADS = 'cancel-apply-job-ads'
+  CANCEL_APPLY_JOB_ADS = 'cancel-apply-job-ads',
+  GET_APPOINTMENTS = 'get-appointments'
 }
 
 export enum SERVICE_NAME {

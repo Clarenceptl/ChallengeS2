@@ -1,8 +1,9 @@
 import { AppointmentService } from './appointment.service';
-import { SERVICE_CMD } from '../global';
+import { Roles, SERVICE_CMD } from '../global';
 import { AppointmentDto } from './appointment.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Body, ValidationPipe } from '@nestjs/common';
+import { UserRole } from 'src/users/users.entity';
 
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -25,5 +26,11 @@ export class AppointmentController {
   @MessagePattern({ cmd: SERVICE_CMD.GET_APPOINTMENT_BY_ID })
   public async getAppointmentById(@Body(ValidationPipe) id) {
     return this.appointmentService.getAppointmentById(id);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_APPOINTMENTS })
+  @Roles(UserRole.ROLE_EMPLOYEUR || UserRole.ROLE_USER)
+  public async getAppointments(@Payload(ValidationPipe) tokenUser) {
+    return this.appointmentService.getAppointments(tokenUser);
   }
 }

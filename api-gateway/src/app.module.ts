@@ -12,6 +12,7 @@ import { CompanySectorOptionsModule } from './company-sector-options/company-sec
 import { RequestLoggerMiddleware } from './global';
 import { CompanyModule } from './company/company.module';
 import { JobAdsModule } from './job-ads/job-ads.module';
+import { AppointmentModule } from './appointment/appointment.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { JobAdsModule } from './job-ads/job-ads.module';
     CompanyRevenueOptionsModule,
     CompanySectorOptionsModule,
     CompanyModule,
-    JobAdsModule
+    JobAdsModule,
+    AppointmentModule
   ],
 
   controllers: [],

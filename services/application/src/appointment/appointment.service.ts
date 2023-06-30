@@ -7,6 +7,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { AppointmentDto } from './appointment.dto';
 import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
+import { User, UserRole } from 'src/users/users.entity';
 
 export class AppointmentService {
   public constructor(
@@ -73,5 +74,29 @@ export class AppointmentService {
 
   public async updateAppointment(id, appointment) {
     return this.appointmentRepository.update(id, appointment);
+  }
+
+  public async getAppointments(tokenUser: User) {
+    let res: Appointment[];
+    try {
+      if (tokenUser.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
+        res = await this.appointmentRepository.find({
+          where: { employee: tokenUser }
+        });
+      } else {
+        res = await this.appointmentRepository.find({
+          where: { candidate: tokenUser }
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
   }
 }
