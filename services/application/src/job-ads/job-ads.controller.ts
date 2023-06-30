@@ -48,4 +48,14 @@ export class JobAdsController {
     const { id, tokenUser } = payload;
     return this.jobAdsService.deleteJobAds(id, tokenUser);
   }
+
+  @MessagePattern({ cmd: SERVICE_CMD.APPLY_JOB_ADS })
+  @Roles(UserRole.ROLE_USER)
+  public applyJobAds(
+    @Payload(ValidationPipe)
+    payload
+  ) {
+    const { id, tokenUser } = payload;
+    return this.jobAdsService.applyJobAds(id, tokenUser);
+  }
 }

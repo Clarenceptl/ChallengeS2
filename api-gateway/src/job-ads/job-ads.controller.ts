@@ -59,4 +59,18 @@ export class JobAdsController {
     const tokenUser = req?.user ?? null;
     return this.jobAdsService.deleteJobAds(id, tokenUser);
   }
+
+  @Post(':id/apply')
+  @HttpCode(200)
+  public applyJobAds(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.applyJobAds(id, tokenUser);
+  }
+
+  @Post(':id/apply/cancel')
+  @HttpCode(200)
+  public cancelApplyJobAds(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.cancelApplyJobAds(id, tokenUser);
+  }
 }
