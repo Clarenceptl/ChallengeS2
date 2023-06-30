@@ -191,9 +191,8 @@ export class JobAdsService {
       }
       jobAdsToUpdate.candidates.push(currentUser);
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
-      currentUser.candidatures.push(res);
-      await this.userRepository.save(currentUser);
     } catch (error) {
+      console.log(error);
       throw new RpcException({
         statusCode: 500,
         message: error.message
@@ -214,9 +213,6 @@ export class JobAdsService {
       const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
         id: parseInt(id)
       });
-      const currentUser = await this.userRepository.findOneBy({
-        id: user.id
-      });
       if (!jobAdsToUpdate) {
         throw new RpcException({
           statusCode: 404,
@@ -231,14 +227,11 @@ export class JobAdsService {
           message: 'You did not apply for this job'
         });
       }
+      console.log(jobAdsToUpdate.candidates);
       jobAdsToUpdate.candidates = jobAdsToUpdate.candidates.filter(
         (candidate) => candidate.id !== user.id
       );
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
-      currentUser.candidatures = currentUser.candidatures.filter(
-        (candidature) => candidature.id !== res.id
-      );
-      await this.userRepository.save(currentUser);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
