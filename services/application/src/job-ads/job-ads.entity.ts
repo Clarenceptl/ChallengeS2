@@ -66,10 +66,10 @@ export class JobAds {
   company: Company;
 
   @ManyToMany(() => User, (user) => user.candidatures, {
-    eager: true,
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    cascade: true,
+    eager: true
   })
-  @JoinTable()
   candidates: User[];
 
   @OneToMany(() => Appointment, (appointment) => appointment)
