@@ -1,10 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: analytics-service
-  labels:
-    app: analytics-service
-    spec:
-    replicas: 1
-    selector:
+  name: challenges2-analytics
+  namespace: challenges2
+spec:
+  replicas: 2
+  selector:
     matchLabels:
+      app: api-gateway-app
+      service: api-gateway-service
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+        service: api-gateway-service
+    spec:
+      containers:
+        - name: challenges2-api-gateway
+          image: challenges2acr.azurecr.io/challenges2-analytics-service:latest
