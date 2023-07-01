@@ -7,6 +7,10 @@ import {
   SuccessResponse,
   handleErrors
 } from 'src/global';
+import {
+  AcceptAppointmentRequest,
+  CreateAppointmentRequest
+} from './appointment.dto';
 
 @Injectable()
 export class AppointmentService {
@@ -17,6 +21,55 @@ export class AppointmentService {
     try {
       res = await lastValueFrom(
         this.client.send({ cmd: SERVICE_CMD.GET_APPOINTMENTS }, tokenUser)
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async getAppointmentById(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.GET_APPOINTMENT_BY_ID },
+          { id, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async createAppointment(data: CreateAppointmentRequest, tokenUser) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_APPOINTMENT },
+          { appointment: data, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async acceptAppointment(
+    id: string,
+    data: AcceptAppointmentRequest,
+    tokenUser
+  ) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.ACCEPT_APPOINTMENT },
+          { id, accepted: data.accepted, tokenUser }
+        )
       );
     } catch (error) {
       handleErrors(error);

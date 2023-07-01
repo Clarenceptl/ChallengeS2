@@ -1,48 +1,27 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Appointment } from './appointment.entity';
-import { Inject } from '@nestjs/common';
-import { SERVICE_CMD, SERVICE_NAME } from '../global';
+import { Inject, Injectable } from '@nestjs/common';
+import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { AppointmentDto } from './appointment.dto';
+import { AppointmentDto, CreateAppointmentRequest } from './appointment.dto';
 import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
 import { User, UserRole } from 'src/users/users.entity';
+import { JobAds } from 'src/job-ads/job-ads.entity';
 
+@Injectable()
 export class AppointmentService {
   public constructor(
     @InjectRepository(Appointment)
     private readonly appointmentRepository: Repository<Appointment>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(JobAds)
+    private readonly jobAdsRepository: Repository<JobAds>,
     @Inject(SERVICE_NAME.MAILING)
     private readonly mailingService: ClientProxy
   ) {}
-
-  public async createAppointment(appointment: AppointmentDto) {
-    try {
-      const savedAppointment = this.appointmentRepository.create(appointment);
-      await this.appointmentRepository.save(savedAppointment);
-    } catch (error) {
-      throw new RpcException('error');
-    }
-    const resultAppointmentEmail: SendEmailRequest = {
-      email: appointment.candidate.email,
-      firstname: appointment.candidate.firstname
-    };
-
-    console.log('envoi email');
-    const res = await lastValueFrom(
-      this.mailingService.emit<SendEmailRequest>(
-        SERVICE_CMD.GET_REGISTER_MAIL,
-        resultAppointmentEmail
-      )
-    );
-    console.log('response email', res);
-    return { success: true, message: 'Appointment' };
-  }
-
-  public async getAppointmentById(id) {
-    return this.appointmentRepository.findOne(id);
-  }
 
   //TODO where do we add the body related to the email?
   public async deleteAppointment(id) {
@@ -72,22 +51,127 @@ export class AppointmentService {
     }
   }
 
-  public async updateAppointment(id, appointment) {
-    return this.appointmentRepository.update(id, appointment);
-  }
-
   public async getAppointments(tokenUser: User) {
     let res: Appointment[];
     try {
       if (tokenUser.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
         res = await this.appointmentRepository.find({
-          where: { employee: tokenUser }
+          where: {
+            employee: {
+              id: tokenUser.id
+            }
+          }
         });
       } else {
         res = await this.appointmentRepository.find({
-          where: { candidate: tokenUser }
+          where: {
+            candidate: {
+              id: tokenUser.id
+            }
+          }
         });
       }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async getAppointmentById(
+    id: string,
+    tokenUser: User
+  ): Promise<SuccessResponse> {
+    let res: Appointment;
+    try {
+      res = await this.appointmentRepository.findOneBy({ id: parseInt(id) });
+      if (tokenUser.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
+        if (res.employee.id !== tokenUser.id) {
+          throw new RpcException({
+            statusCode: 403,
+            message: 'Forbidden'
+          });
+        }
+      } else {
+        if (res.candidate.id !== tokenUser.id) {
+          throw new RpcException({
+            statusCode: 403,
+            message: 'Forbidden'
+          });
+        }
+      }
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Appointment not found'
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async createAppointment(
+    appointment: CreateAppointmentRequest,
+    tokenUser: User
+  ): Promise<SuccessResponse> {
+    let res: Appointment;
+    try {
+      const newAppointment = new Appointment();
+      const candidate = await this.userRepository.findOneBy({
+        id: appointment.candidateId
+      });
+      const jobAd = await this.jobAdsRepository.findOneBy({
+        id: parseInt(appointment.jobAdId)
+      });
+      newAppointment.employee = tokenUser;
+      newAppointment.candidate = candidate;
+      newAppointment.job = jobAd;
+      newAppointment.time = appointment.time;
+
+      res = await this.appointmentRepository.save(newAppointment);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async acceptAppointment(
+    id: string,
+    accepted: boolean,
+    tokenUser: User
+  ): Promise<SuccessResponse> {
+    let res: Appointment;
+    try {
+      const appointment = await this.appointmentRepository.findOneBy({
+        id: parseInt(id)
+      });
+      if (!appointment) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Appointment not found'
+        });
+      }
+      appointment.accepted = accepted;
+      res = await this.appointmentRepository.save(appointment);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

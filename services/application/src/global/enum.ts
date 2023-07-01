@@ -10,6 +10,7 @@ export enum SERVICE_CMD {
   CREATE_APPOINTMENT = 'create-appointment',
   DELETE_APPOINTMENT = 'delete-appointment',
   UPDATE_APPOINTMENT = 'update-appointment',
+  ACCEPT_APPOINTMENT = 'accept-appointment',
   GET_APPOINTMENT_BY_ID = 'get-appointment-by-id',
   GET_COMPANIES = 'get-companies',
   GET_COMPANY = 'get-company',

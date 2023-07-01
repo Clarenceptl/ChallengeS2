@@ -15,7 +15,8 @@ export class Appointment {
 
   @ManyToOne(() => User, (user) => user, {
     onDelete: 'SET NULL',
-    nullable: false
+    nullable: false,
+    eager: true
   })
   @JoinColumn({
     name: 'candidateId'
@@ -24,7 +25,8 @@ export class Appointment {
 
   @ManyToOne(() => User, (user) => user, {
     onDelete: 'SET NULL',
-    nullable: false
+    nullable: false,
+    eager: true
   })
   @JoinColumn({
     name: 'employeeId'
