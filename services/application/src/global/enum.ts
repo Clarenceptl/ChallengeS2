@@ -10,6 +10,7 @@ export enum SERVICE_CMD {
   CREATE_APPOINTMENT = 'create-appointment',
   DELETE_APPOINTMENT = 'delete-appointment',
   UPDATE_APPOINTMENT = 'update-appointment',
+  ACCEPT_APPOINTMENT = 'accept-appointment',
   GET_APPOINTMENT_BY_ID = 'get-appointment-by-id',
   GET_COMPANIES = 'get-companies',
   GET_COMPANY = 'get-company',
@@ -39,6 +40,7 @@ export enum SERVICE_CMD {
   DELETE_JOB_ADS = 'delete-job-ads',
   APPLY_JOB_ADS = 'apply-job-ads',
   CANCEL_APPLY_JOB_ADS = 'cancel-apply-job-ads',
+  GET_APPOINTMENTS = 'get-appointments',
   VERIFY_ACCOUNT = 'auth_verify_account'
 }
 

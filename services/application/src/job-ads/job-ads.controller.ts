@@ -2,7 +2,6 @@ import { Controller, ValidationPipe } from '@nestjs/common';
 import { JobAdsService } from './job-ads.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Roles, SERVICE_CMD } from 'src/global';
-import { CreateJobAdsRequest } from './job-ads.dto';
 import { UserRole } from 'src/users/users.entity';
 
 @Controller('job-ads')

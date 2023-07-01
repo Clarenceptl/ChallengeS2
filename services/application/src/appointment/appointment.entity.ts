@@ -1,7 +1,7 @@
 import {
   Column,
   Entity,
-  IsNull,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -13,26 +13,39 @@ export class Appointment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => User, (user) => user, {
-  //   nullable: true,
-  //   onDelete: 'CASCADE'
-  // })
-  // candidate?: User;
+  @ManyToOne(() => User, (user) => user, {
+    onDelete: 'SET NULL',
+    nullable: false,
+    eager: true
+  })
+  @JoinColumn({
+    name: 'candidateId'
+  })
+  candidate: User;
+
+  @ManyToOne(() => User, (user) => user, {
+    onDelete: 'SET NULL',
+    nullable: false,
+    eager: true
+  })
+  @JoinColumn({
+    name: 'employeeId'
+  })
+  employee: User;
 
   @ManyToOne(() => JobAds, (job) => job)
   job: JobAds;
 
   @Column({
     type: 'timestamp',
-    nullable: false,
-    update: true
+    nullable: false
   })
   time: Date;
 
   @Column({
     type: 'boolean',
-    nullable: false,
-    update: true
+    nullable: true,
+    default: null
   })
   accepted: boolean;
 }
