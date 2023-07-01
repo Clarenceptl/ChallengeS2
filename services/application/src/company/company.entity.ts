@@ -94,24 +94,30 @@ export class Company {
   @ManyToOne(
     () => CompanySizeOptions,
     (companySizeOptions) => companySizeOptions,
-    { nullable: true, onDelete: 'SET NULL' }
+    {
+      nullable: true,
+      onDelete: 'SET NULL',
+      eager: true
+    }
   )
   size?: CompanySizeOptions;
 
   @ManyToOne(
     () => CompanyRevenueOptions,
     (companyRevenueOptions) => companyRevenueOptions,
-    { nullable: true, onDelete: 'SET NULL' }
+    { nullable: true, onDelete: 'SET NULL', eager: true }
   )
   revenue?: CompanySizeOptions;
 
   @ManyToOne(
     () => CompanySectorOptions,
     (companySectorOptions) => companySectorOptions,
-    { nullable: true, onDelete: 'SET NULL' }
+    { nullable: true, onDelete: 'SET NULL', eager: true }
   )
   sector?: CompanySectorOptions;
 
-  @OneToMany(() => JobAds, (jobAds) => jobAds, { cascade: true })
+  @OneToMany(() => JobAds, (jobAds) => jobAds, {
+    onDelete: 'SET NULL'
+  })
   jobAds?: JobAds[];
 }

@@ -96,7 +96,7 @@ export class UsersService {
   }
 
   public async seed() {
-    await this.userRepository.clear();
+    await this.userRepository.delete({});
     const password: string = encryptPassword('password');
     let user = new User();
     user = Object.assign(user, {

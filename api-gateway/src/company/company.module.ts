@@ -1,29 +1,23 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Company } from './company.entity';
 import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAME } from '../global';
-import { User } from 'src/users/users.entity';
+import { SERVICE_NAME } from 'src/global';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Company, User]),
     ClientsModule.register([
       {
-        name: SERVICE_NAME.MAILING,
+        name: SERVICE_NAME.APP,
         transport: Transport.TCP,
         options: {
-          host: 'mailing-service',
-          port: 3024
+          host: 'app-service',
+          port: 3021
         }
       }
     ])
   ],
-
   controllers: [CompanyController],
-  providers: [CompanyService],
-  exports: [CompanyService]
+  providers: [CompanyService]
 })
 export class CompanyModule {}

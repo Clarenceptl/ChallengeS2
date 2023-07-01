@@ -20,7 +20,10 @@ export enum SERVICE_CMD {
   GET_COMPANY_SECTOR_OPTIONS_BY_ID = 'get-company-sector-options-by-id',
   CREATE_COMPANY_SECTOR_OPTIONS = 'create-company-sector-options',
   UPDATE_COMPANY_SECTOR_OPTIONS = 'update-company-sector-options',
-  DELETE_COMPANY_SECTOR_OPTIONS = 'delete-company-sector-options'
+  DELETE_COMPANY_SECTOR_OPTIONS = 'delete-company-sector-options',
+  GET_COMPANIES = 'get-companies',
+  GET_COMPANY = 'get-company',
+  CREATE_COMPANY = 'create-company'
 }
 
 export enum SERVICE_NAME {

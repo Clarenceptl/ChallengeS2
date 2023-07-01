@@ -10,6 +10,7 @@ import { CompanySizeOptionsModule } from './company-size-options/company-size-op
 import { CompanyRevenueOptionsModule } from './company-revenue-options/company-revenue-options.module';
 import { CompanySectorOptionsModule } from './company-sector-options/company-sector-options.module';
 import { RequestLoggerMiddleware } from './global';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { RequestLoggerMiddleware } from './global';
     AdminModule,
     CompanySizeOptionsModule,
     CompanyRevenueOptionsModule,
-    CompanySectorOptionsModule
+    CompanySectorOptionsModule,
+    CompanyModule
   ],
 
   controllers: [],
