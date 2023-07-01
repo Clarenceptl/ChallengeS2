@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { User } from 'src/users/users.entity';
 
 export class CreateJobAdsRequest {
   @IsString()
@@ -31,5 +32,5 @@ export class CreateJobAdsRequest {
   @IsNotEmpty()
   updatedAt?: Date;
 
-  applicants: any;
+  applicants: User[];
 }

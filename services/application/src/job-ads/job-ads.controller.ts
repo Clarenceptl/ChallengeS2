@@ -15,7 +15,7 @@ export class JobAdsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_JOB_ADS_BY_ID })
-  public getJobAdsById(id: string) {
+  public getJobAdsById(@Payload(ValidationPipe) id: string) {
     return this.jobAdsService.getJobAdsById(id);
   }
 

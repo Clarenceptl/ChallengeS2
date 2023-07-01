@@ -68,12 +68,7 @@ export class JobAdsService {
     let res: JobAds;
     try {
       const newJobAds = new JobAds();
-      newJobAds.title = data.title;
-      newJobAds.description = data.description;
-      newJobAds.city = data.city;
-      newJobAds.country = data.country;
-      newJobAds.contractType = data.contractType;
-      newJobAds.salary = data.salary;
+      Object.assign(newJobAds, data);
       newJobAds.company = user.company;
       newJobAds.created_at = new Date();
       newJobAds.updated_at = new Date();
@@ -112,14 +107,8 @@ export class JobAdsService {
           message: 'Forbidden'
         });
       }
-      jobAdsToUpdate.title = data.title || jobAdsToUpdate.title;
-      jobAdsToUpdate.description =
-        data.description || jobAdsToUpdate.description;
-      jobAdsToUpdate.city = data.city || jobAdsToUpdate.city;
-      jobAdsToUpdate.country = data.country || jobAdsToUpdate.country;
-      jobAdsToUpdate.contractType =
-        data.contractType || jobAdsToUpdate.contractType;
-      jobAdsToUpdate.salary = data.salary || jobAdsToUpdate.salary;
+      Object.assign(jobAdsToUpdate, data);
+      jobAdsToUpdate.updated_at = new Date();
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
       throw new RpcException({
