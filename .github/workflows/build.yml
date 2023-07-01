@@ -5,6 +5,18 @@ on:
     branches: develop
 
 jobs:
+  EndtoEnd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitCode
+        uses: actions/checkout@v2
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
+        with:
+          command: npx cypress run
+          browser: chrome
+
   BuildAndPush:
     runs-on: ubuntu-latest
     steps:
@@ -78,7 +90,6 @@ jobs:
           context: ./api-gateway
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api-gateway:ci
-
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
