@@ -11,6 +11,7 @@ import { CompanyRevenueOptionsModule } from './company-revenue-options/company-r
 import { CompanySectorOptionsModule } from './company-sector-options/company-sector-options.module';
 import { RequestLoggerMiddleware } from './global';
 import { CompanyModule } from './company/company.module';
+import { JobAdsModule } from './job-ads/job-ads.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { CompanyModule } from './company/company.module';
     CompanySizeOptionsModule,
     CompanyRevenueOptionsModule,
     CompanySectorOptionsModule,
-    CompanyModule
+    CompanyModule,
+    JobAdsModule
   ],
 
   controllers: [],

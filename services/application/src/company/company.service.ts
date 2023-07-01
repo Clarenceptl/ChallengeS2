@@ -31,7 +31,7 @@ export class CompanyService {
     company: CreateCompanyRequest,
     user: User
   ): Promise<SuccessResponse> {
-    const isEmployer: boolean = user.roles.includes('ROLE_EMPLOYEUR');
+    const isEmployer: boolean = user.roles.includes(UserRole.ROLE_EMPLOYEUR);
     if (isEmployer) {
       throw new RpcException({
         statusCode: 403,
@@ -40,17 +40,19 @@ export class CompanyService {
     } else {
       let res: Company;
       try {
-        const newCompany = this.companyRepository.create(company);
+        const newCompany = this.companyRepository.create({
+          ...company,
+          employees: [user]
+        });
         newCompany.created_at = new Date();
         newCompany.updated_at = new Date();
         res = await this.companyRepository.save(newCompany);
         const userToUpdate = await this.userRepository.findOneBy({
           id: user.id
         });
-
         userToUpdate.roles.push(UserRole.ROLE_EMPLOYEUR);
-        userToUpdate.company = res;
         await this.userRepository.save(userToUpdate);
+        userToUpdate.company = res;
       } catch (error) {
         throw new RpcException({
           statusCode: 500,
@@ -140,7 +142,7 @@ export class CompanyService {
       firstname: 'employeur',
       lastname: 'John',
       birthdate: '01/01/1990',
-      role: UserRole.ROLE_EMPLOYEUR,
+      roles: [UserRole.ROLE_USER, UserRole.ROLE_EMPLOYEUR],
       isVerified: true
     });
 

@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { User } from 'src/users/users.entity';
 
-export class JobAdsDto {
+export class CreateJobAdsRequest {
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -23,14 +24,13 @@ export class JobAdsDto {
   @IsNotEmpty()
   salary: number;
 
-  @IsNotEmpty()
   company: any;
 
   @IsNotEmpty()
-  createdAt: Date;
+  createdAt?: Date;
 
   @IsNotEmpty()
-  updatedAt: Date;
+  updatedAt?: Date;
 
-  applicants: any;
+  applicants: User[];
 }

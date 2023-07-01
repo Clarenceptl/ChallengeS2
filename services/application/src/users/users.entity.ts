@@ -1,11 +1,14 @@
 import { Company } from 'src/company/company.entity';
+import { JobAds } from 'src/job-ads/job-ads.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   BeforeInsert,
   BeforeUpdate,
-  ManyToOne
+  ManyToOne,
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 
 export enum UserRole {
@@ -40,9 +43,9 @@ export class User {
     type: 'simple-array',
     nullable: false,
     update: true,
-    default: 'ROLE_USER'
+    default: [UserRole.ROLE_USER]
   })
-  roles: string[];
+  roles: UserRole[];
 
   @Column({
     type: 'varchar',
@@ -105,6 +108,12 @@ export class User {
     eager: true
   })
   company: Company | null;
+
+  @ManyToMany(() => JobAds, (jobAds) => jobAds.candidates, {
+    onDelete: 'SET NULL'
+  })
+  @JoinTable()
+  candidatures: JobAds[];
 
   @BeforeInsert()
   @BeforeUpdate()

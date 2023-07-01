@@ -105,7 +105,7 @@ export class UsersService {
       firstname: 'Admin',
       lastname: 'Jhon',
       birthdate: '01/01/1990',
-      roles: UserRole.ROLE_ADMIN,
+      roles: [UserRole.ROLE_USER, UserRole.ROLE_ADMIN, UserRole.ROLE_EMPLOYEUR],
       isVerified: true
     });
 
@@ -114,15 +114,14 @@ export class UsersService {
     user = Object.assign(user, {
       email: 'user@user.com',
       firstname: 'User',
-      roles: UserRole.ROLE_USER
+      roles: [UserRole.ROLE_USER]
     });
 
     const basicUser = this.userRepository.create(user);
 
     user = Object.assign(user, {
       email: 'user@user2.com',
-      firstname: 'User2',
-      roles: UserRole.ROLE_USER
+      firstname: 'User2'
     });
 
     const basicUser2 = this.userRepository.create(user);

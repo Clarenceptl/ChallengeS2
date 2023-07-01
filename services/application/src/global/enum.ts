@@ -32,6 +32,11 @@ export enum SERVICE_CMD {
   CREATE_COMPANY_SECTOR_OPTIONS = 'create-company-sector-options',
   UPDATE_COMPANY_SECTOR_OPTIONS = 'update-company-sector-options',
   DELETE_COMPANY_SECTOR_OPTIONS = 'delete-company-sector-options',
+  GET_JOB_ADS = 'get-job-ads',
+  GET_JOB_ADS_BY_ID = 'get-job-ads-by-id',
+  CREATE_JOB_ADS = 'create-job-ads',
+  UPDATE_JOB_ADS = 'update-job-ads',
+  DELETE_JOB_ADS = 'delete-job-ads',
   VERIFY_ACCOUNT = 'auth_verify_account'
 }
 
