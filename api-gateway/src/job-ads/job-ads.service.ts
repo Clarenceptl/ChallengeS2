@@ -82,4 +82,31 @@ export class JobAdsService {
     }
     return res;
   }
+
+  public async applyJobAds(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.APPLY_JOB_ADS }, { id, tokenUser })
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async cancelApplyJobAds(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.CANCEL_APPLY_JOB_ADS },
+          { id, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
 }

@@ -37,6 +37,8 @@ export enum SERVICE_CMD {
   CREATE_JOB_ADS = 'create-job-ads',
   UPDATE_JOB_ADS = 'update-job-ads',
   DELETE_JOB_ADS = 'delete-job-ads',
+  APPLY_JOB_ADS = 'apply-job-ads',
+  CANCEL_APPLY_JOB_ADS = 'cancel-apply-job-ads',
   VERIFY_ACCOUNT = 'auth_verify_account'
 }
 

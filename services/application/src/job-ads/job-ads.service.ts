@@ -11,7 +11,9 @@ import { User } from 'src/users/users.entity';
 export class JobAdsService {
   public constructor(
     @InjectRepository(JobAds)
-    private readonly jobAdsRepository: Repository<JobAds>
+    private readonly jobAdsRepository: Repository<JobAds>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>
   ) {}
 
   public async getJobAds(): Promise<SuccessResponse> {
@@ -141,6 +143,84 @@ export class JobAdsService {
         });
       }
       res = await this.jobAdsRepository.remove(res);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async applyJobAds(id: string, user: User): Promise<SuccessResponse> {
+    let res: JobAds;
+    try {
+      const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
+        id: parseInt(id)
+      });
+      const currentUser = await this.userRepository.findOneBy({
+        id: user.id
+      });
+      if (!jobAdsToUpdate) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Job ad not found'
+        });
+      }
+      if (
+        jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
+      ) {
+        throw new RpcException({
+          statusCode: 401,
+          message: 'You already applied for this job'
+        });
+      }
+      jobAdsToUpdate.candidates.push(currentUser);
+      res = await this.jobAdsRepository.save(jobAdsToUpdate);
+    } catch (error) {
+      console.log(error);
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async cancelApplyJobAds(
+    id: string,
+    user: User
+  ): Promise<SuccessResponse> {
+    let res: JobAds;
+    try {
+      const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
+        id: parseInt(id)
+      });
+      if (!jobAdsToUpdate) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Job ad not found'
+        });
+      }
+      if (
+        !jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
+      ) {
+        throw new RpcException({
+          statusCode: 409,
+          message: 'You did not apply for this job'
+        });
+      }
+      console.log(jobAdsToUpdate.candidates);
+      jobAdsToUpdate.candidates = jobAdsToUpdate.candidates.filter(
+        (candidate) => candidate.id !== user.id
+      );
+      res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
