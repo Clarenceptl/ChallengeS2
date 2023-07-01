@@ -17,7 +17,7 @@ import { APP_GUARD } from '@nestjs/core';
         secure: false
       },
       defaults: {
-        from: '"larudakoé" <larudakoé@no-reply.com>'
+        from: '"larudakoé" <noreply@larudakote.com>'
       },
 
       template: {
