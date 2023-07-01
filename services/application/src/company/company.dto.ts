@@ -2,6 +2,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { CompanyRevenueOptions } from 'src/company-revenue-options/company-revenue-options.entity';
 import { CompanySectorOptions } from 'src/company-sector-options/company-sector-options.entity';
 import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
+import { JobAds } from 'src/job-ads/job-ads.entity';
 
 export class CompanyDto {
   @IsString()
@@ -38,7 +39,7 @@ export class CompanyDto {
   @IsNotEmpty()
   sector: CompanySectorOptions;
 
-  jobAds: any;
+  jobAds: JobAds[];
 }
 
 export class CreateCompanyRequest {
