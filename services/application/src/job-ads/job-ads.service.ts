@@ -227,7 +227,6 @@ export class JobAdsService {
           message: 'You did not apply for this job'
         });
       }
-      console.log(jobAdsToUpdate.candidates);
       jobAdsToUpdate.candidates = jobAdsToUpdate.candidates.filter(
         (candidate) => candidate.id !== user.id
       );

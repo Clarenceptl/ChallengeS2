@@ -9,6 +9,7 @@ import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
 import { User, UserRole } from 'src/users/users.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
+import e from 'express';
 
 @Injectable()
 export class AppointmentService {
@@ -170,12 +171,18 @@ export class AppointmentService {
           message: 'Appointment not found'
         });
       }
+      if (tokenUser.id !== appointment.candidate.id) {
+        throw new RpcException({
+          statusCode: 403,
+          message: 'Forbidden'
+        });
+      }
       appointment.accepted = accepted;
       res = await this.appointmentRepository.save(appointment);
     } catch (error) {
       throw new RpcException({
-        statusCode: 500,
-        message: error.message
+        statusCode: error.error.statusCode ?? 500,
+        message: error.error.message
       });
     }
     return {
