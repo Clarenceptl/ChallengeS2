@@ -7,6 +7,8 @@ import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AdminModule } from './admin/admin.module';
 import { CompanySizeOptionsModule } from './company-size-options/company-size-options.module';
+import { CompanyRevenueOptionsModule } from './company-revenue-options/company-revenue-options.module';
+import { CompanySectorOptionsModule } from './company-sector-options/company-sector-options.module';
 import { RequestLoggerMiddleware } from './global';
 
 @Module({
@@ -25,7 +27,9 @@ import { RequestLoggerMiddleware } from './global';
     }),
     UserModule,
     AdminModule,
-    CompanySizeOptionsModule
+    CompanySizeOptionsModule,
+    CompanyRevenueOptionsModule,
+    CompanySectorOptionsModule
   ],
 
   controllers: [],

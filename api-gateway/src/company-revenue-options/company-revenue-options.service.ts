@@ -1,23 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 import {
   SERVICE_CMD,
   SERVICE_NAME,
-  type SuccessResponse,
+  SuccessResponse,
   handleErrors
 } from 'src/global';
-import { lastValueFrom } from 'rxjs';
-import { CreateCompanySizeOptionRequest } from './company-size-options.dto';
+import { CreateCompanyRevenueOptionRequest } from './company-revenue-options.dto';
 
 @Injectable()
-export class CompanySizeOptionsService {
+export class CompanyRevenueOptionsService {
   constructor(@Inject(SERVICE_NAME.APP) private readonly client: ClientProxy) {}
 
-  public async getCompanySizeOptions(): Promise<SuccessResponse> {
+  public async getCompanyRevenueOptions() {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS }, {})
+        this.client.send({ cmd: SERVICE_CMD.GET_COMPANY_REVENUE_OPTIONS }, {})
       );
     } catch (error) {
       handleErrors(error);
@@ -25,13 +25,13 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async getCompanySizeOptionsById(id: string): Promise<SuccessResponse> {
+  public async getCompanyRevenueOptionsById(id: string) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.GET_COMPANY_SIZE_OPTIONS_BY_ID },
-          id
+          { cmd: SERVICE_CMD.GET_COMPANY_REVENUE_OPTIONS_BY_ID },
+          { id }
         )
       );
     } catch (error) {
@@ -40,16 +40,16 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async createCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest,
+  public async createCompanyRevenueOptions(
+    data: CreateCompanyRevenueOptionRequest,
     tokenUser
-  ): Promise<SuccessResponse> {
+  ) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.CREATE_COMPANY_SIZE_OPTIONS },
-          { size: data.size, tokenUser }
+          { cmd: SERVICE_CMD.CREATE_COMPANY_REVENUE_OPTIONS },
+          { revenue: data.revenue, tokenUser }
         )
       );
     } catch (error) {
@@ -58,18 +58,18 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async updateCompanySizeOptions(
-    data: CreateCompanySizeOptionRequest,
+  public async updateCompanyRevenueOptions(
+    data: CreateCompanyRevenueOptionRequest,
     id: string,
     tokenUser
-  ): Promise<SuccessResponse> {
+  ) {
     let res: SuccessResponse;
     try {
-      const { size } = data;
+      const { revenue } = data;
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.UPDATE_COMPANY_SIZE_OPTIONS },
-          { size, id, tokenUser }
+          { cmd: SERVICE_CMD.UPDATE_COMPANY_REVENUE_OPTIONS },
+          { revenue, id, tokenUser }
         )
       );
     } catch (error) {
@@ -78,15 +78,12 @@ export class CompanySizeOptionsService {
     return res;
   }
 
-  public async deleteCompanySizeOptions(
-    id: string,
-    tokenUser
-  ): Promise<SuccessResponse> {
+  public async deleteCompanyRevenueOptions(id: string, tokenUser) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
         this.client.send(
-          { cmd: SERVICE_CMD.DELETE_COMPANY_SIZE_OPTIONS },
+          { cmd: SERVICE_CMD.DELETE_COMPANY_REVENUE_OPTIONS },
           { id, tokenUser }
         )
       );
