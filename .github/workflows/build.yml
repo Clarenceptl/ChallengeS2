@@ -6,7 +6,6 @@ on:
 
 jobs:
   EndtoEnd:
-  cypress-run:
     runs-on: ubuntu-latest
     container: cypress/browsers:node16.16.0-chrome107-ff107-edge
     steps:
