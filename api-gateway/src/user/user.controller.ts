@@ -24,8 +24,7 @@ export class UserController {
 
   @Get('/getSelf')
   public getSelfUser(@Req() req: any) {
-    const { id } = req?.user ?? null;
-    return this.userService.getSelfUser(id);
+    return this.userService.getSelfUser(req?.user?.id ?? null);
   }
 
   @Get()

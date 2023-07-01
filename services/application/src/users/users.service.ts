@@ -73,6 +73,9 @@ export class UsersService {
     let res: User;
     try {
       res = await this.userRepository.findOneBy({ id });
+      if (!res) {
+        throw new Error();
+      }
     } catch (error) {
       throw new RpcException({
         statusCode: 404,
