@@ -185,7 +185,7 @@ export class JobAdsService {
         jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
       ) {
         throw new RpcException({
-          statusCode: 409,
+          statusCode: 401,
           message: 'You already applied for this job'
         });
       }
