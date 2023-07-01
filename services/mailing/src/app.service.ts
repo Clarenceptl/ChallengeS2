@@ -11,7 +11,7 @@ export class AppService {
     try {
       await this.mailerService.sendMail({
         to: data.email,
-        from: 'noreply@nestjs.com',
+        from: 'noreply@larudakote.com',
         subject: 'Veuillez confirmer votre email ✔',
         template: 'registerMail', // The `.hbs` extension is appended automatically.
         context: {

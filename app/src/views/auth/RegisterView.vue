@@ -73,7 +73,7 @@
             label="Confirmation du mot de passe"
           />
           <div>
-            <v-btn type="submit" class="w-100 mb-3" color="appgrey">Login</v-btn>
+            <v-btn type="submit" class="w-100 mb-3" color="appgrey">Register</v-btn>
           </div>
         </v-form>
       </div>
