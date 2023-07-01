@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: develop
+    branches: e2e
 
 jobs:
   EndtoEnd:
@@ -12,9 +12,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v2
         with:
-          command: npx cypress run
+          command: npm run build && npm run test:ci
           browser: chrome
 
   BuildAndPush:
