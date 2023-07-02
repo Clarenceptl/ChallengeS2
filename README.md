@@ -21,9 +21,9 @@ $ docker compose up -d
 ```bash
 $ docker compose exec app-service npm run seed
 ```
-Compte seed : 
-admin@admin.com - password -> admin
-user@user - password -> utilisateur simple
+Compte seed : <br>
+admin@admin.com - password -> admin <br>
+user@user - password -> utilisateur simple <br>
 employeur@employeur.com -> password -> employeur avec une entreprise
 
 ### Other
