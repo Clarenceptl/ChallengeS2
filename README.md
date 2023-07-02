@@ -25,3 +25,7 @@ Compte seed :
 admin@admin.com - password -> admin
 user@user - password -> utilisateur simple
 employeur@employeur.com -> password -> employeur avec une entreprise
+
+### Other
+Liens du repo : https://github.com/Victsing/ChallengeS2
+Branch : rendu/nestjs
