@@ -31,7 +31,7 @@ jobs:
         with:
           context: ./services/application
           push: true
-          tags: challenges2acr.azurecr.io/challenges2_app-service:ci
+          tags: challenges2acr.azurecr.io/challenges2-app-service:ci
 
       - name: Build and push mailing
         id: docker_build_mailing_service
@@ -39,7 +39,7 @@ jobs:
         with:
           context: ./services/mailing
           push: true
-          tags: challenges2acr.azurecr.io/challenges2_mailing-service:ci
+          tags: challenges2acr.azurecr.io/challenges2-mailing-service:ci
 
       - name: Build and push bo-analytics
         id: docker_build_bo-analytics
@@ -55,7 +55,7 @@ jobs:
         with:
           context: ./app
           push: true
-          tags: challenges2acr.azurecr.io/challenges2_app-front:ci
+          tags: challenges2acr.azurecr.io/challenges2-app-front:ci
 
       - name: Build and push authentication
         id: docker_build_authentication_service
