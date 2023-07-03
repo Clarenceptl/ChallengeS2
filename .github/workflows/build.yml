@@ -17,20 +17,62 @@ jobs:
           az account set --subscription 73818172-e926-48d0-aa9e-00ba7f0787ba
           az aks get-credentials --resource-group challenges2 --name challenges2Cluster
 
-      - name: buildAndPushToACR
-        run: |
-          docker build "./composition" -f  "./api-gateway/Dockerfile" -t challenges2acr.azurecr.io/challenge-api-gateway:latest
-          docker build "./composition" -f  "./app/Dockerfile" -t challenges2acr.azurecr.io/challenge-app-front:latest
-          docker build "./composition" -f  "./bo-analytics/Dockerfile" -t challenges2acr.azurecr.io/challenge-bo-analytics:latest
-          docker build "./composition" -f  "../services/analytics/Dockerfile" -t challenges2acr.azurecr.io/challenge-analytics-service:latest
-          docker build "./composition" -f  "../services/application/Dockerfile" -t challenges2acr.azurecr.io/challenge-app-service:latest
-          docker build "./composition" -f  "../services/authentication/Dockerfile" -t challenges2acr.azurecr.io/challenge-auth-service:latest
-          docker build "./composition" -f  "../services/mailing/analytics" -t challenges2acr.azurecr.io/challenge-mailing-service:latest
+      - name: Build and push analytics
+        id: docker_build_analytics_service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/analytics
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2-bo-analytics:ci
 
-          docker push challenges2acr.azurecr.io/challenges2-api-gateway:latest
-          docker push challenges2acr.azurecr.io/challenges2-app-front:latest
-          docker push challenges2acr.azurecr.io/challenges2-bo-analytics:latest
-          docker push challenges2acr.azurecr.io/challenges2-mailing-service:latest
-          docker push challenges2acr.azurecr.io/challenges2-analytics-service:latest
-          docker push challenges2acr.azurecr.io/challenges2-auth-service:latest
-          docker push challenges2acr.azurecr.io/challenges2-app-service:latest
+      - name: Build and push application
+        id: docker_build_application_service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/application
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2_app-service:ci
+
+      - name: Build and push mailing
+        id: docker_build_mailing_service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/mailing
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2_mailing-service:ci
+
+      - name: Build and push bo-analytics
+        id: docker_build_bo-analytics
+        uses: docker/build-push-action@v2
+        with:
+          context: ./bo-analytics
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2-bo-analytics:ci
+
+      - name: Build and push app front
+        id: docker_build_app-front
+        uses: docker/build-push-action@v2
+        with:
+          context: ./app
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2_app-front:ci
+
+      - name: Build and push authentication
+        id: docker_build_authentication_service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/authentication
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2-auth-service:ci
+
+      - name: Build and push api
+        id: docker_build_api
+        uses: docker/build-push-action@v2
+        with:
+          context: ./api-gateway
+          push: true
+          tags: challenges2acr.azurecr.io/challenges2-api-gateway:ci
+
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
