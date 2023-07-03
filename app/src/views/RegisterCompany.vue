@@ -13,16 +13,14 @@
             v-model="companyData.name"
             type="text"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>Creation Date</label>
           <v-text-field
             clearable
             v-model="companyData.creationDate"
-            type="text"
+            type="date"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>Address</label>
@@ -31,7 +29,6 @@
             v-model="companyData.address"
             type="text"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>Website</label>
@@ -40,7 +37,6 @@
             v-model="companyData.website"
             type="text"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>Description</label>
@@ -49,7 +45,6 @@
             v-model="companyData.description"
             type="text"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>Founder</label>
@@ -58,47 +53,51 @@
             v-model="companyData.founder"
             type="text"
             color="appgrey"
-            counter="10"
             variant="outlined"
           />
           <label>SIRET</label>
           <v-text-field
             clearable
             v-model="companyData.siret"
-            type="text"
+            type="number"
             color="appgrey"
-            counter="10"
+            counter="14"
             variant="outlined"
-          />
-          <label>Size</label>
-          <v-text-field
-            clearable
-            v-model="companyData.size"
-            type="text"
-            color="appgrey"
-            counter="10"
-            variant="outlined"
+            :rules="siretRules"
           />
           <label>Revenue</label>
-          <v-text-field
-            clearable
+          <v-select
+            :items="companyRevenueOptions"
+            item-title="revenue"
+            item-value="id"
+            label="Select Revenue"
             v-model="companyData.revenue"
-            type="text"
-            color="appgrey"
-            counter="10"
-            variant="outlined"
           />
           <label>Sector</label>
-          <v-text-field
-            clearable
+          <v-select
+            :items="companySectorOptions"
+            item-title="sector"
+            item-value="id"
+            label="Select Sector"
             v-model="companyData.sector"
-            type="text"
-            color="appgrey"
-            counter="10"
-            variant="outlined"
+          />
+          <label>Size</label>
+          <v-select
+            :items="companySizeOptions"
+            item-title="size"
+            item-value="id"
+            label="Select Size"
+            v-model="companyData.size"
           />
           <div>
-            <v-btn disabled class="w-100 mb-3" color="appgrey">Register</v-btn>
+            <v-btn
+              type="submit"
+              class="w-100 mb-3"
+              color="appgrey"
+              @click="createCompany"
+            >
+              Create
+            </v-btn>
           </div>
         </v-form>
       </div>
@@ -107,7 +106,65 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useCompanySizeOptionsStore } from '@/stores/company-size-options';
+import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options';
+import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
+import { useCompaniesStore } from '@/stores/companies';
+import { computed, ref } from 'vue';
+import { useToastStore } from '@/stores'
+
+const stores = {
+  toast: useToastStore()
+}
+
+const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore());
+const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore());
+const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore());
+const { companies } = storeToRefs(useCompaniesStore());
+
+useCompanySizeOptionsStore().getCompanySizeOptions();
+useCompanyRevenueOptionsStore().getCompanyRevenueOptions();
+useCompanySectorOptionsStore().getCompanySectorOptions();
+useCompaniesStore().getCompanies();
+
+const companiesSiret = computed(() => {
+  return companies.value.map((company) => company.siret);
+});
+
+const isSiretTaken = computed(() => {
+  return companiesSiret.value.includes(companyData.value.siret);
+});
+
+const isDateInPast = computed(() => {
+  const today = new Date();
+  const creationDate = new Date(companyData.value.creationDate);
+  return creationDate < today;
+});
+
+const siretRules = computed(() => {
+  const rules = [];
+  if (isSiretTaken.value) {
+    rules.push('Siret already taken');
+  }
+  if (companyData.value.siret.length !== 14) {
+    rules.push('Siret must be 14 digits');
+  }
+  return rules;
+});
+
+const isFormValid = computed(() => {
+  return (
+    companyData.value.name &&
+    companyData.value.creationDate &&
+    companyData.value.address &&
+    companyData.value.founder &&
+    companyData.value.siret &&
+    companyData.value.revenue &&
+    companyData.value.sector &&
+    companyData.value.size
+  );
+});
 
 let companyData = ref({
   name: '',
@@ -117,10 +174,19 @@ let companyData = ref({
   description: '',
   founder: '',
   siret: '',
-  size: '',
-  revenue: '',
-  sector: ''
+  size: null,
+  revenue: null,
+  sector: null,
 })
+
+const createCompany = (e) => {
+  e.preventDefault();
+  if (isDateInPast.value && !isSiretTaken.value && isFormValid.value) {
+    useCompaniesStore().createCompany(companyData.value);
+  } else {
+    stores.toast.createToast('error', 'Please fill all the fields');
+  }
+};
 </script>
 
 <style scoped>

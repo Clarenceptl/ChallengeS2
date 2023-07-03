@@ -6,8 +6,13 @@
           <v-btn variant="outlined" color="green-800" @click="router.push('/login')">Login</v-btn>
           <v-btn class="ml-1" variant="outlined" @click="router.push('/register')">Register</v-btn>
         </div>
-        <v-btn v-else class="ml-1" color="red-800" variant="outlined" @click="logout">Logout</v-btn>
-        <v-btn v-if="isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/admin')">Admin</v-btn>
+        <div v-else>
+          <v-btn class="ml-1" color="green-800" variant="outlined" @click="router.push('/job-offers')">Job Offers</v-btn>
+          <v-btn class="ml-1" color="green-800" variant="outlined" @click="router.push('/profile')">Profile</v-btn>
+          <v-btn class="ml-1" color="green-800" variant="outlined" @click="router.push('/register-company')">Register Company</v-btn>
+          <v-btn class="ml-1" color="red-800" variant="outlined" @click="logout">Logout</v-btn>
+          <v-btn v-if="isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/admin')">Admin</v-btn>
+        </div>
       </template>
       <v-app-bar-title @click="router.push('/')"> Larudakoté </v-app-bar-title>
     </v-app-bar>
