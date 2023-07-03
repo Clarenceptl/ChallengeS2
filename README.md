@@ -10,7 +10,7 @@ setup le .env docker
 $ docker compose build
 ```
 
-### Developments
+### Development
 
 ```bash
 $ docker compose up -d
