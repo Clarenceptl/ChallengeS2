@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-gateway-service
-        image: challenges2acr.azurecr.io/challenges2-api-gateway:latest
+        image: challenges2acr.azurecr.io/challenges2-api-gateway:ci
         ports:
           - containerPort: 3081
 
@@ -29,10 +29,11 @@ metadata:
   name: api-gateway-service
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: api-gateway-app
   ports:
     - protocol: TCP
       port: 3081
       targetPort: 3081
+      nodePort: 30081
