@@ -6,11 +6,11 @@
     </div>
 
     <div class="text-center">
-      <v-btn color="appgrey mb-4" @click="router.push('company-information/new')" prepend-icon="mdi-plus" >Add new company information</v-btn>
+      <v-btn color="appgrey mb-4" @click="router.push('new')" prepend-icon="mdi-plus">
+        Add new company information
+      </v-btn>
     </div>
     <v-row class="pa-5">
-
-
       <v-col cols="4" class="text-center scrollable">
         <div class=" justify-center mb-2">
           <div class="container">
@@ -24,15 +24,31 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Revenue</th>
                       <th class="py-4 px-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="revenue in revenues" :key="revenue.id">
-                      <td class="py-4 px-4">{{revenue.name}}</td>
-                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
-                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    <tr v-for="revenue in companyRevenueOptions" :key="revenue.id">
+                      <td class="py-4 px-4">{{revenue.revenue}}</td>
+                      <td>
+                        <v-icon color="blue" @click="
+                          updateRevenueDialog = true;
+                          selectedRevenueId = revenue.id
+                        ">
+                          mdi-pencil
+                        </v-icon>
+                      </td>
+                      <td>
+                        <v-icon
+                          class="mr-4"
+                          color="red"
+                          @click="deleteRevenueDialog = true;
+                          selectedRevenueId = revenue.id
+                        ">
+                          mdi-delete
+                        </v-icon>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -55,15 +71,31 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Sector</th>
                       <th class="py-4 px-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="sector in sectors" :key="sector.id">
-                      <td class="py-4 px-4">{{sector.name}}</td>
-                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
-                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    <tr v-for="sector in companySectorOptions" :key="sector.id">
+                      <td class="py-4 px-4">{{sector.sector}}</td>
+                      <td>
+                        <v-icon color="blue" @click="
+                          updateSectorDialog = true;
+                          selectedSectorId = sector.id
+                        ">
+                          mdi-pencil
+                        </v-icon>
+                      </td>
+                      <td>
+                        <v-icon
+                          class="mr-4"
+                          color="red"
+                          @click="deleteSectorDialog = true;
+                          selectedSectorId = sector.id
+                        ">
+                          mdi-delete
+                        </v-icon>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -86,15 +118,32 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="py-4 px-4">Name</th>
+                      <th class="py-4 px-4">Size</th>
                       <th class="py-4 px-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="size in sizes" :key="size.id">
-                      <td class="py-4 px-4">{{size.name}}</td>
-                      <td><v-icon color="blue">mdi-pencil</v-icon></td>
-                      <td><v-icon class="mr-4" color="red">mdi-delete</v-icon></td>
+                    <tr v-for="size in companySizeOptions" :key="size.id">
+                      <td class="py-4 px-4">{{size.size}}</td>
+                      <td>
+                        <v-icon
+                          color="blue"
+                          @click="updateSizeDialog = true;
+                          selectedSizeId = size.id
+                        ">
+                          mdi-pencil
+                        </v-icon>
+                      </td>
+                      <td>
+                        <v-icon
+                          class="mr-4"
+                          color="red"
+                          @click="deleteSizeDialog = true;
+                          selectedSizeId = size.id
+                        ">
+                          mdi-delete
+                        </v-icon>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -104,134 +153,274 @@
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="updateRevenueDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Update revenue</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Change the revenue of the selected revenue
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              v-model="updatedRevenue"
+              label="Revenue"
+              required
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              updateRevenueDialog = false;
+              selectedRevenueId = null;
+              updatedRevenue = ''
+            ">
+              Cancel
+            </v-btn>
+          <v-btn color="blue-800" text @click="updateRevenue">Send</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="updateSectorDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Update sector</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Change the sector of the selected sector
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              v-model="updatedSector"
+              label="Revenue"
+              required
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              updateSectorDialog = false;
+              selectedSectorId = null;
+              updatedSector = ''
+            ">
+              Cancel
+            </v-btn>
+          <v-btn color="blue-800" text @click="updateSector">Send</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="updateSizeDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Update size</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Change the size of the selected size
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              v-model="updatedSize"
+              label="Revenue"
+              required
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              updateSizeDialog = false;
+              selectedSizeId = null;
+              updatedSize = ''
+            ">
+              Cancel
+            </v-btn>
+          <v-btn color="blue-800" text @click="updateSize">Send</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="deleteRevenueDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Delete revenue</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to delete the selected revenue?
+        </v-card-subtitle>
+        <v-card-text>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              deleteRevenueDialog = false;
+              selectedRevenueId = null
+            ">
+              Cancel
+            </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="deleteRevenue"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="deleteSectorDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Delete sector</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to delete the selected sector?
+        </v-card-subtitle>
+        <v-card-text>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              deleteSectorDialog = false;
+              selectedSectorId = null
+            ">
+              Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="deleteSector"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="deleteSizeDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Delete size</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to delete the selected size?
+        </v-card-subtitle>
+        <v-card-text>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn 
+          color="red-500" 
+          text 
+          @click="
+            deleteSizeDialog = false; 
+            selectedSizeId = null
+          ">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="deleteSize"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useCompanySizeOptionsStore } from '@/stores/company-size-options';
+import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options';
+import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
+import { ref } from 'vue';
+
+let updateRevenueDialog = ref(false);
+let updateSectorDialog = ref(false);
+let updateSizeDialog = ref(false);
+
+let updatedRevenue = ref('');
+let updatedSector = ref('');
+let updatedSize = ref('');
+
+
+let selectedRevenueId = ref(null);
+let selectedSectorId = ref(null);
+let selectedSizeId = ref(null);
+
+let deleteRevenueDialog = ref(false);
+let deleteSectorDialog = ref(false);
+let deleteSizeDialog = ref(false);
+
+const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore());
+const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore());
+const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore());
+
+useCompanySizeOptionsStore().getCompanySizeOptions();
+useCompanyRevenueOptionsStore().getCompanyRevenueOptions();
+useCompanySectorOptionsStore().getCompanySectorOptions();
 
 const router = useRouter();
 
-const revenues = [
-  {
-    id: 1,
-    name: '0-500k'
-  },
-  {
-    id: 2,
-    name: '500k-1M'
-  },
-  {
-    id: 3,
-    name: '1M-5M'
-  },
-  {
-    id: 4,
-    name: '5M-10M'
-  },
-  {
-    id: 5,
-    name: '10M-50M'
-  },
-  {
-    id: 6,
-    name: '50M-100M'
-  },
-  {
-    id: 7,
-    name: '100M-500M'
-  },
-  {
-    id: 8,
-    name: '500M-1B'
-  },
-  {
-    id: 9,
-    name: '1B-5B'
-  },
-  {
-    id: 10,
-    name: '5B-10B'
-  },
-  {
-    id: 11,
-    name: '10B+'
-  }
-]
+const updateRevenue = () => {
+  useCompanyRevenueOptionsStore().updateCompanyRevenueOptions(selectedRevenueId.value, updatedRevenue.value);
+  updateRevenueDialog.value = false;
+  selectedRevenueId.value = null;
+  updatedRevenue.value = '';
+};
 
-const sectors = [
-  {
-    id: 1,
-    name: 'Tech'
-  },
-  {
-    id: 2,
-    name: 'Finance'
-  },
-  {
-    id: 3,
-    name: 'Education'
-  },
-  {
-    id: 4,
-    name: 'Health'
-  },
-  {
-    id: 5,
-    name: 'Retail'
-  },
-  {
-    id: 6,
-    name: 'Transportation'
-  },
-  {
-    id: 7,
-    name: 'Energy'
-  },
-  {
-    id: 8,
-    name: 'Manufacturing'
-  },
-  {
-    id: 9,
-    name: 'Other'
-  }
-]
+const updateSector = () => {
+  useCompanySectorOptionsStore().updateCompanySectorOptions(selectedSectorId.value, updatedSector.value);
+  updateSectorDialog.value = false;
+  selectedSectorId.value = null;
+  updatedSector.value = '';
+};
 
-const sizes = [
-  {
-    id: 1,
-    name: '1-10'
-  },
-  {
-    id: 2,
-    name: '11-50'
-  },
-  {
-    id: 3,
-    name: '51-200'
-  },
-  {
-    id: 4,
-    name: '201-500'
-  },
-  {
-    id: 5,
-    name: '501-1000'
-  },
-  {
-    id: 6,
-    name: '1001-5000'
-  },
-  {
-    id: 7,
-    name: '5001-10000'
-  },
-  {
-    id: 8,
-    name: '10001+'
-  }
-]
+const updateSize = () => {
+  useCompanySizeOptionsStore().updateCompanySizeOptions(selectedSizeId.value, updatedSize.value);
+  updateSizeDialog.value = false;
+  selectedSizeId.value = null;
+  updatedSize.value = '';
+};
+
+const deleteRevenue = () => {
+  useCompanyRevenueOptionsStore().deleteCompanyRevenueOptions(selectedRevenueId.value);
+  deleteRevenueDialog.value = false;
+  selectedRevenueId.value = null;
+};
+
+const deleteSector = () => {
+  useCompanySectorOptionsStore().deleteCompanySectorOptions(selectedSectorId.value);
+  deleteSectorDialog.value = false;
+  selectedSectorId.value = null;
+};
+
+const deleteSize = () => {
+  useCompanySizeOptionsStore().deleteCompanySizeOptions(selectedSizeId.value);
+  deleteSizeDialog.value = false;
+  selectedSizeId.value = null;
+};
 </script>
 
 <style scoped>

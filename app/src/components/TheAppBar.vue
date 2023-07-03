@@ -7,6 +7,7 @@
           <v-btn class="ml-1" variant="outlined" @click="router.push('/register')">Register</v-btn>
         </div>
         <v-btn v-else class="ml-1" color="red-800" variant="outlined" @click="logout">Logout</v-btn>
+        <v-btn v-if="isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/admin')">Admin</v-btn>
       </template>
       <v-app-bar-title @click="router.push('/')"> Larudakoté </v-app-bar-title>
     </v-app-bar>
@@ -22,6 +23,7 @@ const router = useRouter()
 const userStore = useUserStore()
 await userStore.loadContextUser()
 const isConnected = computed(() => userStore.isConnected)
+const isAdmin = computed(() => userStore.isAdmin)
 
 const logout = () => {
   userStore.logout()
