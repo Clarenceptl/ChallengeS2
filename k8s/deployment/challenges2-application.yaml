@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-authentication
+  name: challenges2-application
   namespace: challenges2
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: api-gateway-app
@@ -17,5 +17,5 @@ spec:
     spec:
       containers:
         - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-app-service:latest
+          image: challenges2acr.azurecr.io/challenges2-auth-service:latest
 
