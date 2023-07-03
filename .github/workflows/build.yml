@@ -17,15 +17,8 @@ jobs:
           az account set --subscription 73818172-e926-48d0-aa9e-00ba7f0787ba
           az aks get-credentials --resource-group challenges2 --name challenges2Cluster
 
-  buildAndPushToACR:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: azure/docker-login@v1
-        with:
-          login-server: challenges2acr.azurecr.io
-          password: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
+      - name: buildAndPushToACR
+        run: |
           docker build "./composition" -f  "./api-gateway/Dockerfile" -t challenges2acr.azurecr.io/challenge-api-gateway:latest
           docker build "./composition" -f  "./app/Dockerfile" -t challenges2acr.azurecr.io/challenge-app-front:latest
           docker build "./composition" -f  "./bo-analytics/Dockerfile" -t challenges2acr.azurecr.io/challenge-bo-analytics:latest
