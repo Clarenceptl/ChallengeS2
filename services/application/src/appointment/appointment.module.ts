@@ -18,7 +18,7 @@ import { JobAds } from '../job-ads/job-ads.entity';
         name: SERVICE_NAME.MAILING,
         transport: Transport.TCP,
         options: {
-          host: 'mailing-service',
+          host: process.env.APPOINTMENT_HOST,
           port: 3024
         }
       }
