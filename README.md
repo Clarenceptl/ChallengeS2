@@ -16,7 +16,7 @@ $ docker compose build
 $ docker compose up -d
 ```
 
-### Seed data
+### Seed datas
 
 ```bash
 $ docker compose exec app-service npm run seed
