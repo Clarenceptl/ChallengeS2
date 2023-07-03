@@ -16,3 +16,28 @@ jobs:
           az acr login -n challenges2acr
           az account set --subscription 73818172-e926-48d0-aa9e-00ba7f0787ba
           az aks get-credentials --resource-group challenges2 --name challenges2Cluster
+
+  buildAndPushToACR:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/docker-login@v1
+        with:
+          login-server: challenges2acr.azurecr.io
+          password: ${{ secrets.AZURE_CREDENTIALS }}
+      - run: |
+          docker build "./composition" -f  "./api-gateway/Dockerfile" -t challenges2acr.azurecr.io/challenge-api-gateway:latest
+          docker build "./composition" -f  "./app/Dockerfile" -t challenges2acr.azurecr.io/challenge-app-front:latest
+          docker build "./composition" -f  "./bo-analytics/Dockerfile" -t challenges2acr.azurecr.io/challenge-bo-analytics:latest
+          docker build "./composition" -f  "../services/analytics/Dockerfile" -t challenges2acr.azurecr.io/challenge-analytics-service:latest
+          docker build "./composition" -f  "../services/application/Dockerfile" -t challenges2acr.azurecr.io/challenge-app-service:latest
+          docker build "./composition" -f  "../services/authentication/Dockerfile" -t challenges2acr.azurecr.io/challenge-auth-service:latest
+          docker build "./composition" -f  "../services/mailing/analytics" -t challenges2acr.azurecr.io/challenge-mailing-service:latest
+
+          docker push challenges2acr.azurecr.io/challenges2-api-gateway:latest
+          docker push challenges2acr.azurecr.io/challenges2-app-front:latest
+          docker push challenges2acr.azurecr.io/challenges2-bo-analytics:latest
+          docker push challenges2acr.azurecr.io/challenges2-mailing-service:latest
+          docker push challenges2acr.azurecr.io/challenges2-analytics-service:latest
+          docker push challenges2acr.azurecr.io/challenges2-auth-service:latest
+          docker push challenges2acr.azurecr.io/challenges2-app-service:latest
