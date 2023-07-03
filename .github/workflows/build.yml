@@ -8,7 +8,6 @@ jobs:
   authenticateToAzure:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.AZURE_CREDENTIALS }}
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
