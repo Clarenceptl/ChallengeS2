@@ -2,7 +2,6 @@ name: Continuous Integration
 
 on:
   push:
-<<<<<<< HEAD
     branches: ci/cd
 
 jobs:
@@ -83,19 +82,3 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-=======
-    branches: kubernetes
-
-jobs:
-  authenticateToAzure:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
-          az acr login -n challenges2Cluster
-          az account set --subscription 73818172-e926-48d0-aa9e-00ba7f0787ba
-          az aks get-credentials --resource-group challenges2 --name challenges2Cluster
->>>>>>> 0df2f23 (update script githubactions)
