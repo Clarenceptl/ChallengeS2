@@ -19,6 +19,13 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { useUserStore } from '@/stores'
+
+const userStore = useUserStore()
+onMounted(async () => {
+  await userStore.loadContextUser()
+})
 </script>
 
 <style scoped>
