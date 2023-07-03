@@ -23,7 +23,7 @@ jobs:
         with:
           context: ./services/analytics
           push: true
-          tags: challenges2acr.azurecr.io/challenges2-bo-analytics:ci
+          tags: challenges2acr.azurecr.io/challenges2-analytics-service:ci
 
       - name: Build and push application
         id: docker_build_application_service
