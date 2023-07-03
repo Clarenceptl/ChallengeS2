@@ -14,7 +14,7 @@ export const useUserStore = defineStore('userStore', () => {
   const getContextUser = computed(() => contextUser.user)
   const isConnected = computed(() => !!contextUser.user?.id)
   // user roles
-  const isAdmin = computed(() => contextUser.user?.roles.includes('ROLE_ADMIN'))
+  const isAdmin = computed(() => contextUser.user?.roles?.includes('ROLE_ADMIN'))
   //#endregion
 
   //#region Services methods
