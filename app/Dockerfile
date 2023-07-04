@@ -8,7 +8,6 @@ RUN npm ci
 
 COPY . .
 
-RUN chown -R node /app/dist
 
 USER node
 

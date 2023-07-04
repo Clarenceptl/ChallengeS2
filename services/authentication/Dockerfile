@@ -10,8 +10,6 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
-RUN chown -R node /app/dist
-
 USER node
 
 CMD ["npm", "run", "start:dev"]
