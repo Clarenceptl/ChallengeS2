@@ -113,7 +113,9 @@ import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
 import { useCompaniesStore } from '@/stores/companies';
 import { computed, ref } from 'vue';
 import { useToastStore } from '@/stores'
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const stores = {
   toast: useToastStore()
 }
@@ -183,8 +185,17 @@ const createCompany = (e) => {
   e.preventDefault();
   if (isDateInPast.value && !isSiretTaken.value && isFormValid.value) {
     useCompaniesStore().createCompany(companyData.value);
+    stores.toast.createToast({
+      message: 'Company created',
+      type: 'success'
+    });
+
+    router.push('/profile');
   } else {
-    stores.toast.createToast('error', 'Please fill all the fields');
+    stores.toast.createToast({
+      message: 'Please fill all the fields',
+      type: 'error'
+    });
   }
 };
 </script>

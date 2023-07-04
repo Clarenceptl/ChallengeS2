@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia'
 import { CompaniesService } from '@/services/companies.service'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 export const useCompaniesStore = defineStore('companiesStore', {
   state: () => ({
@@ -20,7 +17,6 @@ export const useCompaniesStore = defineStore('companiesStore', {
       const res = await CompaniesService.createCompany(company)
       if (res?.success) {
         await this.getCompanies();
-        router.push({ name: 'CompanyInformationsList' })
       }
       return res
     }

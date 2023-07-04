@@ -51,8 +51,8 @@ export class CompanyService {
           id: user.id
         });
         userToUpdate.roles.push(UserRole.ROLE_EMPLOYEUR);
-        await this.userRepository.save(userToUpdate);
         userToUpdate.company = res;
+        await this.userRepository.save(userToUpdate);
       } catch (error) {
         throw new RpcException({
           statusCode: 500,
