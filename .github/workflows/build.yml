@@ -13,7 +13,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: |
-          az acr login -n challengeRg
+          az acr login -n challengesContainerRegistry
           az account set --subscription 5a6e3f3f-c18d-49ce-b626-5c7824f0cfc7
           az aks get-credentials --resource-group challengeRg --name challengeCluster
 
