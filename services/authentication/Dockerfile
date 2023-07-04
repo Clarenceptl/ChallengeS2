@@ -2,14 +2,12 @@ FROM node:18.15-alpine As development
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
 
 # Bundle app source
-COPY . .
-
-USER node
+COPY --chown=node:node . .
 
 CMD ["npm", "run", "start:dev"]
