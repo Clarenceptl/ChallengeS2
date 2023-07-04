@@ -11,7 +11,6 @@ import { APP_GUARD } from '@nestjs/core';
     MailerModule.forRoot({
       // TODO: replace with real smtp server
       transport: process.env.MAIL_URL_SMTP ?? {
-        host: '0.0.0.0',
         port: 1025,
         ignoreTLS: true,
         secure: false

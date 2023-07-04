@@ -17,4 +17,4 @@ spec:
     spec:
       containers:
         - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-analytics-service:ci
+          image: challengescontainerregistry.azurecr.io/challenges2-analytics-service:ci

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-gateway-service
-        image: challenges2acr.azurecr.io/challenges2-api-gateway:ci
+        image: challengescontainerregistry.azurecr.io/challenges2-api-gateway:ci
         ports:
           - containerPort: 3081
 

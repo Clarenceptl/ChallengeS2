@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-app-front:ci
+          image: challengescontainerregistry.azurecr.io/challenges2-app-front:ci
           ports:
             - containerPort: 5173
 
