@@ -22,6 +22,12 @@ import { SuccessResponse, ErrorModel } from '../global';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('/my-jobs')
+  @HttpCode(200)
+  public getMyJobs(@Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.userService.getMyJobs(tokenUser);
+  }
   @Get('/getSelf')
   public getSelfUser(@Req() req: any) {
     return this.userService.getSelfUser(req?.user?.id ?? null);
@@ -44,4 +50,5 @@ export class UserController {
   public getUser(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.userService.getUser(uuid);
   }
+
 }

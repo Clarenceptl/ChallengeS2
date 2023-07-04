@@ -117,8 +117,7 @@ export class Company {
   sector?: CompanySectorOptions;
 
   @OneToMany(() => JobAds, (jobAds) => jobAds, {
-    onDelete: 'SET NULL',
-    eager: true
+    onDelete: 'SET NULL'
   })
   jobAds?: JobAds[];
 }

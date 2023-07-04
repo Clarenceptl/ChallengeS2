@@ -185,7 +185,6 @@ import { useUsersStore } from '../stores/users.store';
 const { me } = storeToRefs(useUsersStore());
 useUsersStore().getMe();
 
-// computed that format date from dd/mm/yyyy to yyyy-mm-dd
 const formatedBirthdate = computed(() => {
   if (me.value?.birthdate) {
     const date = me.value?.birthdate.split('/');
