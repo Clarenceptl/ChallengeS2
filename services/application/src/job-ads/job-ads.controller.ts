@@ -44,6 +44,7 @@ export class JobAdsController {
     @Payload(ValidationPipe)
     payload
   ) {
+    console.log(payload);
     const { id, tokenUser } = payload;
     return this.jobAdsService.deleteJobAds(id, tokenUser);
   }

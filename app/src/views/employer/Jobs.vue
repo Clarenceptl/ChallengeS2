@@ -5,7 +5,7 @@
       <v-btn color="appgrey mb-4" @click="newJobDialog = true">Add a new job offer</v-btn>
     </div>
 
-    <div v-if="myJobs">
+    <div v-if="myJobs.length">
       <v-row>
         <v-col cols="4" class="column-scrollable">
           <v-card
@@ -35,7 +35,6 @@
               </p>
             </v-card-text>
           </v-card>
-          <v-btn color="appgrey w-100" text>Load more</v-btn>
         </v-col>
 
         <v-col>
@@ -141,8 +140,20 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red-500" text @click="editDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Yes</v-btn>
+          <v-btn
+            color="red-500"
+            text
+            @click="editDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="updateJob"
+          >
+            Yes
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -156,8 +167,20 @@
           Are you sure you want to delete this job ?
         </v-card-subtitle>
         <v-card-actions>
-          <v-btn color="red-500" text @click="deleteDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Yes</v-btn>
+          <v-btn
+            color="red-500"
+            text
+            @click="deleteDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="deleteJob"
+          >
+            Yes
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -177,48 +200,69 @@
               clearable
               placeholder="Title"
               type="text"
+              v-model="newJob.title"
             />
             <label>Job Description</label>
             <v-textarea
               clearable
               placeholder="Description"
               type="text"
+              v-model="newJob.description"
             />
             <label>Job City</label>
             <v-text-field
               clearable
               placeholder="City"
               type="text"
+              v-model="newJob.city"
             />
             <label>Job Country</label>
             <v-text-field
               clearable
               placeholder="Country"
               type="text"
+              v-model="newJob.country"
             />
             <label>Job Contract Type</label>
             <v-text-field
               clearable
               placeholder="Contract Type"
               type="text"
+              v-model="newJob.contractType"
             />
             <label>Job Salary</label>
             <v-text-field
               clearable
               placeholder="Salary"
               type="text"
-            />
-            <label>Job Duration</label>
-            <v-text-field
-              clearable
-              placeholder="Duration"
-              type="text"
+              v-model="newJob.salary"
             />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red-500" text @click="newJobDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Yes</v-btn>
+          <v-btn
+            color="red-500"
+            text
+            @click="
+              newJobDialog = false;
+              newJob = {
+                title: '',
+                description: '',
+                city: '',
+                country: '',
+                contractType: '',
+                salary: '',
+              }
+            ">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="createJob"
+          >
+            Yes
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -229,9 +273,16 @@
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
 import { useUsersStore } from '../../stores/users.store';
-const { me, myJobs } = storeToRefs(useUsersStore());
+import { useJobAdsStore } from '../../stores/job-ads.store';
+import { useToastStore } from '@/stores'
+
+const stores = {
+  toast: useToastStore()
+}
+const { me } = storeToRefs(useUsersStore());
+const { myJobs } = storeToRefs(useJobAdsStore());
 await useUsersStore().getMe();
-await useUsersStore().getMyJobs();
+await useJobAdsStore().getMyJobs();
 
 let editDialog = ref(false);
 let deleteDialog = ref(false);
@@ -239,6 +290,14 @@ let newJobDialog = ref(false);
 
 let selectedJob = ref(myJobs.value[0]);
 const jobEdit = ref({...selectedJob.value});
+let newJob = ref({
+  title: '',
+  description: '',
+  city: '',
+  country: '',
+  contractType: '',
+  salary: null
+});
 
 const companyOptions = computed(() => {
   return [
@@ -256,6 +315,70 @@ const jobDetails = computed(() => {
     selectedJob.value?.salary,
   ];
 });
+
+const createJob = () => {
+  useJobAdsStore().createJobAd(newJob.value).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'job ads created'
+    });
+    await useUsersStore().getMe();
+    newJobDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'job ad not created'
+    });
+  });
+};
+
+const updateJob = () => {
+  let formattedJob = {
+    title: jobEdit.value.title,
+    description: jobEdit.value.description,
+    city: jobEdit.value.city,
+    country: jobEdit.value.country,
+    contractType: jobEdit.value.contractType,
+    salary: jobEdit.value.salary,
+  };
+  console.log(selectedJob.value.id);
+  useJobAdsStore().updateJobAd(selectedJob.value.id, formattedJob).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'job ad updated'
+    });
+    await useUsersStore().getMe();
+    editDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'job ad not updated'
+    });
+  });
+};
+
+const deleteJob = () => {
+  console.log(selectedJob.value.id);
+  useJobAdsStore().deleteJobAd(selectedJob.value.id).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'job ad deleted'
+    });
+    await useUsersStore().getMe();
+    deleteDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'job ad not deleted'
+    });
+  });
+};
 </script>
 
 <style scoped>
