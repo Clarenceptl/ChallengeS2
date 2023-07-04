@@ -1,8 +1,10 @@
 FROM node:18.15-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
+RUN chmod 777 /app
+
+COPY --chown=node:node package*.json ./
 
 RUN npm ci
 

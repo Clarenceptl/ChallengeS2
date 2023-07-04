@@ -1,6 +1,8 @@
 FROM node:18.15-alpine As development
 
-WORKDIR /app
+WORKDIR /analytics-service
+
+RUN chmod 777 /analytics-service
 
 COPY --chown=node:node package*.json ./
 
@@ -8,8 +10,9 @@ COPY --chown=node:node package*.json ./
 RUN npm ci
 
 # Bundle app source
-COPY --chown=node:node . .
+COPY . .
 
+# Use the node user from the image (instead of the root user)
 USER node
 
 EXPOSE 3020
