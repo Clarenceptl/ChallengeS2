@@ -13,9 +13,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: |
-          az acr login -n challenges2acr
-          az account set --subscription 73818172-e926-48d0-aa9e-00ba7f0787ba
-          az aks get-credentials --resource-group challenges2 --name challenges2Cluster
+          az acr login -n challengeRg
+          az account set --subscription 5a6e3f3f-c18d-49ce-b626-5c7824f0cfc7
+          az aks get-credentials --resource-group challenges2 --name challengeCluster
 
       - name: Build and push analytics
         id: docker_build_analytics_service
