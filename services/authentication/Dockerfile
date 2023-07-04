@@ -1,6 +1,6 @@
 FROM node:18.15-alpine As development
 
-WORKDIR /auth-service
+WORKDIR /app
 
 COPY package*.json ./
 
@@ -10,7 +10,7 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
-RUN chown -R node /app/node_modules
+RUN chown -R node /app/dist
 
 USER node
 

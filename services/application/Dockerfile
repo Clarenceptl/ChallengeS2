@@ -10,7 +10,7 @@ RUN npm ci
 # Bundle app source
 COPY --chown=node:node . .
 
-RUN chown -R node /app/node_modules
+RUN chown -R node /app/dist
 
 USER node
 

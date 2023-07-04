@@ -1,6 +1,6 @@
 FROM node:18.15-alpine As development
 
-WORKDIR /analytics-service
+WORKDIR /app
 
 COPY --chown=node:node package*.json ./
 
@@ -10,7 +10,7 @@ RUN npm ci
 # Bundle app source
 COPY --chown=node:node . .
 
-RUN chown -R node /app/node_modules
+RUN chown -R node /app/dist
 
 USER node
 
