@@ -1,12 +1,12 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="12" sm="6" class="text-center justify-content-center">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
-      <h1 class="mt-16">Create Your Account</h1>
-      <div class="mb-10">
-        Already have an account ? <router-link to="/login">Login</router-link>
+    <v-col cols="12" sm="6">
+      <h1 class="mt-16 text-center">Create Your Account</h1>
+      <div class="mb-10 text-center">
+        Already have an account? <router-link to="/login">Login</router-link>
       </div>
       <div class="form-width">
         <v-form @submit.prevent="submit">
@@ -81,6 +81,33 @@
   </v-row>
 </template>
 
+<style scoped>
+.form-width {
+  max-width: 500px;
+  margin: 0 auto; /* Centrer horizontalement */
+}
+
+.logo {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    display: none; /* Masquer l'image */
+  }
+  .form-width {
+    max-width: 100%; /* Ajuster la largeur du formulaire à 100% de l'écran */
+    width: 100%; /* Ajuster la largeur du formulaire à 100% de l'écran */
+  }
+
+  /* Pour afficher les inputs sur toute la largeur de l'écran */
+  .form-width v-text-field {
+    width: 100%;
+  }
+}
+</style>
+
+
 <script setup>
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
@@ -135,26 +162,3 @@ const submit = handleSubmit(async (values) => {
   }
 })
 </script>
-
-<style scoped>
-.form-width {
-  max-width: 500px;
-}
-
-.col-bg-image {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100vh;
-}
-
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
-  }
-}
-</style>
