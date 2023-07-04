@@ -6,6 +6,8 @@ RUN chmod 777 /app
 
 COPY --chown=node:node package*.json ./
 
+
+
 RUN npm ci
 
 COPY . .

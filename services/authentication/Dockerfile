@@ -11,6 +11,4 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
-USER node
-
 CMD ["npm", "run", "start:dev"]
