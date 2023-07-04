@@ -1,6 +1,22 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
 const authToken = localStorage.getItem('bearer-token') ?? ''
 export class JobAdsService {
+  static async getJobAds() {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/job-ads`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
+
   static async getMyJobs() {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/users/my-jobs`, {
@@ -61,6 +77,22 @@ export class JobAdsService {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/job-ads/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
+
+  static async applyJobAd(id) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/job-ads/apply/${id}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${authToken}`

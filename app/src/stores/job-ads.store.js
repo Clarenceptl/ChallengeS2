@@ -3,9 +3,17 @@ import { JobAdsService } from '@/services/job-ads.service'
 
 export const useJobAdsStore = defineStore('jobAdsStore', {
   state: () => ({
+    jobAds: [],
     myJobs: []
   }),
   actions: {
+    async getJobAds() {
+      const res = await JobAdsService.getJobAds()
+      if (res?.success) {
+        this.jobAds = res.data
+      }
+      return res
+    },
     async getMyJobs() {
       const res = await JobAdsService.getMyJobs()
       if (res?.success) {
@@ -31,6 +39,13 @@ export const useJobAdsStore = defineStore('jobAdsStore', {
       const res = await JobAdsService.deleteJobAd(id)
       if (res?.success) {
         await this.getMyJobs()
+      }
+      return res
+    },
+    async applyJobAd(id) {
+      const res = await JobAdsService.applyJobAd(id)
+      if (res?.success) {
+        await this.getJobAds()
       }
       return res
     }

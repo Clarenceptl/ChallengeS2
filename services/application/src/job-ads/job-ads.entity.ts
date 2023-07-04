@@ -60,14 +60,14 @@ export class JobAds {
   salary: number;
 
   @ManyToOne(() => Company, (company) => company, {
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    eager: true
   })
   company: Company;
 
   @ManyToMany(() => User, (user) => user.candidatures, {
     onDelete: 'SET NULL',
-    cascade: true,
-    eager: true
+    cascade: true
   })
   candidates: User[];
 
