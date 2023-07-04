@@ -70,11 +70,7 @@ export const useUserStore = defineStore('userStore', () => {
     isConnected,
     logout,
     getUsers,
-<<<<<<< HEAD
     isAdmin,
     isEmployer
-=======
-    isAdmin
->>>>>>> d851c1c (crud admin company options)
   }
 })
