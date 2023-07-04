@@ -2,8 +2,6 @@ FROM node:18.15-alpine
 
 WORKDIR /app
 
-RUN chmod 777 /app
-
 COPY --chown=node:node package*.json ./
 
 RUN npm ci

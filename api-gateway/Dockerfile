@@ -11,6 +11,7 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
+
 EXPOSE 3080
 
 CMD ["npm", "run", "start:dev"]

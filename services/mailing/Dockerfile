@@ -2,8 +2,6 @@ FROM node:18.15-alpine As development
 
 WORKDIR /mailing-service
 
-RUN chmod 777 /mailing-service
-
 COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
