@@ -11,7 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
     MailerModule.forRoot({
       // TODO: replace with real smtp server
       transport: process.env.MAIL_URL_SMTP ?? {
-        host: 'mailcatcher',
+        host: '0.0.0.0',
         port: 1025,
         ignoreTLS: true,
         secure: false
@@ -19,7 +19,6 @@ import { APP_GUARD } from '@nestjs/core';
       defaults: {
         from: '"larudakoé" <noreply@larudakote.com>'
       },
-
       template: {
         dir: process.cwd() + '/mails/',
         adapter: new HandlebarsAdapter(),
