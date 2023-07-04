@@ -49,7 +49,7 @@ jobs:
           push: true
           tags: challenges2acr.azurecr.io/challenges2-bo-analytics:ci
 
-      - name: Build and push app front
+      - name: Build and push app front end
         id: docker_build_app-front
         uses: docker/build-push-action@v2
         with:
