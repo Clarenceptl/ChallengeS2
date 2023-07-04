@@ -3,7 +3,7 @@ FROM node:18.15-alpine As development
 WORKDIR /app
 
 
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci

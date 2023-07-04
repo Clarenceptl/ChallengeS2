@@ -2,7 +2,7 @@ FROM node:18.15-alpine As development
 
 WORKDIR /app
 
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 
 RUN npm ci
 
