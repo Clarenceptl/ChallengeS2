@@ -1,12 +1,12 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="12" sm="6" class="text-center justify-content-center">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
-      <h1 class="mt-16">Login</h1>
-      <div class="mb-10">
-        Don't have an account ? <router-link to="/register">Create new account</router-link>
+    <v-col cols="12" sm="6" class="text-center">
+      <h1 class="mt-16 text-left">Login</h1>
+      <div class="mb-10 text-left">
+        Don't have an account? <router-link to="/register">Create new account</router-link>
       </div>
       <div class="form-width">
         <v-form @submit.prevent="submit">
@@ -34,7 +34,7 @@
           <div>
             <v-btn type="submit" class="w-100 mb-3" color="appgrey">Login</v-btn>
           </div>
-          <v-btn variant="text" @click="forgotPassword = true">Forgot Password ?</v-btn>
+          <v-btn variant="text" @click="forgotPassword = true">Forgot Password?</v-btn>
         </v-form>
       </div>
     </v-col>
@@ -68,6 +68,33 @@
     </v-dialog>
   </v-row>
 </template>
+
+<style scoped>
+.form-width {
+  max-width: 500px;
+}
+
+.logo {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form-width {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    display: none;
+  }
+  
+  .text-center {
+    text-align: D;
+  }
+}
+</style>
+
+
 
 <script setup>
 import { ref } from 'vue'
@@ -111,27 +138,3 @@ const submit = handleSubmit(async (values) => {
   }
 })
 </script>
-
-<style scoped>
-.form-width {
-  max-width: 500px;
-}
-
-.col-bg-image {
-  background-image: url('../assets/bulle.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100vh;
-}
-
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
-  }
-}
-</style>
