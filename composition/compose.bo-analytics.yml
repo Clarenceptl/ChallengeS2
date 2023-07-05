@@ -9,5 +9,5 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ../bo-analytics/:/usr/src/app
-      - /usr/src/app/node_modules
+      - ../bo-analytics/:/app
+      - /app/node_modules

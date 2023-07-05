@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: challenges2_analytics-service
     volumes:
-      - ../services/analytics:/analytics-service
-      - /analytics-service/node_modules
+      - ../services/analytics:/app
+      - /app/node_modules
 
   app-service:
     build:
@@ -29,8 +29,8 @@ services:
     env_file:
       - ../.env
     volumes:
-      - ../services/authentication:/auth-service
-      - /auth-service/node_modules
+      - ../services/authentication:/app
+      - /app/node_modules
 
   mailing-service:
     build:
@@ -40,8 +40,8 @@ services:
     env_file:
       - ../.env
     volumes:
-      - ../services/mailing:/mailing-service
-      - /mailing-service/node_modules
+      - ../services/mailing:/app
+      - /app/node_modules
     ports:
       - "3023:3023"
 

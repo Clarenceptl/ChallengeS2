@@ -1,15 +1,17 @@
 FROM node:18.15-alpine As development
 
-WORKDIR /mailing-service
+WORKDIR /app
 
 RUN chmod -R 777 .
 
 COPY package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm ci
+RUN npm ci --production
 
 # Bundle app source
 COPY . .
 
-CMD ["npm", "run", "start:dev"]
+#RUN npm run build
+
+CMD ["node", "dist/main"]

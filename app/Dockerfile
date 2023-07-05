@@ -1,4 +1,6 @@
-FROM node:18.15-alpine as base
+FROM node:18-alpine as base
+
+RUN npm install --global serve
 
 WORKDIR /app
 
@@ -11,8 +13,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-
-RUN npm install -g serve
 
 # Set the command to start the server
 CMD serve -s dist
