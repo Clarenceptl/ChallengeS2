@@ -161,8 +161,7 @@ const createAppointment = () => {
       message: 'Appointment created',
     });
     router.push('/employer/appointments');
-  }).catch((error) => {
-    console.log(error);
+  }).catch(() => {
     stores.toast.createToast({
       type: 'error',
       message: 'Something went wrong',
