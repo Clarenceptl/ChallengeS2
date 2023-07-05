@@ -25,8 +25,8 @@ import { AppointmentModule } from './appointment/appointment.module';
       }
     }),
     ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 10
+      ttl: 80,
+      limit: 20
     }),
     UserModule,
     AdminModule,

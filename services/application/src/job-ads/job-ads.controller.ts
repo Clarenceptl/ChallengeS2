@@ -49,7 +49,6 @@ export class JobAdsController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.APPLY_JOB_ADS })
-  @Roles(UserRole.ROLE_USER)
   public applyJobAds(
     @Payload(ValidationPipe)
     payload

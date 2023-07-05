@@ -1,6 +1,6 @@
 <template>
   <div class="pa-5">
-    <v-table class="bg-green-200" v-if="jobAd.candidates.length">
+    <v-table class="bg-green-200" v-if="jobAd?.candidates?.length">
       <thead>
         <tr>
           <th class="text-left">Firstname</th>
@@ -103,7 +103,6 @@ import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useAppointmentsStore } from "../../stores/appointments.store";
-import { useUsersStore } from "../../stores/users.store";
 import { useToastStore } from '@/stores'
 import { storeToRefs } from "pinia";
 
@@ -113,9 +112,7 @@ const stores = {
 const route = useRoute();
 const router = useRouter();
 const { jobAd } = storeToRefs(useJobAdsStore());
-const { me } = storeToRefs(useUsersStore());
 await useJobAdsStore().getJobAd(route.params.id);
-await useUsersStore().getMe();
 
 let appointmentDialog = ref(false);
 let deleteDialog = ref(false);
@@ -161,7 +158,7 @@ const createAppointment = () => {
       type: 'success',
       message: 'Appointment created',
     });
-    router.push('/appointment-list');
+    router.push('/employer/appointments');
   }).catch((error) => {
     console.log(error);
     stores.toast.createToast({

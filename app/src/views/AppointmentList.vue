@@ -77,7 +77,7 @@
         <v-card-subtitle> Are you sure you want to decline this appointment ? </v-card-subtitle>
         <v-card-actions>
           <v-btn color="red-500" text @click="declineDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Yes</v-btn>
+          <v-btn color="blue-800" text @click="respondToAppointment(false)">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -85,9 +85,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useAppointmentsStore } from '../stores/appointments.store'
-import { useUsersStore } from '../stores/users.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 
@@ -97,9 +96,7 @@ const stores = {
   toast: useToastStore()
 }
 const { appointments } = storeToRefs(useAppointmentsStore())
-const { me } = storeToRefs(useUsersStore())
 await useAppointmentsStore().getAppointments()
-await useUsersStore().getMe()
 const acceptDialog = ref(false)
 const declineDialog = ref(false)
 
@@ -110,20 +107,19 @@ const respondToAppointment = async (accepted) => {
       .then(async () => {
         acceptDialog.value = false
         await useAppointmentsStore().getAppointments()
-        useUsersStore().getMe()
-        stores.toast.success({
+        stores.toast.createToast({
           type: 'success',
           message: 'Appointment responded to successfully'
         })
       })
       .catch(() => {
-        stores.toast.error({
+        stores.toast.createToast({
           type: 'error',
           message: 'Error responding to appointment'
         })
       })
   } catch (error) {
-    stores.toast.error({
+    stores.toast.createToast({
       type: 'error',
       message: 'Error responding to appointment'
     })

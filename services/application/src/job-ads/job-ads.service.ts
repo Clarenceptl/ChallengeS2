@@ -150,14 +150,12 @@ export class JobAdsService {
           message: 'Job ad not found'
         });
       }
-      console.log('toto', res, user);
       if (res.company.id !== user.company.id) {
         throw new RpcException({
           statusCode: 403,
           message: 'Forbidden'
         });
       }
-      console.log('toto', res);
       res = await this.jobAdsRepository.remove(res);
     } catch (error) {
       throw new RpcException({
@@ -175,6 +173,7 @@ export class JobAdsService {
     let res: JobAds;
     if (user.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
       throw new RpcException({
+        success: false,
         statusCode: 403,
         message: 'Forbidden'
       });
@@ -209,7 +208,6 @@ export class JobAdsService {
       jobAdsToUpdate.candidates.push(currentUser);
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
-      console.log(error);
       throw new RpcException({
         statusCode: 500,
         message: error.message
