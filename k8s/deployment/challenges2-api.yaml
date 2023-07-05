@@ -29,11 +29,10 @@ metadata:
   name: api-gateway-service
   namespace: challenges2
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: api-gateway-app
   ports:
     - protocol: TCP
       port: 3081
       targetPort: 3081
-      nodePort: 30081
