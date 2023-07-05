@@ -53,6 +53,7 @@ export class AuthService {
     }
 
     if (!user.isVerified) {
+      console.log('user', user);
       throw new RpcException({
         statusCode: 400,
         message: 'Your account is not verified'

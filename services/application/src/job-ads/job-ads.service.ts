@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { SuccessResponse } from 'src/global';
 import { RpcException } from '@nestjs/microservices';
 import { CreateJobAdsRequest } from './job-ads.dto';
-import { User } from 'src/users/users.entity';
+import { User, UserRole } from 'src/users/users.entity';
 
 @Injectable()
 export class JobAdsService {
@@ -42,8 +42,22 @@ export class JobAdsService {
   public async getJobAdsById(id: string): Promise<SuccessResponse> {
     let res: JobAds;
     try {
-      res = await this.jobAdsRepository.findOneBy({
-        id: parseInt(id)
+      res = await this.jobAdsRepository.findOne({
+        where: {
+          id: parseInt(id)
+        },
+        relations: {
+          candidates: true
+        },
+        select: {
+          candidates: {
+            id: true,
+            email: true,
+            firstname: true,
+            lastname: true,
+            birthdate: true
+          }
+        }
       });
       if (!res) {
         throw new RpcException({
@@ -157,6 +171,12 @@ export class JobAdsService {
 
   public async applyJobAds(id: string, user: User): Promise<SuccessResponse> {
     let res: JobAds;
+    if (user.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'Forbidden'
+      });
+    }
     try {
       const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
         id: parseInt(id)

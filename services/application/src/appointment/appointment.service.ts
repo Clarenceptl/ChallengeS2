@@ -61,6 +61,25 @@ export class AppointmentService {
             employee: {
               id: tokenUser.id
             }
+          },
+          select: {
+            employee: {},
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            },
+            job: {
+              id: true,
+              title: true,
+              description: true,
+              city: true,
+              contractType: true,
+              salary: true,
+              country: true
+            }
           }
         });
       } else {
@@ -68,6 +87,25 @@ export class AppointmentService {
           where: {
             candidate: {
               id: tokenUser.id
+            }
+          },
+          select: {
+            employee: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            },
+            candidate: {},
+            job: {
+              id: true,
+              title: true,
+              description: true,
+              city: true,
+              contractType: true,
+              salary: true,
+              country: true
             }
           }
         });

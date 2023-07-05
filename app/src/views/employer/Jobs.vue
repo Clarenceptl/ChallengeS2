@@ -44,6 +44,8 @@
               <div>
                 <v-btn color="blue-500" @click="editDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
+                <!-- button to see candidates -->
+                <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
               </div>
             </v-card-title>
             <v-card-text>
@@ -275,7 +277,9 @@ import { computed, ref } from 'vue';
 import { useUsersStore } from '../../stores/users.store';
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useToastStore } from '@/stores'
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const stores = {
   toast: useToastStore()
 }

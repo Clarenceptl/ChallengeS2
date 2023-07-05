@@ -81,6 +81,7 @@ export class UsersService {
       const userCompany = tokenUser?.company?.id;
       const jobAds = await this.jobAdsRepository.find({
         where: { company: userCompany },
+        relations: ['candidates'],
         order: { created_at: 'DESC' }
       });
       res = jobAds;
