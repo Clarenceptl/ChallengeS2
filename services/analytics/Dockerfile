@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 3020
 
-CMD ["node", "dist/main"]
+CMD ["npm", "run", "start:prod"]
