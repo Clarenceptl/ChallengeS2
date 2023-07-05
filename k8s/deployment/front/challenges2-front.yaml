@@ -7,13 +7,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
+      app: challenges2-frontend
   template:
     metadata:
       labels:
-        app: api-gateway-app
+        app: challenges2-frontend
 
     spec:
       containers:
-        - name: challenges2-api-gateway
+        - name: challenges2-frontend
           image: challengescontainerregistry.azurecr.io/challenges2-app-front:ci
