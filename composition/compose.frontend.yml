@@ -5,6 +5,7 @@ services:
     container_name: challenges2_frontend
     build:
       context: ../app
+      target: deployment
       dockerfile: Dockerfile
     env_file:
       - ../.env
