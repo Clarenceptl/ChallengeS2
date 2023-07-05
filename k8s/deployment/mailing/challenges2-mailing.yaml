@@ -18,6 +18,8 @@ spec:
       containers:
         - name: challenges2-mailing-service
           image: challengescontainerregistry.azurecr.io/challenges2-mailing-service:ci
+          imagePullPolicy: Always
+
           ports:
             - containerPort: 3023
 

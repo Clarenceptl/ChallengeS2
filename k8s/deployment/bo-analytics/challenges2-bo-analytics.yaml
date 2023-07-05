@@ -18,6 +18,8 @@ spec:
       containers:
         - name: challenges2-bo-analytics
           image: challengescontainerregistry.azurecr.io/challenges2-bo-analytics:ci
+          imagePullPolicy: Always
+
           ports:
             - containerPort: 5000
 

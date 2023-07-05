@@ -18,7 +18,7 @@ spec:
       containers:
         - name: challenges2-api-analytics
           image: challengescontainerregistry.azurecr.io/challenges2-analytics-service:ci
-
+          imagePullPolicy: Always
 ---
 
 apiVersion: v1

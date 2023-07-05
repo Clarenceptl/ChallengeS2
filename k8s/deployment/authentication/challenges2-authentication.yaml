@@ -18,6 +18,7 @@ spec:
       containers:
         - name: challenges2-authentication
           image: challengescontainerregistry.azurecr.io/challenges2-app-service:ci
+          imagePullPolicy: Always
 
 ---
 
