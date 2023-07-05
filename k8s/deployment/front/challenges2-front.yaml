@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
         - name: challenges2-frontend
-          image: challengescontainerregistry.azurecr.io/challenges2-app-front:ci
+          image: challengescontainerregistry.azurecr.io/challenges2-app-front:latest
           imagePullPolicy: Always

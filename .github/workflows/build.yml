@@ -23,7 +23,7 @@ jobs:
         with:
           context: ./services/analytics
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-analytics-service:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-analytics-service:latest
 
       - name: Build and push application
         id: docker_build_application_service
@@ -31,7 +31,7 @@ jobs:
         with:
           context: ./services/application
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-app-service:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-app-service:latest
 
       - name: Build and push mailing
         id: docker_build_mailing_service
@@ -39,7 +39,7 @@ jobs:
         with:
           context: ./services/mailing
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-mailing-service:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-mailing-service:latest
 
       - name: Build and push app front end
         id: docker_build_app-front
@@ -47,7 +47,7 @@ jobs:
         with:
           context: ./app
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-app-front:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-app-front:latest
 
       - name: Build and push authentication
         id: docker_build_authentication_service
@@ -55,7 +55,7 @@ jobs:
         with:
           context: ./services/authentication
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-auth-service:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-auth-service:latest
 
       - name: Build and push api
         id: docker_build_api
@@ -63,7 +63,7 @@ jobs:
         with:
           context: ./api-gateway
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-api-gateway:ci
+          tags: challengescontainerregistry.azurecr.io/challenges2-api-gateway:latest
 
 
       - name: Image digest

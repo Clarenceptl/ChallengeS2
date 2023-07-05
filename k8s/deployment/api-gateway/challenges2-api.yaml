@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api-gateway-service
-        image: challengescontainerregistry.azurecr.io/challenges2-api-gateway:ci
+        image: challengescontainerregistry.azurecr.io/challenges2-api-gateway:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 3080
