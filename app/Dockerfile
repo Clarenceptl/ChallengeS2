@@ -22,6 +22,8 @@ WORKDIR /app
 # Copy the built code from the build stage
 COPY --from=base /app/dist ./dist
 
+COPY --from=base /app/node_modules ./node_modules
+
 # Set the command to start the server
 CMD ["npm", "run", "preview"]
 
