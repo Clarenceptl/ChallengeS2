@@ -63,4 +63,10 @@ export class UsersController {
   public async deleteUser(@Body(ValidationPipe) uuid: string) {
     return this.usersService.deleteUser(uuid);
   }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_MY_JOBS })
+  @Roles(UserRole.ROLE_EMPLOYEUR)
+  public getMyJobs(@Payload(ValidationPipe) payload: any) {
+    return this.usersService.getMyJobs(payload.tokenUser);
+  }
 }

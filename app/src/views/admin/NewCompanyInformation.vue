@@ -89,16 +89,25 @@ let companyRevenue = ref('');
 
 const createCompanyRevenue = () => {
   useCompanyRevenueOptionsStore().createCompanyRevenueOptions(companyRevenue.value).then(() => {
-    stores.toast.createToast('success', 'Company revenue created');
+    stores.toast.createToast({
+      type: 'success',
+      message: 'Company revenue created'
+    });
   }).catch(() => {
-    stores.toast.createToast('error', 'Company revenue already exists');
+    stores.toast.createToast({
+      type: 'error',
+      message: 'Company revenue already exists'
+    });
   });
   companyRevenue.value = '';
 };
 
 const createCompanySector = () => {
   useCompanySectorOptionsStore().createCompanySectorOptions(companySector.value).then(() => {
-    stores.toast.createToast('success', 'Company sector created');
+    stores.toast.createToast({
+      type: 'success',
+      message: 'Company sector created'
+    });
   }).catch(() => {
     stores.toast.createToast('error', 'Company sector already exists');
   });
@@ -107,9 +116,15 @@ const createCompanySector = () => {
 
 const createCompanySize = () => {
   useCompanySizeOptionsStore().createCompanySizeOptions(companySize.value).then(() => {
-    stores.toast.createToast('success', 'Company size created');
+    stores.toast.createToast({
+      type: 'success',
+      message: 'Company size created'
+    });
   }).catch(() => {
-    stores.toast.createToast('error', 'Company size already exists');
+    stores.toast.createToast({
+      type: 'error',
+      message: 'Company size already exists'
+    });
   });
   companySize.value = '';
 };

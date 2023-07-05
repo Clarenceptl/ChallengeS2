@@ -2,6 +2,7 @@ export enum SERVICE_CMD {
   GET_USER = 'get-user',
   GET_USER_BY_EMAIL = 'get-user-by-email',
   GET_USERS = 'get-users',
+  GET_MY_JOBS = 'get-my-jobs',
   GET_SELF_USER = 'get-self-user',
   UPDATE_USER = 'update-user',
   DELETE_USER = 'delete-user',
