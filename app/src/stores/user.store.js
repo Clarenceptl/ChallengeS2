@@ -34,7 +34,6 @@ export const useUserStore = defineStore('userStore', () => {
 
   const getUsers = async () => {
     const res = await UserService.getUsers()
-    console.log(res)
     return res
   }
 

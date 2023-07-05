@@ -56,7 +56,6 @@ export class JobAdsController {
   @Delete(':id')
   @HttpCode(200)
   public deleteJobAds(@Param('id') id: string, @Req() req: any) {
-    console.log(id);
     const tokenUser = req?.user ?? null;
     return this.jobAdsService.deleteJobAds(id, tokenUser);
   }

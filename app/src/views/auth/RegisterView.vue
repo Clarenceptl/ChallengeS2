@@ -121,7 +121,6 @@ const user = {
 const submit = handleSubmit(async (values) => {
   const res = await stores.user.register(values)
   if (res.success) {
-    console.log(res, 'ok')
     resetForm()
     return stores.toast.createToast({
       message: res.message,

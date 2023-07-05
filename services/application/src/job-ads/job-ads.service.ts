@@ -158,8 +158,13 @@ export class JobAdsService {
   public async applyJobAds(id: string, user: User): Promise<SuccessResponse> {
     let res: JobAds;
     try {
-      const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOneBy({
-        id: parseInt(id)
+      const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOne({
+        where: {
+          id: parseInt(id)
+        },
+        relations: {
+          candidates: true
+        }
       });
       const currentUser = await this.userRepository.findOneBy({
         id: user.id
@@ -171,6 +176,7 @@ export class JobAdsService {
         });
       }
       if (
+        jobAdsToUpdate.candidates?.length &&
         jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
       ) {
         throw new RpcException({
