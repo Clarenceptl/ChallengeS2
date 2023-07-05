@@ -19,7 +19,7 @@ FROM base as deployment
 # Set the working directory
 WORKDIR /app
 
-# Copy the built code from the build stage
+# Copy the built code from the build stag
 COPY --from=base /app/dist ./dist
 
 COPY --from=base /app/node_modules ./node_modules
