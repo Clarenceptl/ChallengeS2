@@ -67,8 +67,7 @@ export class JobAds {
 
   @ManyToMany(() => User, (user) => user.candidatures, {
     onDelete: 'SET NULL',
-    cascade: true,
-    eager: true
+    cascade: true
   })
   candidates: User[];
 
