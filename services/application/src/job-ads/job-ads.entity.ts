@@ -60,7 +60,8 @@ export class JobAds {
   salary: number;
 
   @ManyToOne(() => Company, (company) => company, {
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    eager: true
   })
   company: Company;
 
