@@ -15,9 +15,22 @@ spec:
         app: api-gateway-app
         service: api-gateway-service
     spec:
+      initContainers:
+        - name: permission-setup
+          image: busybox
+          command: [ "sh", "-c", "mkdir -p /app/node_modules/.vite/ && chown -R <user>:<group> /app" ]
+          securityContext:
+            runAsUser: 0  # Set the desired user ID for the init container
+            runAsGroup: 0  # Set the desired group ID for the init container
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
       containers:
         - name: challenges2-api-gateway
           image: challengescontainerregistry.azurecr.io/challenges2-app-front:ci
-          ports:
-            - containerPort: 5173
-
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
+      volumes:
+        - name: app-volume
+          emptyDir: { }

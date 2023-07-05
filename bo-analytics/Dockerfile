@@ -4,12 +4,13 @@ WORKDIR /app
 
 RUN chmod -R 777 .
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
 RUN npm ci
 
-COPY . ./
+COPY . .
 
+USER node
 EXPOSE 5000
 
 CMD [ "npm", "run", "dev" ]
