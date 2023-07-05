@@ -35,4 +35,3 @@ spec:
   ports:
     - protocol: TCP
       port: 3081
-      targetPort: 3081

@@ -8,7 +8,7 @@ COPY package*.json ./
 
 RUN npm ci
 
-COPY . .
+COPY . ./
 
 EXPOSE 5000
 

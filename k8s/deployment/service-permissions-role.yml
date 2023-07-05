@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: service-permissions-role
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "update", "delete"]
