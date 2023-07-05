@@ -37,4 +37,10 @@ export class AppointmentController {
   public async getAppointments(@Payload(ValidationPipe) tokenUser) {
     return this.appointmentService.getAppointments(tokenUser);
   }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_APPOINTMENTS_BY_JOB_ID })
+  public async getAppointmentsByJobId(@Payload(ValidationPipe) payload) {
+    const { id, tokenUser } = payload;
+    return this.appointmentService.getAppointmentsByJobId(id, tokenUser);
+  }
 }

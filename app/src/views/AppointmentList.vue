@@ -106,11 +106,11 @@ const respondToAppointment = async (accepted) => {
       .acceptAppointment(selectedAppointmentId.value, accepted)
       .then(async () => {
         acceptDialog.value = false
-        await useAppointmentsStore().getAppointments()
         stores.toast.createToast({
           type: 'success',
           message: 'Appointment responded to successfully'
         })
+        await useAppointmentsStore().getAppointments()
       })
       .catch(() => {
         stores.toast.createToast({

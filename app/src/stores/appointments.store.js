@@ -3,7 +3,8 @@ import { AppointmentsService } from '@/services/appointments.service'
 
 export const useAppointmentsStore = defineStore('appointmentsStore', {
   state: () => ({
-    appointments: []
+    appointments: [],
+    appointmentsByJobId: []
   }),
   actions: {
     async getAppointments() {
@@ -24,6 +25,13 @@ export const useAppointmentsStore = defineStore('appointmentsStore', {
       const res = await AppointmentsService.acceptAppointment(appointmentId, boolean)
       if (res?.success) {
         await this.getAppointments();
+      }
+      return res
+    },
+    async getAppointmentsByJobId(jobId) {
+      const res = await AppointmentsService.getAppointmentsByJobId(jobId)
+      if (res?.success) {
+        this.appointmentsByJobId = res.data
       }
       return res
     }

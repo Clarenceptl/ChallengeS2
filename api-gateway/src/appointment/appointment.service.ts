@@ -76,4 +76,19 @@ export class AppointmentService {
     }
     return res;
   }
+
+  public async getAppointmentsByJobId(id: string, tokenUser) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.GET_APPOINTMENTS_BY_JOB_ID },
+          { id, tokenUser }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
 }

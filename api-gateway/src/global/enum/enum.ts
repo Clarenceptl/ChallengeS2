@@ -35,7 +35,8 @@ export enum SERVICE_CMD {
   GET_APPOINTMENTS = 'get-appointments',
   GET_APPOINTMENT_BY_ID = 'get-appointment-by-id',
   CREATE_APPOINTMENT = 'create-appointment',
-  ACCEPT_APPOINTMENT = 'accept-appointment'
+  ACCEPT_APPOINTMENT = 'accept-appointment',
+  GET_APPOINTMENTS_BY_JOB_ID = 'get-appointments-by-job-id'
 }
 
 export enum SERVICE_NAME {

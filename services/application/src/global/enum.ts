@@ -13,6 +13,7 @@ export enum SERVICE_CMD {
   UPDATE_APPOINTMENT = 'update-appointment',
   ACCEPT_APPOINTMENT = 'accept-appointment',
   GET_APPOINTMENT_BY_ID = 'get-appointment-by-id',
+  GET_APPOINTMENTS_BY_JOB_ID = 'get-appointments-by-job-id',
   GET_COMPANIES = 'get-companies',
   GET_COMPANY = 'get-company',
   GET_COMPANY_BY_ID = 'get-company-by-id',

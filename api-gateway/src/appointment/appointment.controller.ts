@@ -56,4 +56,11 @@ export class AppointmentController {
     const tokenUser = req?.user ?? null;
     return this.appointmentService.acceptAppointment(id, data, tokenUser);
   }
+
+  @Get('job/:id')
+  @HttpCode(200)
+  public getAppointmentsByJobId(@Param('id') id: string, @Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.appointmentService.getAppointmentsByJobId(id, tokenUser);
+  }
 }

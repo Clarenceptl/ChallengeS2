@@ -235,4 +235,63 @@ export class AppointmentService {
       data: res
     };
   }
+
+  public async getAppointmentsByJobId(
+    jobId: string,
+    tokenUser: User
+  ): Promise<SuccessResponse> {
+    let res: Appointment[];
+    try {
+      const jobAd = await this.jobAdsRepository.findOneBy({
+        id: parseInt(jobId)
+      });
+      if (!jobAd) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Job Ad not found'
+        });
+      }
+      if (tokenUser.company.id !== jobAd.company.id) {
+        throw new RpcException({
+          statusCode: 403,
+          message: 'Forbidden'
+        });
+      }
+      res = await this.appointmentRepository.find({
+        where: {
+          job: {
+            id: parseInt(jobId)
+          }
+        },
+        select: {
+          employee: {},
+          candidate: {
+            id: true,
+            email: true,
+            firstname: true,
+            lastname: true,
+            birthdate: true
+          },
+          job: {
+            id: true,
+            title: true,
+            description: true,
+            city: true,
+            contractType: true,
+            salary: true,
+            country: true
+          }
+        }
+      });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: error.error.statusCode ?? 500,
+        message: error.error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
 }

@@ -49,4 +49,20 @@ export class AppointmentsService {
       return error.response
     }
   }
+
+  static async getAppointmentsByJobId(jobId) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/appointments/job/${jobId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="pa-5">
-    <v-table class="bg-green-200" v-if="jobAd?.candidates?.length">
+    <v-table class="bg-green-200" v-if="candidates?.length">
       <thead>
         <tr>
           <th class="text-left">Firstname</th>
@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="candidate in jobAd.candidates"
+          v-for="candidate in candidates"
           :key="candidate.id"
         >
           <td>
@@ -111,8 +111,10 @@ const stores = {
 }
 const route = useRoute();
 const router = useRouter();
-const { jobAd } = storeToRefs(useJobAdsStore());
+await useAppointmentsStore().getAppointmentsByJobId(route.params.id)
 await useJobAdsStore().getJobAd(route.params.id);
+const { jobAd } = storeToRefs(useJobAdsStore());
+const { appointmentsByJobId } = storeToRefs(useAppointmentsStore());
 
 let appointmentDialog = ref(false);
 let deleteDialog = ref(false);
@@ -167,6 +169,15 @@ const createAppointment = () => {
     });
   });
 };
+
+// if job ad candidate id is in appointmentsByJobId candidate id, then remove candidate from job ad candidates
+const candidates = computed(() => {
+  return jobAd.value.candidates.filter((candidate) => {
+    return !appointmentsByJobId.value.find((appointment) => {
+      return appointment.candidate.id === candidate.id;
+    });
+  });
+});
 </script>
 
 <style scoped></style>
