@@ -1,37 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway-service
+  name: gateway
   namespace: challenges2
   labels:
-    app: api-gateway-service
+    app: gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
+      app: gateway
   template:
     metadata:
       labels:
-        app: api-gateway-app
+        app: gateway
     spec:
       containers:
       - name: api-gateway-service
         image: challengescontainerregistry.azurecr.io/challenges2-api-gateway:ci
         ports:
-          - containerPort: 3081
+          - containerPort: 3080
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-gateway-service
+  name: gateway
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
-    app: api-gateway-app
+    app: gateway
   ports:
     - protocol: TCP
-      port: 3081
+      port: 3080
+      targetPort: 3080

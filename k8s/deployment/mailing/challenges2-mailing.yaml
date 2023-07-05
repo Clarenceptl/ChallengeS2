@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailing
+  namespace: challenges2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailing
+      service: mailing
+  template:
+    metadata:
+      labels:
+        app: mailing
+        service: mailing
+    spec:
+      containers:
+        - name: challenges2-mailing-service
+          image: challengescontainerregistry.azurecr.io/challenges2-mailing-service:ci
+          ports:
+            - containerPort: 3023
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailing
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: mailing
+  ports:
+    - protocol: TCP
+      port: 3081

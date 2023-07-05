@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication
+  namespace: challenges2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentication
+      service: authentication
+  template:
+    metadata:
+      labels:
+        app: authentication
+        service: authentication
+    spec:
+      containers:
+        - name: challenges2-authentication
+          image: challengescontainerregistry.azurecr.io/challenges2-app-service:ci
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: authentication
+  ports:
+    - protocol: TCP
+      port: 3081
