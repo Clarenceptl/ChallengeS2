@@ -347,7 +347,6 @@ const updateJob = () => {
     contractType: jobEdit.value.contractType,
     salary: jobEdit.value.salary,
   };
-  console.log(selectedJob.value.id);
   useJobAdsStore().updateJobAd(selectedJob.value.id, formattedJob).then(async () => {
     stores.toast.createToast({
       type: 'success',
@@ -366,7 +365,6 @@ const updateJob = () => {
 };
 
 const deleteJob = () => {
-  console.log(selectedJob.value.id);
   useJobAdsStore().deleteJobAd(selectedJob.value.id).then(async () => {
     stores.toast.createToast({
       type: 'success',
