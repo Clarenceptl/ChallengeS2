@@ -45,6 +45,7 @@
                 <v-btn v-if="!quiz" color="green-500" @click="mcqDialog = true">Create MCQ</v-btn>
                 <v-btn color="blue-500 ml-2" @click="editDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
+                <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
               </div>
             </v-card-title>
             <v-card-text>
@@ -495,10 +496,11 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { useUsersStore } from '../../stores/users.store';
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useQuizStore } from '../../stores/quiz.store';
 import { useToastStore } from '@/stores'
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores'
 
 await useJobAdsStore().getMyJobs();
 const { myJobs } = storeToRefs(useJobAdsStore());
@@ -506,10 +508,13 @@ let selectedJob = ref(myJobs.value[0]);
 const stores = {
   toast: useToastStore()
 }
-await useUsersStore().getMe();
 await useQuizStore().getQuizByJobId(selectedJob.value.id);
-const { me } = storeToRefs(useUsersStore());
 const { quiz } = storeToRefs(useQuizStore());
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+
+const router = useRouter();
 
 watch(() => selectedJob.value.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
@@ -590,7 +595,6 @@ const createJob = () => {
       type: 'success',
       message: 'job ads created'
     });
-    await useUsersStore().getMe();
     newJobDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
@@ -641,7 +645,7 @@ const updateJob = () => {
       type: 'success',
       message: 'job ad updated'
     });
-    await useUsersStore().getMe();
+    await useJobAdsStore().getMyJobs();
     editDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
@@ -659,7 +663,7 @@ const deleteJob = () => {
       type: 'success',
       message: 'job ad deleted'
     });
-    await useUsersStore().getMe();
+    await useJobAdsStore().getMyJobs();
     deleteDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};

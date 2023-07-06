@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { isConnected } from '@/middleware'
+import { useUserStore } from '@/stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -111,8 +112,12 @@ const router = createRouter({
     {
       path: '/admin/',
       beforeEnter: async (to, from, next) => {
+        const userStore = useUserStore()
         if (!(await isConnected())) {
           return next({ name: 'Login' })
+        }
+        if (!userStore.isAdmin) {
+          return next({ name: 'Home' })
         }
         return next()
       },
