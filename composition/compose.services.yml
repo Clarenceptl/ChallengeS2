@@ -1,14 +1,6 @@
 version: '3.8'
 
 services:
-  analytics-service:
-    build:
-      context: ../services/analytics
-      dockerfile: Dockerfile
-    container_name: challenges2_analytics-service
-    volumes:
-      - ../services/analytics:/app
-      - /app/node_modules
 
   app-service:
     build:
