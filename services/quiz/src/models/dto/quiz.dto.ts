@@ -38,11 +38,15 @@ export class DeleteQuizDto {
 
 export class DeleteQuestionDto {
   tokenUser: User;
-  id: Types.ObjectId;
+  id: string;
+}
+
+class AnswersUser extends Answer {
+  idQuestion: string;
 }
 
 export class AddAnswersDto {
   tokenUser: User;
-  quizId: string;
-  answers: Answer[];
+  idQuiz: string;
+  answers: AnswersUser[];
 }

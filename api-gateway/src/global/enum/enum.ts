@@ -39,7 +39,7 @@ export enum SERVICE_CMD {
   DELETE_QUIZ = 'delete-quiz',
   UPDATE_QUIZ = 'update-quiz',
   ADD_QUESTIONS_ANSWERS = 'add-questions-answers',
-  DELETE_QUESTION = 'delete-question',
+  DELETE_QUESTION = 'delete-questions',
   ADD_USER_ANSWERS = 'add-user-answers'
 }
 

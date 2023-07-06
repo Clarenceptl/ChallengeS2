@@ -51,8 +51,14 @@ export class Answers {
   label: string;
 }
 
+export class AnswersUser extends Answers {
+  @IsString()
+  @IsNotEmpty()
+  idQuestion: string;
+}
+
 export class UserAnswersDto {
-  answers: Answers[];
+  answers: AnswersUser[];
 }
 
 export class CreateQuestionsAnswersDto {
