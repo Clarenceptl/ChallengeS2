@@ -15,7 +15,6 @@ export const isConnected = async () => {
 
   
   const responseService = await AuthService.refreshToken(refreshToken)
-  console.log(responseService, 'responseService')
   if (!responseService.success) return false
   localStorage.setItem('bearer-token', responseService.data.token)
   localStorage.setItem('refresh-token', responseService.data.refreshToken)

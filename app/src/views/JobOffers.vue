@@ -111,10 +111,15 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useJobAdsStore } from '../stores/job-ads.store'
 import { useToastStore } from '@/stores'
+import { useUserStore } from '@/stores'
 
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.loadContextUser()
+})
 const stores = {
   toast: useToastStore()
 }
