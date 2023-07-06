@@ -13,12 +13,12 @@ import { SeedModule } from './seed/seed.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.pghost,
-      port: 5432,
+      host: process.env.DATABASE_POSTGRES_HOST,
+      port: process.env.POSTGRES_PORT,
       ssl: true,
-      username: process.env.pgusername,
-      password: process.env.pgpassword,
-      database: process.env.pgdatabase,
+      username: process.env.DATABASE_POSTGRES_USER,
+      password: process.env.DATABASE_POSTGRES_PASSWORD,
+      database: process.env.DATABASE_POSTGRES_DB,
       // synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true
     }),
