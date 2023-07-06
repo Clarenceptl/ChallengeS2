@@ -19,6 +19,9 @@ spec:
         - name: challenges2-authentication
           image: challengescontainerregistry.azurecr.io/challenges2-app-service:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: production-secret
 
 ---
 
