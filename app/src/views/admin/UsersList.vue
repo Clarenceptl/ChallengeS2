@@ -17,7 +17,7 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="py-4 px-4">Firstname</th>
+                      <th class="px-4">Firstname</th>
                       <th class=" px-4">Lastname</th>
                       <th class=" px-4">Email</th>
                       <th class=" px-4">Birthdate</th>

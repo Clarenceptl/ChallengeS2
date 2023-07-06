@@ -123,13 +123,13 @@ const submit = handleSubmit(async (values) => {
   if (res.success) {
     resetForm()
     return stores.toast.createToast({
+      type: 'success',
       message: res.message,
-      type: 'success'
     })
   } else {
     return stores.toast.createToast({
+      type: 'error',
       message: res.message,
-      type: 'error'
     })
   }
 })

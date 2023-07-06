@@ -1,51 +1,63 @@
 <template>
   <div class="pa-5">
-    <v-card v-if="me.candidatures.length">
-      <v-table class="bg-green-200">
-        <thead>
-          <tr>
-            <th class="text-left">Title</th>
-            <th class="text-left">City</th>
-            <th class="text-left">Country</th>
-            <th class="text-left">Salary</th>
-            <th class="text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(candidature, index) in me.candidatures"
-            :key="index"
-          >
-            <td>{{ candidature.title }}</td>
-            <td>{{ candidature.city }}</td>
-            <td>{{ candidature.country }}</td>
-            <td>{{ candidature.salary }}</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-card>
-    <v-card v-else>
-      <v-card-title>
-        <h2>You have no applied jobs</h2>
-      </v-card-title>
-    </v-card>
+    <h1 class="text-center my-10">Your applications list</h1>
+    <div class="d-flex justify-center mb-2">
+        <v-card class="mx-auto" v-if="me?.candidatures?.length">
+          <v-toolbar color="appgrey">
+            <v-toolbar-title></v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="px-4">Title</th>
+                  <th class="px-4">City</th>
+                  <th class="px-4">Country</th>
+                  <th class="px-4">Salary</th>
+                  <th class="px-4">MCQ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(candidature, index) in me.candidatures"
+                  :key="index"
+                >
+                  <td class="px-4">{{ candidature.title }}</td>
+                  <td class="px-4">{{ candidature.city }}</td>
+                  <td class="px-4">{{ candidature.country }}</td>
+                  <td class="px-4">{{ candidature.salary }}</td>
+                  <td class="px-4 py-4">
+                    <v-btn color="blue-500" @click="router.push(`applied-list/${candidature.id}/test`)">Take the test</v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
+        <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+          <v-card-title>
+            <h2>You have no applied jobs</h2>
+          </v-card-title>
+          <v-card-subtitle> You didn't apply to any jobs yet </v-card-subtitle>
+        </v-card>
+      </div>
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
-import { useUsersStore } from '../stores/users.store'
-import { useToastStore } from '@/stores'
+import { useUserStore } from '@/stores'
+import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 
-const stores = {
-  toast: useToastStore()
-}
-const { me } = storeToRefs(useUsersStore())
-await useUsersStore().getMe()
+const router = useRouter()
+
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+onMounted(() => {
+  userStore.loadContextUser()
+})
 </script>
 
 <style scoped></style>

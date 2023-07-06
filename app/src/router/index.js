@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { isConnected } from '@/middleware'
+import { useUserStore } from '@/stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,7 +70,8 @@ const router = createRouter({
       name: 'RegisterCompany',
       component: () => import('@/views/RegisterCompany.vue'),
       beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
           return next({ name: 'Login' })
         }
         return next()
@@ -79,7 +81,8 @@ const router = createRouter({
       path: '/job-offers',
       name: 'JobOffers',
       beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
           return next({ name: 'Login' })
         }
         return next()
@@ -90,18 +93,31 @@ const router = createRouter({
       path: '/applied-list',
       name: 'AppliedList',
       beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
           return next({ name: 'Login' })
         }
         return next()
       },
-      component: () => import('@/views/AppliedList.vue')
+      children: [
+        {
+          path: '',
+          name: 'AppliedList',
+          component: () => import('@/views/AppliedList.vue')
+        },
+        {
+          path: ':id/test',
+          name: 'Test',
+          component: () => import('@/views/Test.vue')
+        }
+      ]
     },
     {
       path: '/appointment-list',
       name: 'AppointmentList',
       beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
           return next({ name: 'Login' })
         }
         return next()
@@ -111,8 +127,12 @@ const router = createRouter({
     {
       path: '/admin/',
       beforeEnter: async (to, from, next) => {
+        const userStore = useUserStore()
         if (!(await isConnected())) {
           return next({ name: 'Login' })
+        }
+        if (!userStore.isAdmin) {
+          return next({ name: 'Home' })
         }
         return next()
       },
@@ -147,7 +167,8 @@ const router = createRouter({
       path: '/employer/',
       name: 'Employer',
       beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
+        const userStore = useUserStore()
+        if (!(await isConnected() && userStore.isEmployer)) {
           return next({ name: 'Login' })
         }
         return next()
