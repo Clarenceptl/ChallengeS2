@@ -4,16 +4,11 @@ WORKDIR /app
 
 RUN chmod -R 777 .
 
-COPY package*.json ./
-
-# Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm ci --production
-
-# Bundle app source
 COPY . .
 
-#RUN npm run build
+RUN npm ci
 
-EXPOSE 3021
+
+RUN npm run build
 
 CMD ["npm", "run", "start:prod"]
