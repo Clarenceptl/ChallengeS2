@@ -9,7 +9,7 @@ import { UsersService } from './users.service';
 import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
-import { Roles, SERVICE_CMD, SelfUpdate } from '../global';
+import { Roles, SERVICE_CMD } from '../global';
 import { UserRole } from './users.entity';
 
 @Controller()
@@ -62,5 +62,11 @@ export class UsersController {
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })
   public async deleteUser(@Body(ValidationPipe) uuid: string) {
     return this.usersService.deleteUser(uuid);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_MY_JOBS })
+  @Roles(UserRole.ROLE_EMPLOYEUR)
+  public getMyJobs(@Payload(ValidationPipe) payload: any) {
+    return this.usersService.getMyJobs(payload.tokenUser);
   }
 }

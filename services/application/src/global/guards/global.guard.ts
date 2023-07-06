@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { User, UserRole } from 'src/users/users.entity';
+import { UserRole } from 'src/users/users.entity';
 import { checkRole, checkSelfUpdate } from '../helpers/global.helper';
 import { RpcException } from '@nestjs/microservices';
 import { ErrorModel } from '../global.model';
@@ -23,16 +23,20 @@ export class RolesAndOwnerGlobalGuard implements CanActivate {
       context.getHandler()
     );
 
-    const roles = this.reflector.get<UserRole[]>('roles', context.getHandler());
+    const roles: UserRole[] | null = this.reflector.get<UserRole[]>(
+      'roles',
+      context.getHandler()
+    );
+    // if tokenUser -> data is object
     const { tokenUser, ...params } = context.switchToRpc().getData();
-
     let hasRole = false;
     let selfUpdateRes = false;
 
-    if (!selfUpdate && roles?.length === 0) {
+    if (!selfUpdate && !roles) {
       return true;
     }
 
+    if (!tokenUser) throw this.error;
     if (selfUpdate) {
       selfUpdateRes = checkSelfUpdate(tokenUser, params);
     }

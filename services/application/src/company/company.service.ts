@@ -1,12 +1,10 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Company } from './company.entity';
-import { Inject } from '@nestjs/common';
-import { SERVICE_CMD, SERVICE_NAME } from '../global';
+import { SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CompanyDto } from './company.dto';
-import { SendEmailRequest } from '../users/users.dto';
-import { lastValueFrom } from 'rxjs';
+import { CreateCompanyRequest } from './company.dto';
 import { User, UserRole } from 'src/users/users.entity';
 import { encryptPassword } from 'src/helpers';
 import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
@@ -18,86 +16,118 @@ interface CompanyOptions {
   companyRevenueOptions: CompanyRevenueOptions;
   companySectorOptions: CompanySectorOptions;
 }
+@Injectable()
 export class CompanyService {
   public constructor(
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @Inject(SERVICE_NAME.MAILING)
     private readonly mailingService: ClientProxy
   ) {}
 
-  public async createCompany(company: CompanyDto) {
-    try {
-      const savedCompany = this.companyRepository.create(company);
-      await this.companyRepository.save(savedCompany);
-    } catch (error) {
-      throw new RpcException('error');
-    }
-    const resultCompanyEmail: SendEmailRequest = {
-      email: company.founder.email,
-      firstname: company.founder.firstname
-    };
-
-    console.log('envoi email');
-    const res = await lastValueFrom(
-      this.mailingService.emit<SendEmailRequest>(
-        SERVICE_CMD.GET_REGISTER_MAIL,
-        resultCompanyEmail
-      )
-    );
-    console.log('response email', res);
-    return { success: true, message: 'Company' };
-  }
-
-  public async getCompanyById(id) {
-    return this.companyRepository.findOne(id);
-  }
-
-  public async getCompanies() {
-    return this.companyRepository.find();
-  }
-  public async deleteCompany(id) {
-    try {
-      const company = await this.companyRepository.findOne(id);
-      if (!company) {
-        throw new RpcException('Company not found');
-      }
-      const resultCompanyEmail: SendEmailRequest = {
-        // email: company.founder.email,
-        email: 'toto@gmail.com',
-        // firstname: company.founder.firstname
-        firstname: 'toto'
-      };
-
-      console.log('envoi email');
-      const res = await lastValueFrom(
-        this.mailingService.emit<SendEmailRequest>(
-          SERVICE_CMD.GET_REGISTER_MAIL,
-          resultCompanyEmail
-        )
-      );
-      console.log('response email', res);
-      return this.companyRepository.delete(id);
-    } catch (error) {
-      throw new RpcException('Company not found');
-    }
-  }
-
-  public async updateCompany(id, company: CompanyDto) {
-    try {
-      const companyToUpdate = await this.companyRepository.findOne(id);
-      if (!companyToUpdate) {
-        throw new RpcException('Company not found');
-      }
-      const updatedCompany = this.companyRepository.create({
-        ...companyToUpdate,
-        ...company
+  public async createCompany(
+    company: CreateCompanyRequest,
+    user: User
+  ): Promise<SuccessResponse> {
+    const isEmployer: boolean = user.roles.includes(UserRole.ROLE_EMPLOYEUR);
+    if (isEmployer) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'You are not allowed to create a company'
       });
-      await this.companyRepository.save(updatedCompany);
-      return updatedCompany;
-    } catch (error) {
-      throw new RpcException('Company not found');
+    } else {
+      let res: Company;
+      try {
+        const newCompany = this.companyRepository.create({
+          ...company,
+          employees: [user]
+        });
+        newCompany.created_at = new Date();
+        newCompany.updated_at = new Date();
+        res = await this.companyRepository.save(newCompany);
+        const userToUpdate = await this.userRepository.findOneBy({
+          id: user.id
+        });
+        userToUpdate.roles.push(UserRole.ROLE_EMPLOYEUR);
+        userToUpdate.company = res;
+        await this.userRepository.save(userToUpdate);
+      } catch (error) {
+        throw new RpcException({
+          statusCode: 500,
+          message: error.message
+        });
+      }
+      return {
+        success: true,
+        data: res
+      };
     }
+  }
+
+  public async getCompanyById(id: string): Promise<SuccessResponse> {
+    let res: Company;
+    try {
+      res = await this.companyRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company not found'
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async getCompanies(): Promise<SuccessResponse> {
+    let res: Company[];
+    try {
+      res = await this.companyRepository.find({
+        order: {
+          id: 'ASC'
+        }
+      });
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async getCompany(id: string): Promise<SuccessResponse> {
+    let res: Company;
+    try {
+      res = await this.companyRepository.findOneBy({ id: parseInt(id) });
+      if (!res) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Company not found'
+        });
+      }
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
   }
 
   public async seed(options: CompanyOptions) {
@@ -112,7 +142,7 @@ export class CompanyService {
       firstname: 'employeur',
       lastname: 'John',
       birthdate: '01/01/1990',
-      role: UserRole.ROLE_EMPLOYEUR,
+      roles: [UserRole.ROLE_USER, UserRole.ROLE_EMPLOYEUR],
       isVerified: true
     });
 

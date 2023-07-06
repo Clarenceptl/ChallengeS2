@@ -4,21 +4,33 @@ import {
   HttpCode,
   Param,
   ParseUUIDPipe,
+  Post,
   Req
 } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { SuccessResponse, ErrorModel } from '../global';
 
 @ApiTags('User')
+@ApiBearerAuth()
 @Controller({ path: 'users', version: '1' })
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('/my-jobs')
+  @HttpCode(200)
+  public getMyJobs(@Req() req: any) {
+    const tokenUser = req?.user ?? null;
+    return this.userService.getMyJobs(tokenUser);
+  }
   @Get('/getSelf')
   public getSelfUser(@Req() req: any) {
-    const { id } = req?.user ?? null;
-    return this.userService.getSelfUser(id);
+    return this.userService.getSelfUser(req?.user?.id ?? null);
   }
 
   @Get()
@@ -38,4 +50,5 @@ export class UserController {
   public getUser(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.userService.getUser(uuid);
   }
+
 }

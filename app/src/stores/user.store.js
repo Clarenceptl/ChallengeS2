@@ -13,6 +13,9 @@ export const useUserStore = defineStore('userStore', () => {
   //#region getters
   const getContextUser = computed(() => contextUser.user)
   const isConnected = computed(() => !!contextUser.user?.id)
+  // user roles
+  const isAdmin = computed(() => contextUser.user?.roles?.includes('ROLE_ADMIN'))
+  const isEmployer = computed(() => contextUser.user?.roles?.includes('ROLE_EMPLOYEUR'))
   //#endregion
 
   //#region Services methods
@@ -31,7 +34,6 @@ export const useUserStore = defineStore('userStore', () => {
 
   const getUsers = async () => {
     const res = await UserService.getUsers()
-    console.log(res)
     return res
   }
 
@@ -66,6 +68,8 @@ export const useUserStore = defineStore('userStore', () => {
     getContextUser,
     isConnected,
     logout,
-    getUsers
+    getUsers,
+    isAdmin,
+    isEmployer
   }
 })

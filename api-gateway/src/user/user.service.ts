@@ -54,4 +54,18 @@ export class UserService {
     }
     return res;
   }
+
+  public async getMyJobs(tokenUser: any) {
+    let res: SuccessResponse;
+
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.GET_MY_JOBS }, { tokenUser })
+      );
+    } catch (error) {
+      console.log('error', error);
+      handleErrors(error);
+    }
+    return res;
+  }
 }

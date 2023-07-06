@@ -1,5 +1,19 @@
-export class CompanyRevenueOptionsDto {
-  revenue: any;
+import { IsNotEmpty, IsString } from 'class-validator';
 
-  companies: any;
+export class CreateCompanyRevenueOptionRequest {
+  @IsString()
+  @IsNotEmpty()
+  revenue: string;
+}
+
+export class UpdateCompanyRevenueOptionRequest extends CreateCompanyRevenueOptionRequest {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+}
+
+export class GetCompanyRevenueOptionsByIdRequest {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
 }

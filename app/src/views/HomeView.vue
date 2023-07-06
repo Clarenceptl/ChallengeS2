@@ -23,10 +23,8 @@ import { onMounted } from 'vue'
 import { useUserStore } from '@/stores'
 
 const userStore = useUserStore()
-const user = userStore.getContextUser
 onMounted(async () => {
   await userStore.loadContextUser()
-  await userStore.getUsers()
 })
 </script>
 

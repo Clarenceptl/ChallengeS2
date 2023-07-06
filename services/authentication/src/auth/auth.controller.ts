@@ -1,4 +1,4 @@
-import { Body, Controller, Req, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { SERVICE_CMD } from '../enum';

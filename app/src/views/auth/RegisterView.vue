@@ -73,7 +73,7 @@
             label="Confirmation du mot de passe"
           />
           <div>
-            <v-btn type="submit" class="w-100 mb-3" color="appgrey">Login</v-btn>
+            <v-btn type="submit" class="w-100 mb-3" color="appgrey">Register</v-btn>
           </div>
         </v-form>
       </div>
@@ -121,7 +121,6 @@ const user = {
 const submit = handleSubmit(async (values) => {
   const res = await stores.user.register(values)
   if (res.success) {
-    console.log(res, 'ok')
     resetForm()
     return stores.toast.createToast({
       message: res.message,

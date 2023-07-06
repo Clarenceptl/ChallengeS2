@@ -4,8 +4,12 @@ import { JobAds } from './job-ads.entity';
 import { Company } from '../company/company.entity';
 import { User } from '../users/users.entity';
 import { Appointment } from '../appointment/appointment.entity';
+import { JobAdsController } from './job-ads.controller';
+import { JobAdsService } from './job-ads.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([JobAds, Company, User, Appointment])]
+  imports: [TypeOrmModule.forFeature([JobAds, Company, User, Appointment])],
+  controllers: [JobAdsController],
+  providers: [JobAdsService]
 })
 export class JobAdsModule {}

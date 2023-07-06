@@ -10,19 +10,14 @@ import { APP_GUARD } from '@nestjs/core';
   imports: [
     MailerModule.forRoot({
       // TODO: replace with real smtp server
-      // transport: 'smtps://user@domain.com:pass@smtp.domain.com',
-      transport: {
+      transport: process.env.MAIL_URL_SMTP ?? {
         host: 'mailcatcher',
         port: 1025,
         ignoreTLS: true,
         secure: false
-        // auth: {
-        //   user: 'test',
-        //   pass: 'test'
-        // }
       },
       defaults: {
-        from: '"nest-modules" <modules@nestjs.com>'
+        from: '"larudakoé" <noreply@larudakote.com>'
       },
 
       template: {
