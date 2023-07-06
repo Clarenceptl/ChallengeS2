@@ -3,34 +3,28 @@
     <div class="text-center mb-2">
       <h1>Job Offers</h1>
     </div>
-    <v-row>
-      <v-col cols="5" offset="1">
-        <v-text-field
-          clearable
-          type="text"
-          color="appgrey"
-          variant="outlined"
-          label="Search a particular job"
-        />
-      </v-col>
-      <v-col cols="5">
-        <v-text-field
-          clearable
-          type="text"
-          color="appgrey"
-          variant="outlined"
-          label="Look for a particular field"
-        />
-      </v-col>
-    </v-row>
+    <v-text-field
+      clearable
+      type="text"
+      color="appgrey"
+      variant="outlined"
+      label="Search a particular job"
+      v-model="search"
+    />
     <v-divider class="mb-4" />
-    <div v-if="jobAds.length">
+    <v-card v-if="!jobAds.length" class="pa-5 bg-green-300" variant="outlined">
+      <v-card-title>
+        <h2>No jobs available</h2>
+      </v-card-title>
+      <v-card-subtitle>There aren't any jobs available yet</v-card-subtitle>
+    </v-card>
+    <div v-else-if="filteredJobAds.length">
       <v-row>
         <v-col cols="4" class="column-scrollable">
           <v-card
             variant="outlined"
             class="mb-2 bg-green-200"
-            v-for="(job, index) in jobAds"
+            v-for="(job, index) in filteredJobAds"
             :key="index"
             @click="selectedJob = job"
           >
@@ -91,9 +85,12 @@
       </v-row>
     </div>
 
-    <div v-else>
-      <h2 class="text-center">You have no job offers</h2>
-    </div>
+    <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+      <v-card-title>
+        <h2>No jobs matches search</h2>
+      </v-card-title>
+      <v-card-subtitle>There aren't any jobs that match the search</v-card-subtitle>
+    </v-card>
     <v-dialog v-model="applyDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
@@ -116,6 +113,8 @@ import { useJobAdsStore } from '../stores/job-ads.store'
 import { useToastStore } from '@/stores'
 import { useUserStore } from '@/stores'
 
+let search = ref('');
+
 const userStore = useUserStore()
 onMounted(() => {
   userStore.loadContextUser()
@@ -126,7 +125,14 @@ const stores = {
 const { jobAds } = storeToRefs(useJobAdsStore())
 await useJobAdsStore().getJobAds()
 
-let selectedJob = ref(jobAds.value[0])
+
+
+const filteredJobAds = computed(() => {
+  return jobAds.value.filter((job) => {
+    return job.title.toLowerCase().includes(search.value.toLowerCase())
+  })
+})
+let selectedJob = ref(filteredJobAds.value[0])
 const companyOptions = computed(() => {
   return [
     selectedJob.value?.company?.revenue?.revenue,
