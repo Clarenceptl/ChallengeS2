@@ -10,7 +10,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
-      host: 'mailing-service',
+      host: '0.0.0.0',
       port: 3024
     }
   });
