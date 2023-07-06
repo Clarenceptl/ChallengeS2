@@ -20,9 +20,8 @@ spec:
           image: challengescontainerregistry.azurecr.io/challenges2-auth-service:latest
           imagePullPolicy: Always
           envFrom:
-            secretRef:
-              name: production-secret
-
+            - secretRef:
+                name: production-secret
 ---
 
 apiVersion: v1
