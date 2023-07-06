@@ -38,10 +38,10 @@ export class Quiz {
   tempsParQuestionSecond: number;
 
   @Prop({
-    type: Array<User>,
+    type: Object,
     required: true
   })
-  user: Array<User>;
+  creator: User;
 
   @Prop({ type: Array<ResponseQuiz>, default: [] })
   reponses: ResponseQuiz[];

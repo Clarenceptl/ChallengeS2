@@ -15,7 +15,10 @@ export class Question {
   label: string;
 
   @Prop({ type: [AnswerSchema], default: [] })
-  anwsers: Answer[];
+  answers: Answer[];
+
+  @Prop({ type: [AnswerSchema], default: {} })
+  correctAnswer: Answer;
 
   @Prop({
     type: Date,

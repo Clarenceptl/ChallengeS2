@@ -1,5 +1,15 @@
 import { Optional } from '@nestjs/common';
-import { IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsString,
+  Max,
+  Min,
+  MinLength,
+  IsNumber,
+  ArrayMinSize,
+  ArrayMaxSize
+} from 'class-validator';
 
 export class CreateQuizDto {
   @IsString()
@@ -10,7 +20,7 @@ export class CreateQuizDto {
   @IsNotEmpty()
   idJobAds: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @Min(5) // 5 seconds
   @Max(300) // 5 minutes
@@ -24,24 +34,11 @@ export class UpdateQuizDto {
   title: string;
 
   @Optional()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   @Min(5) // 5 seconds
   @Max(300) // 5 minutes
   tempsParQuestionSecond: number;
-}
-
-export class CreateQuestionsAnswersDto {
-  @IsString()
-  @IsNotEmpty()
-  label: string;
-
-  @IsString()
-  @IsNotEmpty()
-  correct: string;
-
-  @IsNotEmpty()
-  answers: Answers[];
 }
 
 export class Answers {
@@ -52,4 +49,30 @@ export class Answers {
   @IsString()
   @IsNotEmpty()
   label: string;
+}
+
+export class UserAnswersDto {
+  answers: Answers[];
+}
+
+export class CreateQuestionsAnswersDto {
+  @IsString()
+  @IsNotEmpty()
+  label: string;
+
+  @IsNotEmpty()
+  @Type(() => Answers)
+  correct: Answers;
+
+  @IsNotEmpty()
+  @ArrayMinSize(2)
+  @ArrayMaxSize(4)
+  @Type(() => Answers)
+  answers: Answers[];
+}
+
+export class UpdateQuestionsAnswersDto extends CreateQuestionsAnswersDto {
+  @IsString()
+  @IsNotEmpty()
+  idQuestion: string;
 }

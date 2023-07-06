@@ -11,9 +11,15 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { QuizService } from './quiz.service';
-import { CreateQuizDto, UpdateQuizDto } from './quiz.dto';
+import {
+  CreateQuestionsAnswersDto,
+  CreateQuizDto,
+  UpdateQuestionsAnswersDto,
+  UpdateQuizDto,
+  UserAnswersDto
+} from './quiz.dto';
 
-@Controller('quiz')
+@Controller({ path: 'quiz', version: '1' })
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
   @Post()
@@ -26,29 +32,37 @@ export class QuizController {
     return this.quizService.createQuiz(data, user);
   }
 
-  @Post('add-questions-answers')
+  @Post('questions/:id')
   @HttpCode(201)
   public addQuestionsAnswers(
-    @Body(ValidationPipe) data: CreateQuizDto,
+    @Param('id') id: string,
+    @Body(ValidationPipe) data: CreateQuestionsAnswersDto,
     @Req() req: any
   ) {
     const user = req?.user ?? null;
-    // finish TODO
-    return this.quizService.addQuestionsAnswers(data, user);
+    return this.quizService.addQuestionsAnswers(id, data, user);
   }
 
-  @Patch('')
+  @Patch('addResponse/:quizId')
   @HttpCode(200)
-  public updatedQuestionsAnswers(
-    @Param('id') id: string,
-    @Body(ValidationPipe) data: UpdateQuizDto,
+  public addResponse(
+    @Param('quizId') id: string,
+    @Body(ValidationPipe) data: UserAnswersDto,
     @Req() req: any
   ) {
-    if (!data.tempsParQuestionSecond && !data.title) {
-      throw new UnauthorizedException('No data to update');
-    }
     const user = req?.user ?? null;
-    return this.quizService.updateQuiz(data, user, id);
+    return this.quizService.addQuizAnswers(id, data, user);
+  }
+
+  @Patch('questions/:id')
+  @HttpCode(200)
+  public updateQuestion(
+    @Param('id') id: string,
+    @Body(ValidationPipe) data: UpdateQuestionsAnswersDto,
+    @Req() req: any
+  ) {
+    const user = req?.user ?? null;
+    return this.quizService.updateQuestionsAnswers(id, data, user);
   }
 
   @Patch(':id')
@@ -63,6 +77,16 @@ export class QuizController {
     }
     const user = req?.user ?? null;
     return this.quizService.updateQuiz(data, user, id);
+  }
+
+  @Delete('question/:id')
+  @HttpCode(200)
+  public deleteQuestion(
+    @Param('id', ValidationPipe) id: string,
+    @Req() req: any
+  ) {
+    const user = req?.user ?? null;
+    return this.quizService.deleteQuestions(id, user);
   }
 
   @Delete(':id')

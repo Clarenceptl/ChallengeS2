@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+import { Answer } from '../entities/answer.model';
 import { User } from './user.dto';
 
 export interface ResponseQuiz {
@@ -7,20 +9,40 @@ export interface ResponseQuiz {
 }
 
 export class CreateQuizDto {
-  user: User;
+  tokenUser: User;
   title: string;
   idJobAds: string;
   tempsParQuestionSecond: number;
 }
 
 export class UpdateQuizDto {
-  user: User;
+  tokenUser: User;
   id: string;
   title?: string;
   tempsParQuestionSecond?: number;
 }
 
+export class UpdateQuestionsAnswersDto {
+  idQuestion?: Types.ObjectId;
+  tokenUser: User;
+  idQuiz: string;
+  label: string;
+  correct: Answer;
+  answers: Answer[];
+}
+
 export class DeleteQuizDto {
-  user: User;
+  tokenUser: User;
   id: string;
+}
+
+export class DeleteQuestionDto {
+  tokenUser: User;
+  id: Types.ObjectId;
+}
+
+export class AddAnswersDto {
+  tokenUser: User;
+  quizId: string;
+  answers: Answer[];
 }
