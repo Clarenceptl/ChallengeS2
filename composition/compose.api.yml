@@ -12,4 +12,4 @@ services:
       - ../api-gateway:/app
       - /app/node_modules
     ports:
-      - '3080:3080'
+      - '80:80'
