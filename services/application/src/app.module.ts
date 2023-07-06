@@ -15,10 +15,11 @@ import { SeedModule } from './seed/seed.module';
       type: 'postgres',
       host: process.env.pghost,
       port: 5432,
+      ssl: true,
       username: process.env.pgusername,
       password: process.env.pgpassword,
       database: process.env.pgdatabase,
-      synchronize: true, // TODO: Remove this in production
+      // synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true
     }),
     CompanyModule,

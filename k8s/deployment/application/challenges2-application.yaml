@@ -19,15 +19,9 @@ spec:
         - name: challenges2-application-service
           image: challengescontainerregistry.azurecr.io/challenges2-auth-service:latest
           imagePullPolicy: Always
-          env:
-            - name: "pghost"
-              value: "ep-throbbing-block-905548.us-east-2.aws.neon.tech"
-            - name: "pgdatabase"
-              value: "neondb"
-            - name: "pgusername"
-              value: "Victsing"
-            - name: "pgpassword"
-              value: "do39TFckmpjr"
+          envFrom:
+            secretRef:
+              name: production-secret
 
 ---
 
