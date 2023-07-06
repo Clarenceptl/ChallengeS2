@@ -17,7 +17,7 @@ export class Question {
   @Prop({ type: [AnswerSchema], default: [] })
   answers: Answer[];
 
-  @Prop({ type: [AnswerSchema], default: {} })
+  @Prop({ type: AnswerSchema, default: {} })
   correctAnswer: Answer;
 
   @Prop({

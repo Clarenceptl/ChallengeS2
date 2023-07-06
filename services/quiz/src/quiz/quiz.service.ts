@@ -98,7 +98,8 @@ export class QuizService {
   }
 
   async addQuizAnswers(payload: AddAnswersDto) {
-    const quiz = await this.quizModel.findOne({ _id: payload.quizId });
+    const { tokenUser, idQuiz, ...data } = payload;
+    const quiz = await this.quizModel.findOne({ _id: idQuiz });
     if (!quiz) {
       throw new RpcException({
         statusCode: 404,
@@ -107,27 +108,33 @@ export class QuizService {
     }
     let resultQuiz = 0;
     for (const question of quiz.questions) {
-      const isCorrect = payload.answers.find(
-        (element) => element._id === question.correctAnswer._id
+      const answer = data.answers.find(
+        (element) => element.idQuestion === question._id.toString()
       );
-      if (isCorrect) {
-        resultQuiz++;
+      if (!answer) {
+        continue;
+      }
+      if (answer.id === question.correctAnswer.id) {
+        resultQuiz += 1;
       }
     }
     const res: number = quiz.reponses.findIndex(
-      (element) => element.userId === payload?.tokenUser?.id
+      (element) => element.userId === tokenUser.id
     );
     if (res !== -1) {
       quiz.reponses[res].score = resultQuiz;
       quiz.reponses[res].tentative += 1;
+      quiz.updateOne({ reponses: quiz.reponses });
     } else {
-      quiz.reponses.push({
-        userId: payload?.tokenUser?.id,
-        score: resultQuiz,
-        tentative: 1
+      quiz.set({
+        reponses: [
+          ...quiz.reponses,
+          { userId: tokenUser.id, score: resultQuiz, tentative: 1 }
+        ]
       });
     }
     try {
+      quiz.markModified('reponses');
       await quiz.save();
     } catch (error) {
       throw new RpcException({
@@ -161,17 +168,20 @@ export class QuizService {
       });
     }
     if (idQuestion) {
-      console.log('data', idQuestion, quiz, data);
-      quiz.updateOne(
-        { 'questions._id': idQuestion },
-        {
-          $set: {
-            'questions.$.label': data.label,
-            'questions.$.correctAnswer': data.correct,
-            'questions.$.answers': data.answers
-          }
-        }
-      );
+      const objectId = new Types.ObjectId(idQuestion);
+      const question = quiz.questions.findIndex((element) => {
+        return element._id.equals(objectId);
+      });
+      if (question !== -1) {
+        quiz.questions[question].label = data.label;
+        quiz.questions[question].correctAnswer = data.correct;
+        quiz.questions[question].answers = data.answers;
+      } else {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'Question not found'
+        });
+      }
     } else {
       const test = new this.questionModel({
         label: data.label,
@@ -198,10 +208,13 @@ export class QuizService {
     };
   }
 
-  async deleteQuestions(id: Types.ObjectId) {
+  async deleteQuestions(id: string) {
+    const objectId = new Types.ObjectId(id);
     const quiz = await this.quizModel.findOne({
       questions: {
-        _id: id
+        $elemMatch: {
+          _id: objectId
+        }
       }
     });
     if (!quiz) {
@@ -210,8 +223,12 @@ export class QuizService {
         message: 'Question not found'
       });
     }
-    quiz.questions = quiz.questions.filter((element) => element._id !== id);
+    quiz.questions = quiz.questions.filter((element) =>
+      element._id.equals(objectId)
+    );
+    quiz.updateOne({ questions: quiz.questions });
     try {
+      quiz.markModified('questions');
       await quiz.save();
     } catch (error) {
       throw new RpcException({
@@ -226,23 +243,3 @@ export class QuizService {
     };
   }
 }
-
-//   async addQuestionsAnswers(
-//     id: string,
-//     data: CreateQuestionsAnswersDto,
-//     user: any
-//   ) {
-//     let res: SuccessResponse;
-//     const payload = { idQuiz: id, data };
-//     try {
-//       res = await lastValueFrom(
-//         this.client.send(
-//           { cmd: SERVICE_CMD.ADD_QUESTIONS_ANSWERS },
-//           { user, payload }
-//         )
-//       );
-//     } catch (error) {
-//       handleErrors(error);
-//     }
-//     return res;
-//   }
