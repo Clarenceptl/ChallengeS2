@@ -22,12 +22,13 @@ export class RolesGuard implements CanActivate {
     );
     if (!roles) return true;
     // if tokenUser -> data is object
-    const { tokenUser } = context.switchToRpc().getData();
+    const { tokenUser } = context.switchToRpc().getData() ?? null;
+
     if (!tokenUser) throw this.error;
-    for (const role of roles) {
-      if (!tokenUser.roles.includes(role)) return false;
+    for (const role of tokenUser.roles) {
+      if (roles[0] === role) return true;
     }
 
-    return true;
+    throw this.error;
   }
 }

@@ -6,7 +6,13 @@ import {
   SuccessResponse,
   handleErrors
 } from 'src/global';
-import { CreateQuizDto, UpdateQuizDto } from './quiz.dto';
+import {
+  CreateQuestionsAnswersDto,
+  CreateQuizDto,
+  UpdateQuestionsAnswersDto,
+  UpdateQuizDto,
+  UserAnswersDto
+} from './quiz.dto';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
@@ -19,7 +25,10 @@ export class QuizService {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.CREATE_QUIZ }, { user, data })
+        this.client.send(
+          { cmd: SERVICE_CMD.CREATE_QUIZ },
+          { tokenUser: { id: user.id, roles: user.roles }, ...data }
+        )
       );
       // TODO add quiz id to job add
     } catch (error) {
@@ -28,12 +37,19 @@ export class QuizService {
     return res;
   }
 
-  async updateQuiz(data: UpdateQuizDto, user: any, id: string) {
+  async addQuestionsAnswers(
+    id: string,
+    data: CreateQuestionsAnswersDto,
+    tokenUser: any
+  ) {
     let res: SuccessResponse;
-    const payload = { id, data };
+    const payload = { idQuiz: id, ...data };
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.UPDATE_QUIZ }, { user, payload })
+        this.client.send(
+          { cmd: SERVICE_CMD.ADD_QUESTIONS_ANSWERS },
+          { tokenUser, ...payload }
+        )
       );
     } catch (error) {
       handleErrors(error);
@@ -41,13 +57,80 @@ export class QuizService {
     return res;
   }
 
-  async deleteQuiz(id: string, user: any) {
+  async updateQuestionsAnswers(
+    id: string,
+    data: UpdateQuestionsAnswersDto,
+    tokenUser: any
+  ) {
+    let res: SuccessResponse;
+    const payload = { idQuiz: id, ...data };
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.ADD_QUESTIONS_ANSWERS },
+          { tokenUser, ...payload }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  async addQuizAnswers(id: string, data: UserAnswersDto, tokenUser: any) {
+    let res: SuccessResponse;
+    const payload = { idQuiz: id, ...data };
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.ADD_USER_ANSWERS },
+          { tokenUser, ...payload }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  async updateQuiz(data: UpdateQuizDto, user: any, id: string) {
+    let res: SuccessResponse;
+    const payload = { id, ...data };
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_QUIZ },
+          { tokenUser: { id: user.id, roles: user.roles }, ...payload }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  async deleteQuiz(id: string, tokenUser: any) {
     let res: SuccessResponse;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.DELETE_QUIZ }, { user, id })
+        this.client.send({ cmd: SERVICE_CMD.DELETE_QUIZ }, { tokenUser, id })
       );
       // TODO delete quiz id to job add
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  async deleteQuestions(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.DELETE_QUESTION },
+          { tokenUser, id }
+        )
+      );
     } catch (error) {
       handleErrors(error);
     }

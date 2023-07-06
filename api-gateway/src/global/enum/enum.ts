@@ -37,7 +37,10 @@ export enum SERVICE_CMD {
   ACCEPT_APPOINTMENT = 'accept-appointment',
   CREATE_QUIZ = 'create-quiz',
   DELETE_QUIZ = 'delete-quiz',
-  UPDATE_QUIZ = 'update-quiz'
+  UPDATE_QUIZ = 'update-quiz',
+  ADD_QUESTIONS_ANSWERS = 'add-questions-answers',
+  DELETE_QUESTION = 'delete-question',
+  ADD_USER_ANSWERS = 'add-user-answers'
 }
 
 export enum SERVICE_NAME {

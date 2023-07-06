@@ -57,27 +57,5 @@ export class AuthGuard implements CanActivate {
     }
     request['user'] = res.data;
     return true;
-    // TODO : user service
-    // const roles = this.reflector.get<UserRole[]>(
-    //   'roles',
-    //   context.getHandler()
-    // );
-
-    // if (roles) {
-    //   if (!roles.includes(user.role)) {
-    //     throw new ForbiddenException(
-    //       'User is not allowed to access this resource'
-    //     );
-    //   }
-    // }
-
-    //   return true;
-    // } catch (error) {
-    //   if (error instanceof JsonWebTokenError) {
-    //     throw new BadRequestException('Token is invalid');
-    //   }
-
-    //   throw error;
-    // }
   }
 }

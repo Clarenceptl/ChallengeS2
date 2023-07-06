@@ -11,6 +11,12 @@ export class Answer {
     type: String,
     required: true
   })
+  id: string;
+
+  @Prop({
+    type: String,
+    required: true
+  })
   label: string;
 
   @Prop({
