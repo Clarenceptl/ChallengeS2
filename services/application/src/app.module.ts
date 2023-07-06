@@ -14,7 +14,7 @@ import { SeedModule } from './seed/seed.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DATABASE_POSTGRES_HOST,
-      port: process.env.POSTGRES_PORT,
+      port: 5432,
       ssl: true,
       username: process.env.DATABASE_POSTGRES_USER,
       password: process.env.DATABASE_POSTGRES_PASSWORD,
