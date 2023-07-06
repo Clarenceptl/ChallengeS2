@@ -83,4 +83,25 @@ export class QuizService {
       return error.response
     }
   }
+
+  static async userAnswers(id, answers) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/quiz/questions/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        },
+        body: JSON.stringify({
+          ...answers,
+          id: parseInt(id)
+        })
+      })
+      return await response.json()
+    }
+    catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }

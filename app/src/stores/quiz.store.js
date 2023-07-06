@@ -34,6 +34,13 @@ export const useQuizStore = defineStore('quizStore', {
         // await this.getQuizByJobId(id)
       }
       return response
+    },
+    async userAnswers(id, answers) {
+      const response = await QuizService.userAnswers(id, answers)
+      if (response?.success) {
+        // await this.getQuizByJobId(id)
+      }
+      return response
     }
   }
 })
