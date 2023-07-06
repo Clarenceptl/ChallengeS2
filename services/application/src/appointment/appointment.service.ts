@@ -45,7 +45,6 @@ export class AppointmentService {
           resultAppointmailEmail
         )
       );
-      console.log('response email', res);
       return this.appointmentRepository.delete(id);
     } catch (error) {
       throw new RpcException('Appointment not found');
@@ -61,17 +60,63 @@ export class AppointmentService {
             employee: {
               id: tokenUser.id
             }
+          },
+          select: {
+            employee: {},
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            },
+            job: {
+              id: true,
+              title: true,
+              description: true,
+              city: true,
+              contractType: true,
+              salary: true,
+              country: true
+            }
           }
         });
       } else {
+        console.log('tokenUser', tokenUser);
         res = await this.appointmentRepository.find({
           where: {
             candidate: {
               id: tokenUser.id
             }
+          },
+          select: {
+            employee: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            },
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            },
+            job: {
+              id: true,
+              title: true,
+              description: true,
+              city: true,
+              contractType: true,
+              salary: true,
+              country: true
+            }
           }
         });
       }
+      console.log('res', res);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

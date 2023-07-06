@@ -7,7 +7,7 @@ export class AppService {
   constructor(private readonly mailerService: MailerService) {}
 
   public async register(data: RegisterMailRequest): Promise<void> {
-    const url = process.env.FRONTEND_URL + '/verify-account/' + data.token;
+    const url = process.env.FRONTEND_URL + 'verify-account/' + data.token;
     try {
       await this.mailerService.sendMail({
         to: data.email,

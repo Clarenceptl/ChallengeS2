@@ -49,6 +49,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
   public login(@Body(ValidationPipe) data: LoginRequest) {
+    console.log('data', data);
     return this.authService.login(data);
   }
 

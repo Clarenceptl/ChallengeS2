@@ -33,7 +33,9 @@ export class Appointment {
   })
   employee: User;
 
-  @ManyToOne(() => JobAds, (job) => job)
+  @ManyToOne(() => JobAds, (job) => job, {
+    eager: true
+  })
   job: JobAds;
 
   @Column({

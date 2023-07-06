@@ -44,6 +44,8 @@
               <div>
                 <v-btn color="blue-500" @click="editDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
+                <!-- button to see candidates -->
+                <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
               </div>
             </v-card-title>
             <v-card-text>
@@ -272,17 +274,21 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
-import { useUsersStore } from '../../stores/users.store';
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useToastStore } from '@/stores'
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores'
 
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+
+const router = useRouter();
 const stores = {
   toast: useToastStore()
 }
-const { me } = storeToRefs(useUsersStore());
-const { myJobs } = storeToRefs(useJobAdsStore());
-await useUsersStore().getMe();
 await useJobAdsStore().getMyJobs();
+const { myJobs } = storeToRefs(useJobAdsStore());
 
 let editDialog = ref(false);
 let deleteDialog = ref(false);
@@ -322,7 +328,6 @@ const createJob = () => {
       type: 'success',
       message: 'job ads created'
     });
-    await useUsersStore().getMe();
     newJobDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
@@ -348,7 +353,7 @@ const updateJob = () => {
       type: 'success',
       message: 'job ad updated'
     });
-    await useUsersStore().getMe();
+    await useJobAdsStore().getMyJobs();
     editDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
@@ -366,7 +371,7 @@ const deleteJob = () => {
       type: 'success',
       message: 'job ad deleted'
     });
-    await useUsersStore().getMe();
+    await useJobAdsStore().getMyJobs();
     deleteDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};

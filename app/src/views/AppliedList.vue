@@ -36,16 +36,12 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
-import { useUsersStore } from '../stores/users.store'
-import { useToastStore } from '@/stores'
+import { useUserStore } from '@/stores'
+import { computed } from 'vue';
 
-const stores = {
-  toast: useToastStore()
-}
-const { me } = storeToRefs(useUsersStore())
-await useUsersStore().getMe()
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
 </script>
 
 <style scoped></style>

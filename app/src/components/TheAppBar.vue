@@ -12,6 +12,8 @@
           <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/register-company')">Register Company</v-btn>
           <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/applied-list')">Applied list</v-btn>
           <v-btn v-if="isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/employer/jobs')">My Jobs</v-btn>
+          <v-btn v-if="isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/employer/appointments')">Appointments</v-btn>
+          <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/appointment-list')">Appointments</v-btn>
           <v-btn class="ml-1" color="red-800" variant="outlined" @click="logout">Logout</v-btn>
           <v-btn v-if="isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/admin')">Admin</v-btn>
         </div>

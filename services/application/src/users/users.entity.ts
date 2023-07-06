@@ -43,7 +43,7 @@ export class User {
     type: 'simple-array',
     nullable: false,
     update: true,
-    default: [UserRole.ROLE_USER]
+    default: UserRole.ROLE_USER
   })
   roles: UserRole[];
 

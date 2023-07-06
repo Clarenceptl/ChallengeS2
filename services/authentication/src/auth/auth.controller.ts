@@ -16,6 +16,7 @@ export class AuthController {
 
   @MessagePattern({ cmd: SERVICE_CMD.LOGIN_USER })
   public login(@Body(ValidationPipe) loginRequest: LoginRequest) {
+    console.log('loginRequest', loginRequest);
     return this.authService.login(loginRequest);
   }
 

@@ -141,11 +141,18 @@ const jobDetails = computed(() => {
 let applyDialog = ref(false)
 
 const apply = () => {
-  useJobAdsStore().applyJobAd(selectedJob.value.id).then(() => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'you successfully applied to this job'
-    });
+  useJobAdsStore().applyJobAd(selectedJob.value.id).then((val) => {
+    if (val.success) {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'you successfully applied to this job'
+      });
+    } else {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'you cannot apply to this job'
+      });
+    }
     applyDialog.value = false
   }).catch(() => {
     stores.toast.createToast({
