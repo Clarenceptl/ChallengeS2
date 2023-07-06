@@ -121,8 +121,7 @@ export class QuizService {
   }
 
   async addQuizAnswers(payload: AddAnswersDto) {
-    console.log('payload', payload);
-    const { tokenUser, idQuiz, data } = payload;
+    const { tokenUser, idQuiz, answers } = payload;
     const quiz = await this.quizModel.findOne({ _id: idQuiz });
     if (!quiz) {
       throw new RpcException({
@@ -132,7 +131,7 @@ export class QuizService {
     }
     let resultQuiz = 0;
     for (const question of quiz.questions) {
-      const answer = data.answers.find(
+      const answer = answers.find(
         (element) => element.idQuestion === question._id.toString()
       );
       if (!answer) {
@@ -175,7 +174,6 @@ export class QuizService {
 
   async createOrUpdateQuestionsAnswers(payload: UpdateQuestionsAnswersDto) {
     const { idQuiz, idQuestion, tokenUser, ...data } = payload;
-    // console.log('data', payload);
     const objectId = new Types.ObjectId(idQuiz);
     const quiz = await this.quizModel.findOne({ _id: objectId });
 

@@ -18,7 +18,6 @@ export const useQuizStore = defineStore('quizStore', {
       if (response?.success) {
         // await this.getQuizByJobId(quiz.idJobAds)
       }
-      console.log(response)
       return response
     },
     async addQuestionToQuiz(id, question) {

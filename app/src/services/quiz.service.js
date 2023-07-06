@@ -85,7 +85,6 @@ export class QuizService {
   }
 
   static async userAnswers(id, answers) {
-    console.log(answers)
     try {
       const response = await fetch(`${API_GATEWAY_URL}/quiz/addResponse/${id}`, {
         method: 'PATCH',

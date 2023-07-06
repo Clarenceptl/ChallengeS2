@@ -82,7 +82,6 @@ export class AppointmentService {
           }
         });
       } else {
-        console.log('tokenUser', tokenUser);
         res = await this.appointmentRepository.find({
           where: {
             candidate: {
@@ -116,7 +115,6 @@ export class AppointmentService {
           }
         });
       }
-      console.log('res', res);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
