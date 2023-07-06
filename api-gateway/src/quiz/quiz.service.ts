@@ -37,6 +37,18 @@ export class QuizService {
     return res;
   }
 
+  async getQuiz(id: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.GET_QUIZ }, { tokenUser, id })
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
   async addQuestionsAnswers(
     id: string,
     data: CreateQuestionsAnswersDto,

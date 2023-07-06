@@ -6,6 +6,7 @@ import {
   CreateQuizDto,
   DeleteQuestionDto,
   DeleteQuizDto,
+  GetQuizDto,
   UpdateQuestionsAnswersDto,
   UpdateQuizDto,
   UserRole
@@ -53,5 +54,10 @@ export class QuizController {
   @MessagePattern({ cmd: SERVICE_CMD.ADD_USER_ANSWERS })
   public addUsersAnswers(@Payload(ValidationPipe) payload: AddAnswersDto) {
     return this.quizService.addQuizAnswers(payload);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.GET_QUIZ })
+  public getQuiz(@Payload(ValidationPipe) payload: GetQuizDto) {
+    return this.quizService.getQuiz(payload);
   }
 }
