@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SERVICE_NAME } from 'src/global';
+import { JobAds } from 'src/job-ads/job-ads.entity';
+import { Company } from 'src/company/company.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, JobAds, Company]),
     ClientsModule.register([
       {
         name: SERVICE_NAME.MAILING,

@@ -1,6 +1,6 @@
 <template>
   <div class="pa-5">
-    <v-card>
+    <v-card v-if="me.candidatures.length">
       <v-table class="bg-green-200">
         <thead>
           <tr>
@@ -12,65 +12,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn size="small" color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
-            <td>
-              <v-btn color="blue-500">Details</v-btn>
-            </td>
-          </tr>
-          <tr>
-            <td>Développeur</td>
-            <td>Paris</td>
-            <td>France</td>
-            <td>45K</td>
+          <tr
+            v-for="(candidature, index) in me.candidatures"
+            :key="index"
+          >
+            <td>{{ candidature.title }}</td>
+            <td>{{ candidature.city }}</td>
+            <td>{{ candidature.country }}</td>
+            <td>{{ candidature.salary }}</td>
             <td>
               <v-btn color="blue-500">Details</v-btn>
             </td>
@@ -78,9 +27,21 @@
         </tbody>
       </v-table>
     </v-card>
+    <v-card v-else>
+      <v-card-title>
+        <h2>You have no applied jobs</h2>
+      </v-card-title>
+    </v-card>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useUserStore } from '@/stores'
+import { computed } from 'vue';
+
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+</script>
 
 <style scoped></style>

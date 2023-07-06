@@ -26,6 +26,11 @@ services:
       file: ./composition/compose.frontend.yml
       service: node
 
+  quiz-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: quiz-service
+
   app-service:
     extends:
       file: ./composition/compose.services.yml
@@ -40,7 +45,6 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: mailing-service
-
 
   mailcatcher:
     extends:

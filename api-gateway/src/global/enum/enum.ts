@@ -4,6 +4,7 @@ export enum SERVICE_CMD {
   VERIFY_ACCOUNT = 'auth_verify_account',
   GET_USER = 'get-user',
   GET_USERS = 'get-users',
+  GET_MY_JOBS = 'get-my-jobs',
   GET_SELF_USER = 'get-self-user',
   GET_REFRESH_TOKEN = 'get-refresh-token',
   GET_COMPANY_SIZE_OPTIONS = 'get-company-size-options',
@@ -34,10 +35,18 @@ export enum SERVICE_CMD {
   GET_APPOINTMENTS = 'get-appointments',
   GET_APPOINTMENT_BY_ID = 'get-appointment-by-id',
   CREATE_APPOINTMENT = 'create-appointment',
-  ACCEPT_APPOINTMENT = 'accept-appointment'
+  ACCEPT_APPOINTMENT = 'accept-appointment',
+  CREATE_QUIZ = 'create-quiz',
+  DELETE_QUIZ = 'delete-quiz',
+  UPDATE_QUIZ = 'update-quiz',
+  ADD_QUESTIONS_ANSWERS = 'add-questions-answers',
+  DELETE_QUESTION = 'delete-questions',
+  ADD_USER_ANSWERS = 'add-user-answers',
+  GET_QUIZ = 'get-quiz'
 }
 
 export enum SERVICE_NAME {
   AUTH = 'AUTH_SERVICE',
-  APP = 'APPLICATION_SERVICE'
+  APP = 'APPLICATION_SERVICE',
+  QUIZ = 'QUIZ_SERVICE'
 }

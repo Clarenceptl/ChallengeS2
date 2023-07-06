@@ -11,7 +11,7 @@
         <label>Firstname</label>
         <v-text-field
           clearable
-          v-model="user.fistname"
+          v-model="me.firstname"
           type="text"
           color="appgrey"
           variant="outlined"
@@ -21,7 +21,7 @@
         <label>Lastname</label>
         <v-text-field
           clearable
-          v-model="user.lastname"
+          v-model="me.lastname"
           type="text"
           color="appgrey"
           variant="outlined"
@@ -33,7 +33,7 @@
         <label>Email</label>
         <v-text-field
           clearable
-          v-model="user.email"
+          v-model="me.email"
           type="email"
           color="appgrey"
           variant="outlined"
@@ -43,7 +43,7 @@
         <label>Date of birth</label>
         <v-text-field
           clearable
-          v-model="user.birthdate"
+          v-model="formatedBirthdate"
           type="date"
           color="appgrey"
           variant="outlined"
@@ -72,20 +72,130 @@
           />
       </v-col>
     </v-row>
-    <v-btn class="w-100 mt-4" color="appgrey">Save</v-btn>
+    <v-btn disabled class="w-100 mt-4" color="appgrey">Save</v-btn>
+    <div v-if="me.company">
+      <div class="text-center mb-4">
+        <h2 class="mt-2">Company</h2>
+      </div>
+      <v-row>
+        <v-col cols="4">
+          <label>Name</label>
+          <v-text-field
+            clearable
+            v-model="me.company.name"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          /> 
+        </v-col>
+        <v-col cols="4">
+          <label>Founder</label>
+          <v-text-field
+            clearable
+            v-model="me.company.founder"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col cols="4">
+          <label>Address</label>
+          <v-text-field
+            clearable
+            v-model="me.company.address"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="4">
+          <label>Description</label>
+          <v-text-field
+            clearable
+            v-model="me.company.description"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          /> 
+        </v-col>
+        <v-col cols="4">
+          <label>Website</label>
+          <v-text-field
+            clearable
+            v-model="me.company.website"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col cols="4">
+          <label>SIRET</label>
+          <v-text-field
+            clearable
+            v-model="me.company.siret"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="4">
+          <label>Revenue</label>
+          <v-text-field
+            clearable
+            v-model="me.company.revenue.revenue"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          /> 
+        </v-col>
+        <v-col cols="4">
+          <label>Sector</label>
+          <v-text-field
+            clearable
+            v-model="me.company.sector.sector"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+        <v-col cols="4">
+          <label>Size</label>
+          <v-text-field
+            clearable
+            v-model="me.company.size.size"
+            type="text"
+            color="appgrey"
+            variant="outlined"
+          />
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useUserStore } from '@/stores'
+
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+
+const formatedBirthdate = computed(() => {
+  if (me.value?.birthdate) {
+    const date = me.value?.birthdate.split('/');
+    return `${date[2]}-${date[1]}-${date[0]}`;
+  }
+  return '';
+});
 
 let user = ref({
-  fistname: 'Locman',
-  lastname: 'Diawadoh',
-  email: 'l@l.fr',
-  birthdate: '1998-08-12',
-  password: 'qwertyuiop',
-  confirmPassword: 'qwertyuiop',
+  password: '',
+  confirmPassword: '',
 });
 </script>
 

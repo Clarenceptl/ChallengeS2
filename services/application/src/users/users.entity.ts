@@ -43,7 +43,7 @@ export class User {
     type: 'simple-array',
     nullable: false,
     update: true,
-    default: [UserRole.ROLE_USER]
+    default: UserRole.ROLE_USER
   })
   roles: UserRole[];
 
@@ -110,7 +110,8 @@ export class User {
   company: Company | null;
 
   @ManyToMany(() => JobAds, (jobAds) => jobAds.candidates, {
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
+    eager: true
   })
   @JoinTable()
   candidatures: JobAds[];
