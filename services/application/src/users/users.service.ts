@@ -12,11 +12,17 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
+import { Company } from 'src/company/company.entity';
+import { JobAds } from 'src/job-ads/job-ads.entity';
 
 @Injectable()
 export class UsersService {
   public constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
+    @InjectRepository(JobAds)
+    private readonly jobAdsRepository: Repository<JobAds>,
     @Inject(SERVICE_NAME.MAILING) private readonly mailingService: ClientProxy
   ) {}
 
@@ -67,6 +73,24 @@ export class UsersService {
 
   public async getUsers(): Promise<User[]> {
     return await this.userRepository.find();
+  }
+
+  public async getMyJobs(tokenUser: any) {
+    let res: JobAds[];
+    try {
+      const userCompany = tokenUser?.company?.id;
+      const jobAds = await this.jobAdsRepository.find({
+        where: { company: userCompany },
+        order: { created_at: 'DESC' }
+      });
+      res = jobAds;
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Job not found'
+      } as ErrorModel);
+    }
+    return { success: true, data: res };
   }
 
   public async getUser(id: string): Promise<SuccessResponse> {

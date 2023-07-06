@@ -8,12 +8,6 @@ const router = createRouter({
       path: '/',
       name: 'Home',
       component: () => import('@/views/HomeView.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next({ name: 'Login' })
-        }
-        return next()
-      }
     },
     {
       path: '/login',
