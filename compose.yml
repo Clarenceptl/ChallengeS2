@@ -26,10 +26,10 @@ services:
       file: ./composition/compose.frontend.yml
       service: node
 
-  # analytics-service:
-  #   extends:
-  #     file: ./composition/compose.services.yml
-  #     service: analytics-service
+  quiz-service:
+    extends:
+      file: ./composition/compose.services.yml
+      service: quiz-service
 
   app-service:
     extends:
@@ -45,11 +45,6 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: mailing-service
-
-  # bo-analytics:
-  #   extends:
-  #     file: ./composition/compose.bo-analytics.yml
-  #     service: bo-analytics
 
   mailcatcher:
     extends:
