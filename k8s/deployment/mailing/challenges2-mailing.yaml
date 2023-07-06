@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: Always
 
           ports:
-            - containerPort: 3023
+            - containerPort: 3024
 
 ---
 
@@ -36,4 +36,4 @@ spec:
     app: mailing
   ports:
     - protocol: TCP
-      port: 3081
+      port: 3024
