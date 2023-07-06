@@ -24,7 +24,14 @@ export const useQuizStore = defineStore('quizStore', {
     async addQuestionToQuiz(id, question) {
       const response = await QuizService.addQuestionToQuiz(id, question)
       if (response?.success) {
-        await this.getQuizByJobId(id)
+        // await this.getQuizByJobId(id)
+      }
+      return response
+    },
+    async updateQuiz(id, quiz) {
+      const response = await QuizService.updateQuiz(id, quiz)
+      if (response?.success) {
+        // await this.getQuizByJobId(id)
       }
       return response
     }

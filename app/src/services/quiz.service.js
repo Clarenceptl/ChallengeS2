@@ -41,7 +41,7 @@ export class QuizService {
 
   static async addQuestionToQuiz(id, question) {
     try {
-      const response = await fetch(`${API_GATEWAY_URL}/quiz/${id}`, {
+      const response = await fetch(`${API_GATEWAY_URL}/quiz/questions/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,6 +53,27 @@ export class QuizService {
             id: question.answers[0].id,
             label: question.answers[0].label
           }
+        })
+      })
+      return await response.json()
+    }
+    catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
+
+  static async updateQuiz(id, quiz) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/quiz/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        },
+        body: JSON.stringify({
+          ...quiz,
+          tempsParQuestionSecond: parseInt(quiz.tempsParQuestionSecond),
         })
       })
       return await response.json()

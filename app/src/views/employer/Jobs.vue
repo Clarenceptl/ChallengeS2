@@ -42,7 +42,7 @@
             <v-card-title class="d-flex justify-space-between">
               {{ selectedJob?.title }}
               <div>
-                <v-btn v-if="!foundQuiz" color="green-500" @click="mcqDialog = true">Create MCQ</v-btn>
+                <v-btn v-if="!quiz" color="green-500" @click="mcqDialog = true">Create MCQ</v-btn>
                 <v-btn color="blue-500 ml-2" @click="editDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
               </div>
@@ -82,21 +82,21 @@
           <v-card variant="flat" color="green-400" class="mt-4">
             <v-card-title class="d-flex justify-space-between">
               <h2>MCQ</h2>
-              <div v-if="foundQuiz">
+              <div v-if="quiz">
                 <v-btn color="blue-500 ml-2" @click="editMcqDialog = true">Edit</v-btn>
                 <v-btn color="yellow-500 ml-2" @click="addQuestionDialog = true">Add a question</v-btn>
               </div>
             </v-card-title>
             <v-card-subtitle class="d-flex flex-column">
               <div>
-                Title: {{ foundQuiz?.title }}
+                Title: {{ quiz?.title }}
               </div>
               <div>
-                Temps / questions (s): {{ foundQuiz?.tempsParQuestionSecond }}
+                Temps / questions (s): {{ quiz?.tempsParQuestionSecond }}
               </div>
             </v-card-subtitle>
             <v-card-text>
-              <v-list-item class="mb-4" v-for="(question, index) in foundQuiz?.questions" :key="index">
+              <v-list-item class="mb-4" v-for="(question, index) in quiz?.questions" :key="index">
                 <v-list-item-content>
                   <v-list-item-title>Questtion: {{ index + 1 }} {{ question?.label }}</v-list-item-title>
                   <v-list-item-subtitle>
@@ -233,7 +233,7 @@
           <v-btn
             color="blue-800"
             text
-            @click="updateJob"
+            @click="updateQuiz"
           >
             Yes
           </v-btn>
@@ -357,25 +357,25 @@
         </v-card-title>
         <v-card-subtitle>
           Are you sure you want to add a question to this MCQ ?
-          <b>Place the correct answer in the first answer slot</b>
         </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Question</label>
             <v-text-field
-              clearable
-              placeholder="Question"
-              type="text"
-              v-model="newQuestion.label"
+            clearable
+            placeholder="Question"
+            type="text"
+            v-model="newQuestion.label"
             />
-            <label>Correct answer</label>
+            <label>Correct answer*</label>
+            <b class="ml-2">Place the correct answer here</b>
             <v-text-field
               clearable
               placeholder="Correct answer"
               type="text"
               v-model="newQuestion.answers[0].label"
             />
-            <label>Second answer</label>
+            <label>Second answer*</label>
             <v-text-field
               clearable
               placeholder="Second answer"
@@ -431,7 +431,7 @@
           <v-btn
             color="blue-800"
             text
-            @click="createJob"
+            @click="addQuestionToQuiz"
           >
             Yes
           </v-btn>
@@ -500,57 +500,6 @@ import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useQuizStore } from '../../stores/quiz.store';
 import { useToastStore } from '@/stores'
 
-const foundQuiz = ref({
-  _id: "64a68492f049148e064fc589",
-  title: "monquiz23",
-  nbQuestions: 0,
-  idJobAds: "ihjd23",
-  tempsParQuestionSecond: 10,
-  questions: [
-      {
-          label: "tatatataat",
-          answers: [
-              {
-                  id: "1",
-                  label: "tatatataat",
-                  _id: "64a68ed66a6db2ea6c284cdb",
-                  createdAt: "2023-07-06T09:52:22.697Z"
-              },
-              {
-                  id: "2",
-                  label: "tatatataat",
-                  _id: "64a68ed66a6db2ea6c284cdc",
-                  createdAt: "2023-07-06T09:52:22.698Z"
-              }
-          ],
-          correctAnswer: {
-              id: "2",
-              label: "correct",
-              _id: "64a68ed66a6db2ea6c284cda",
-              createdAt: "2023-07-06T09:52:22.696Z"
-          },
-          createdAt: "2023-07-06T09:47:27.496Z",
-          _id: "64a68daf93b63b12efe1fb21"
-      }
-  ],
-  reponses: [
-      {
-          userId: "93daef16-81d2-4f57-aa3e-32adaef7f382",
-          score: 0,
-          tentative: 3
-      }
-  ],
-  createdAt: "2023-07-06T09:08:34.357Z",
-  creator: {
-      id: "93daef16-81d2-4f57-aa3e-32adaef7f382",
-      roles: [
-          "ROLE_USER",
-          "ROLE_EMPLOYEUR"
-      ]
-  },
-  __v: 10
-});
-
 await useJobAdsStore().getMyJobs();
 const { myJobs } = storeToRefs(useJobAdsStore());
 let selectedJob = ref(myJobs.value[0]);
@@ -560,9 +509,8 @@ const stores = {
 await useUsersStore().getMe();
 await useQuizStore().getQuizByJobId(selectedJob.value.id);
 const { me } = storeToRefs(useUsersStore());
-// const { quiz } = storeToRefs(useQuizStore());
+const { quiz } = storeToRefs(useQuizStore());
 
-// if selectedJob.value.id chage, get quiz
 watch(() => selectedJob.value.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
 });
@@ -575,8 +523,8 @@ let mcqDialog = ref(false);
 let newJobDialog = ref(false);
 
 const jobEdit = ref({...selectedJob.value});
-const mcqEdit = ref({...foundQuiz.value});
-// const mcqEdit = ref({...quizz});
+const mcqEdit = ref({...quiz.value});
+
 let newJob = ref({
   title: '',
   description: '',
@@ -609,7 +557,7 @@ let newQuestion = ref({
 let newMcq = ref({
   title: '',
   tempsParQuestionSecond: null,
-  idJobAds: selectedJob.value.id.toString()
+  idJobAds: selectedJob.value?.id.toString()
 });
 
 const companyOptions = computed(() => {
@@ -722,6 +670,54 @@ const deleteJob = () => {
     });
   });
 };
+
+const updateQuiz = () => {
+  let formattedQuiz = {
+    title: mcqEdit.value.title,
+    tempsParQuestionSecond: mcqEdit.value.tempsParQuestionSecond,
+  };
+  useQuizStore().updateQuiz(quiz.value._id, formattedQuiz).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'mcq updated'
+    });
+    await useQuizStore().getQuizByJobId(selectedJob.value.id);
+    editMcqDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'mcq not updated'
+    });
+  });
+};
+
+const addQuestionToQuiz = () => {
+  // check that at least two answers are filled
+  if (newQuestion.value.answers[0].label === '' || newQuestion.value.answers[1].label === '') {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'you must fill at least two answers'
+    });
+    return;
+  }
+  useQuizStore().addQuestionToQuiz(quiz.value._id, newQuestion.value).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'question added'
+    });
+    await useQuizStore().getQuizByJobId(selectedJob.value.id);
+    addQuestionDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'question not added'
+    });
+  });
+}; 
 </script>
 
 <style scoped>

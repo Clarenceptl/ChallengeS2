@@ -24,7 +24,6 @@ export class QuizService {
   async getQuiz(payload: GetQuizDto) {
     const { id, tokenUser } = payload;
     const quiz = await this.quizModel.findOne({ idJobAds: id });
-
     if (!quiz) {
       throw new RpcException({
         statusCode: 404,
