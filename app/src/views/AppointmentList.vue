@@ -1,62 +1,68 @@
 <template>
   <div class="pa-5">
-    <v-table class="bg-green-200" v-if="appointments.length">
-      <thead>
-        <tr>
-          <th class="text-left">Job Title</th>
-          <th class="text-left">Contract</th>
-          <th class="text-left">Salary</th>
-          <th class="text-left">Appointment</th>
-          <th class="text-left">Status</th>
-          <th class="text-left">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(appointment, index) in appointments" :key="index">
-          <td>
-            {{ appointment.job.title }}
-          </td>
-          <td>
-            {{ appointment.job.contractType }}
-          </td>
-          <td>
-            {{ appointment.job.salary }}
-          </td>
-          <td>12/21/2023</td>
-          <td>
-            <v-icon color="green" v-if="appointment.accepted === true">mdi-check</v-icon>
-            <v-icon color="red" v-else-if="appointment.accepted === false">mdi-close</v-icon>
-            <v-icon color="orange" v-else>mdi-clock</v-icon>
-          </td>
-          <td>
-            <v-btn
-              color="blue-500"
-              @click="
-                acceptDialog = true;
-                selectedAppointmentId = appointment.id
-              "
-              :disabled="appointment.accepted !== null"
-              >Accept</v-btn
-            >
-            <v-btn
-              color="red-500 ml-2"
-              @click="
-                declineDialog = true;
-                selectedAppointmentId = appointment.id
-              "
-              :disabled="appointment.accepted !== null"
-              >Decline</v-btn
-            >
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-    <v-card v-else class="pa-5 bg-green-300" variant="outlined">
-      <v-card-title>
-        <h2>No appointments</h2>
-      </v-card-title>
-      <v-card-subtitle> You don't have any appointments yet </v-card-subtitle>
-    </v-card>
+    <h1 class="text-center my-10">Your appointment list</h1>
+      <div class="d-flex justify-center mb-2">
+        <v-card class="mx-auto" v-if="appointments.length">
+          <v-toolbar color="appgrey">
+            <v-toolbar-title></v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+
+          <v-simple-table dense>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="px-4">Job Title</th>
+                  <th class="px-4">Contract</th>
+                  <th class="px-4">Salary</th>
+                  <th class="px-4">Appointment</th>
+                  <th class="px-4">Status</th>
+                  <th class="px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(appointment, index) in appointments" :key="index" class="mb-4">
+                  <td class="px-4">{{ appointment.job.title }}</td>
+                  <td class="px-4">{{ appointment.job.contractType }}</td>
+                  <td class="px-4">{{ appointment.job.salary }}</td>
+                  <td class="px-4">{{ formatDate(appointment.time) }}</td>
+                  <td>
+                    <v-icon color="green" v-if="appointment.accepted === true">mdi-check</v-icon>
+                    <v-icon color="red" v-else-if="appointment.accepted === false">mdi-close</v-icon>
+                    <v-icon color="orange" v-else>mdi-clock</v-icon>
+                  </td>
+                  <td class="px-4 py-4">
+                    <v-btn
+                      color="blue-500"
+                      @click="
+                        acceptDialog = true;
+                        selectedAppointmentId = appointment.id
+                      "
+                      :disabled="appointment.accepted !== null"
+                      >Accept</v-btn
+                    >
+                    <v-btn
+                      color="red-500 ml-2"
+                      @click="
+                        declineDialog = true;
+                        selectedAppointmentId = appointment.id
+                      "
+                      :disabled="appointment.accepted !== null"
+                      >Decline</v-btn
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
+        <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+          <v-card-title>
+            <h2>No appointments</h2>
+          </v-card-title>
+          <v-card-subtitle> You don't have any appointments yet </v-card-subtitle>
+        </v-card>
+      </div>
     <v-dialog v-model="acceptDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
@@ -125,4 +131,14 @@ const respondToAppointment = async (accepted) => {
     })
   }
 }
+
+const formatDate = (date) => {
+  const newDate = new Date(date);
+  const year = newDate.getFullYear();
+  const month = newDate.getMonth() + 1;
+  const day = newDate.getDate();
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+};
 </script>

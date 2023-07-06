@@ -1,44 +1,50 @@
 <template>
   <div class="pa-5">
-    <v-table class="bg-green-200" v-if="jobAd?.candidates?.length">
-      <thead>
-        <tr>
-          <th class="text-left">Firstname</th>
-          <th class="text-left">Lastname</th>
-          <th class="text-left">Email</th>
-          <th class="text-left">Birthdate</th>
-          <th class="text-left">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="candidate in jobAd.candidates"
-          :key="candidate.id"
-        >
-          <td>
-            {{ candidate.firstname }}
-          </td>
-          <td>
-            {{ candidate.lastname }}
-          </td>
-          <td>
-            {{ candidate.email }}
-          </td>
-          <td>
-            {{ candidate.birthdate }}
-          </td>
-          <td>
-            <v-btn color="blue-500" @click="appointmentDialog = true; selectedId = candidate.id">Set appointment</v-btn>
-            <v-btn color="red-500 ml-2" @click="appointmentDialog = true">Decline</v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-    <v-card class="bg-green-200" v-else>
-      <v-card-title>
-        <h2>No candidates yet</h2>
-      </v-card-title>
-    </v-card>
+    <h1 class="text-center my-10">Your candidates list</h1>
+    <div class="d-flex justify-center mb-2">
+      <v-card class="mx-auto" v-if="jobAd?.candidates?.length">
+        <v-toolbar color="appgrey">
+          <v-toolbar-title></v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+
+        <v-simple-table dense>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="px-4">Firstname</th>
+                <th class="px-4">Lastname</th>
+                <th class="px-4">Email</th>
+                <th class="px-4">Birthdate</th>
+                <th class="px-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="candidate in jobAd.candidates"
+                :key="candidate.id"
+                class="mb-4"
+              >
+                <td class="px-4">{{ candidate.firstname }}</td>
+                <td class="px-4">{{ candidate.lastname }}</td>
+                <td class="px-4">{{ candidate.email }}</td>
+                <td class="px-4">{{ candidate.birthdate }}</td>
+                <td class="px-4 py-4">
+                  <v-btn color="blue-500" @click="appointmentDialog = true; selectedId = candidate.id">Set appointment</v-btn>
+                  <v-btn color="red-500 ml-2" @click="appointmentDialog = true">Decline</v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card>
+      <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>No candidates</h2>
+        </v-card-title>
+        <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
+      </v-card>
+    </div>
     <v-dialog v-model="appointmentDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
