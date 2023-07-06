@@ -6,9 +6,7 @@ RUN chmod -R 777 .
 
 COPY . .
 
-RUN npm ci
-
-# Bundle app source
+RUN npm install
 
 
 RUN npm run build
