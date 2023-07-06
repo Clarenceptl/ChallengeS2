@@ -20,7 +20,7 @@ spec:
         image: challengescontainerregistry.azurecr.io/challenges2-api-gateway:latest
         imagePullPolicy: Always
         ports:
-          - containerPort: 3080
+          - containerPort: 80
 
 ---
 
@@ -35,5 +35,5 @@ spec:
     app: gateway
   ports:
     - protocol: TCP
-      port: 3080
-      targetPort: 3080
+      port: 80
+      targetPort: 80

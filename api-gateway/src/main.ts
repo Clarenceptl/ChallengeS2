@@ -40,7 +40,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI
   });
-  app.enableCors();
+  app.enableCors({origin: '*'});
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .addBearerAuth()
