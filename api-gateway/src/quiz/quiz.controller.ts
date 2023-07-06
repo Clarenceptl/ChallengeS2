@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Param,
   Patch,
@@ -22,6 +23,12 @@ import {
 @Controller({ path: 'quiz', version: '1' })
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
+  @Get(':id')
+  @HttpCode(201)
+  public getQuiz(@Param('id') id: string, @Req() req: any) {
+    const user = req?.user ?? null;
+    return this.quizService.getQuiz(id, user);
+  }
   @Post()
   @HttpCode(201)
   public createQuiz(

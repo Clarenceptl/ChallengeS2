@@ -6,10 +6,12 @@ import {
   AddAnswersDto,
   CreateQuizDto,
   DeleteQuizDto,
+  GetQuizDto,
   Question,
   Quiz,
   UpdateQuestionsAnswersDto,
-  UpdateQuizDto
+  UpdateQuizDto,
+  UserRole
 } from 'src/models';
 
 @Injectable()
@@ -18,6 +20,28 @@ export class QuizService {
     @InjectModel(Quiz.name) private quizModel: Model<Quiz>,
     @InjectModel(Question.name) private questionModel: Model<Question>
   ) {}
+
+  async getQuiz(payload: GetQuizDto) {
+    const { id, tokenUser } = payload;
+    const quiz = await this.quizModel.findOne({ idJobAds: id });
+
+    if (!quiz) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Quiz not found'
+      });
+    }
+    if (!tokenUser.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
+      for (const question of quiz.questions) {
+        question.correctAnswer = null;
+      }
+    }
+
+    return {
+      success: true,
+      data: quiz
+    };
+  }
 
   async createQuiz(payload: CreateQuizDto) {
     const { tokenUser, ...data } = payload;

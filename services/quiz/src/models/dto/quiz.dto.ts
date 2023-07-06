@@ -41,6 +41,8 @@ export class DeleteQuestionDto {
   id: string;
 }
 
+export class GetQuizDto extends DeleteQuizDto {}
+
 class AnswersUser extends Answer {
   idQuestion: string;
 }
