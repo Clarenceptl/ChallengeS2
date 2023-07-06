@@ -33,13 +33,13 @@ jobs:
           push: true
           tags: challengescontainerregistry.azurecr.io/challenges2-mailing-service:latest
 
-      - name: Build and push app front end
-        id: docker_build_app-front
+      - name: Build and push app quiz end
+        id: docker_build_quiz
         uses: docker/build-push-action@v2
         with:
           context: ./app
           push: true
-          tags: challengescontainerregistry.azurecr.io/challenges2-app-front:latest
+          tags: challengescontainerregistry.azurecr.io/challenges2-quiz:latest
 
       - name: Build and push authentication
         id: docker_build_authentication_service

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz
+  namespace: challenges2
+  labels:
+    app: quiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiz
+  template:
+    metadata:
+      labels:
+        app: quiz
+    spec:
+      containers:
+      - name: quiz
+        image: challengescontainerregistry.azurecr.io/challenges2-quiz:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: quiz
+  ports:
+    - protocol: TCP
+      port: 3085
+      targetPort: 3085
