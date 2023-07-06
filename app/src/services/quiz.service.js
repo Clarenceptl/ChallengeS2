@@ -85,17 +85,15 @@ export class QuizService {
   }
 
   static async userAnswers(id, answers) {
+    console.log(answers)
     try {
-      const response = await fetch(`${API_GATEWAY_URL}/quiz/questions/${id}`, {
+      const response = await fetch(`${API_GATEWAY_URL}/quiz/addResponse/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${authToken}`
         },
-        body: JSON.stringify({
-          ...answers,
-          id: parseInt(id)
-        })
+        body: JSON.stringify(answers)
       })
       return await response.json()
     }

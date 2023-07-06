@@ -91,7 +91,9 @@ export class QuizService {
 
   async addQuizAnswers(id: string, data: UserAnswersDto, tokenUser: any) {
     let res: SuccessResponse;
-    const payload = { idQuiz: id, ...data };
+    console.log('data', data);
+    const payload = { idQuiz: id, answers: data };
+    console.log('payload', payload);
     try {
       res = await lastValueFrom(
         this.client.send(

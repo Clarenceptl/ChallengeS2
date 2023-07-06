@@ -121,7 +121,8 @@ export class QuizService {
   }
 
   async addQuizAnswers(payload: AddAnswersDto) {
-    const { tokenUser, idQuiz, ...data } = payload;
+    console.log('payload', payload);
+    const { tokenUser, idQuiz, data } = payload;
     const quiz = await this.quizModel.findOne({ _id: idQuiz });
     if (!quiz) {
       throw new RpcException({
