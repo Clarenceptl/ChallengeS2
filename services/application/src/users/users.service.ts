@@ -44,13 +44,14 @@ export class UsersService {
       token,
       firstname: user.firstname
     };
-
+    console.log('register-application-ok');
     await lastValueFrom(
       this.mailingService.emit<SendEmailRequest>(
         SERVICE_CMD.GET_REGISTER_MAIL,
         dataEmail
       )
     );
+    console.log('register-mail-ok');
 
     return { success: true, message: 'User created' };
   }

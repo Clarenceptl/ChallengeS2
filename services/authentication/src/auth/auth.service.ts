@@ -101,16 +101,19 @@ export class AuthService {
       });
     }
     delete data.confirmPassword;
-
+    console.log('register-password-ok');
     data.birthdate = formatDate(data.birthdate);
     const check = checkDate(data.birthdate);
     if (!check) {
       throw new RpcException({ statusCode: 400, message: 'Birthdate invalid' });
     }
 
+    console.log('register-birthday-ok');
+
     const res = await lastValueFrom(
       this.client.send({ cmd: SERVICE_CMD.CREATE_USER }, data)
     );
+    console.log('register-mail-ok', res);
 
     return res;
   }

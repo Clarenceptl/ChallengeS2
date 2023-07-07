@@ -11,6 +11,7 @@ export class AuthController {
 
   @MessagePattern({ cmd: SERVICE_CMD.REGISTER_USER })
   public register(@Body(ValidationPipe) registerRequest: CreatedUserRequest) {
+    console.log('register-service', registerRequest);
     return this.authService.register(registerRequest);
   }
 
