@@ -111,7 +111,9 @@ export class UsersService {
   }
 
   public async getUserByEmail(email: string): Promise<User | null> {
-    return await this.userRepository.findOneBy({ email });
+    const test = await this.userRepository.findOneBy({ email });
+    console.log(test);
+    return test;
   }
 
   public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
