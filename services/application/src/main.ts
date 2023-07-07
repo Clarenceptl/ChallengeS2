@@ -3,8 +3,6 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { RolesAndOwnerGlobalGuard } from './global';
-import { WinstonModule } from 'nest-winston';
-import { format, transports } from 'winston';
 import { ExceptionFilter } from './global/rcp-exception.filter';
 
 async function bootstrap() {
@@ -15,23 +13,8 @@ async function bootstrap() {
       options: {
         host: 'app-service',
         port: 3021
-      },
-      logger: WinstonModule.createLogger({
-      transports: [
-        // we also want to see logs in our console
-        new transports.Console({
-          format: format.combine(
-            format.cli(),
-            format.splat(),
-            format.timestamp(),
-            format.printf((info) => {
-              return `${info.timestamp} ${info.level}: ${info.message}`;
-            })
-          )
-        })
-      ]
-    })
-    },
+      }
+    }
   );
   app.useGlobalPipes(
     new ValidationPipe({
