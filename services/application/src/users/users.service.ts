@@ -83,6 +83,15 @@ export class UsersService {
       const jobAds = await this.jobAdsRepository.find({
         where: { company: userCompany },
         relations: ['candidates'],
+        select: {
+          candidates: {
+            id: true,
+            email: true,
+            firstname: true,
+            lastname: true,
+            birthdate: true
+          }
+        },
         order: { created_at: 'DESC' }
       });
       console.log(jobAds);
