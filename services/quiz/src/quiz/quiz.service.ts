@@ -121,7 +121,6 @@ export class QuizService {
   }
 
   async addQuizAnswers(payload: AddAnswersDto) {
-    console.log('1', payload);
     const { tokenUser, idQuiz, answers } = payload;
     const quiz = await this.quizModel.findOne({ _id: idQuiz });
     if (!quiz) {
@@ -145,12 +144,10 @@ export class QuizService {
     const res: number = quiz.reponses.findIndex(
       (element) => element.userId === tokenUser.id
     );
-    console.log('2', resultQuiz);
     if (res !== -1) {
-      if (quiz.reponses[res].score < resultQuiz) {
-        quiz.reponses[res].score = resultQuiz;
-      }
+      quiz.reponses[res].score = resultQuiz;
       quiz.reponses[res].tentative += 1;
+      quiz.updateOne({ reponses: quiz.reponses });
     } else {
       quiz.set({
         reponses: [

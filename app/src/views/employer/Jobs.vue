@@ -2,7 +2,7 @@
   <div class="pa-10">
     <div class="text-center mb-2">
       <h1>My Job Offers</h1>
-      <v-btn color="appgrey mb-4" @click="createJobDialog = true">Add a new job offer</v-btn>
+      <v-btn color="appgrey mb-4" @click="newJobDialog = true">Add a new job offer</v-btn>
     </div>
 
     <div v-if="myJobs.length">
@@ -18,8 +18,10 @@
             <v-card-title>{{ job?.title }}</v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
+                <v-list-item-content>
                   <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
+                </v-list-item-content>
               </v-list-item>
               <v-chip
                 class="mb-4 ml-1"
@@ -40,16 +42,18 @@
             <v-card-title class="d-flex justify-space-between">
               {{ selectedJob?.title }}
               <div>
-                <v-btn v-if="Object.keys(quiz).length === 0" color="green-500" @click="createMcqDialog = true">Create Quiz</v-btn>
-                <v-btn color="blue-500 ml-2" @click="editJobDialog = true">Edit</v-btn>
-                <v-btn color="red-500 ml-2" @click="deleteJobDialog = true">Delete</v-btn>
+                <v-btn v-if="Object.keys(quiz).length === 0" color="green-500" @click="mcqDialog = true">Create MCQ</v-btn>
+                <v-btn color="blue-500 ml-2" @click="editDialog = true">Edit</v-btn>
+                <v-btn color="red-500 ml-2" @click="deleteDialog = true">Delete</v-btn>
                 <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
               </div>
             </v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
+                <v-list-item-content>
                   <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
+                </v-list-item-content>
               </v-list-item>
               <v-chip
                 class="mb-4 ml-1"
@@ -78,10 +82,10 @@
 
           <v-card variant="flat" color="green-400" class="mt-4" v-if="Object.keys(quiz).length > 0">
             <v-card-title class="d-flex justify-space-between">
-              <h2>Quiz</h2>
+              <h2>MCQ</h2>
               <div v-if="quiz">
                 <v-btn color="blue-500 ml-2" @click="editMcqDialog = true">Edit</v-btn>
-                <v-btn color="yellow-500 ml-2" @click="createMcqQuestionDialog = true">Add a question</v-btn>
+                <v-btn color="yellow-500 ml-2" @click="addQuestionDialog = true">Add a question</v-btn>
               </div>
             </v-card-title>
             <v-card-subtitle class="d-flex flex-column">
@@ -94,6 +98,7 @@
             </v-card-subtitle>
             <v-card-text>
               <v-list-item class="mb-4" v-for="(question, index) in quiz?.questions" :key="index">
+                <v-list-item-content>
                   <v-list-item-title>Questtion: {{ index + 1 }} {{ question?.label }}</v-list-item-title>
                   <v-list-item-subtitle>
                     <v-chip
@@ -107,6 +112,7 @@
                       <v-icon v-if="answer?.id === question?.correctAnswer?.id" color="green">mdi-check</v-icon>
                     </v-chip>
                   </v-list-item-subtitle>
+                </v-list-item-content>
               </v-list-item>
             </v-card-text>
           </v-card>
@@ -118,7 +124,152 @@
       <h2 class="text-center">You have no job offers</h2>
     </div>
 
-    <v-dialog v-model="createJobDialog" max-width="600">
+    <v-dialog v-model="editDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Edit this job</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to update this job ?
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <label>Job Title</label>
+            <v-text-field
+              clearable
+              placeholder="Title"
+              type="text"
+              v-model="jobEdit.title"
+            />
+            <label>Job Description</label>
+            <v-textarea
+              clearable
+              placeholder="Description"
+              type="text"
+              v-model="jobEdit.description"
+            />
+            <label>Job City</label>
+            <v-text-field
+              clearable
+              placeholder="City"
+              type="text"
+              v-model="jobEdit.city"
+            />
+            <label>Job Country</label>
+            <v-text-field
+              clearable
+              placeholder="Country"
+              type="text"
+              v-model="jobEdit.country"
+            />
+            <label>Job Contract Type</label>
+            <v-text-field
+              clearable
+              placeholder="Contract Type"
+              type="text"
+              v-model="jobEdit.contractType"
+            />
+            <label>Job Salary</label>
+            <v-text-field
+              clearable
+              placeholder="Salary"
+              type="number"
+              v-model="jobEdit.salary"
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="editDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="updateJob"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="editMcqDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Edit this MCQ</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to update this MCQ ?
+        </v-card-subtitle>
+        <v-card-text>
+          <v-form>
+            <label>Title</label>
+            <v-text-field
+              clearable
+              placeholder="Title"
+              type="text"
+              v-model="mcqEdit.title"
+            />
+            <label>Duration</label>
+            <v-text-field
+              clearable
+              placeholder="20s"
+              type="number"
+              v-model="mcqEdit.tempsParQuestionSecond"
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="editMcqDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="updateQuiz"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="deleteDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Delete this job</h2>
+        </v-card-title>
+        <v-card-subtitle>
+          Are you sure you want to delete this job ?
+        </v-card-subtitle>
+        <v-card-actions>
+          <v-btn
+            color="red-500"
+            text
+            @click="deleteDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue-800"
+            text
+            @click="deleteJob"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="newJobDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
           <h2>Create Job</h2>
@@ -177,7 +328,7 @@
             color="red-500"
             text
             @click="
-              createJobDialog = false;
+              newJobDialog = false;
               newJob = {
                 title: '',
                 description: '',
@@ -200,64 +351,13 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="createMcqDialog" max-width="600">
+    <v-dialog v-model="addQuestionDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Create Quiz</h2>
+          <h2>Create Job</h2>
         </v-card-title>
         <v-card-subtitle>
-          Are you sure you want to create this Quiz ?
-        </v-card-subtitle>
-        <v-card-text>
-          <v-form>
-            <label>Quiz Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="newMcq.title"
-            />
-            <label>Quiz time / question (s)</label>
-            <v-text-field
-              clearable
-              placeholder="20"
-              type="number"
-              v-model="newMcq.tempsParQuestionSecond"
-            />
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              createJobDialog = false;
-              newMcq = {
-                title: '',
-                tempsParQuestionSecond: null,
-                idJobAds: selectedJob.value.id
-              }
-            ">
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="createMcq"
-          >
-            Yes
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="createMcqQuestionDialog" max-width="600">
-      <v-card class="pa-5 bg-green-300" variant="outlined">
-        <v-card-title>
-          <h2>Create Qeustion</h2>
-        </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to add a question to this Quiz ?
+          Are you sure you want to add a question to this MCQ ?
         </v-card-subtitle>
         <v-card-text>
           <v-form>
@@ -304,7 +404,7 @@
             color="red-500"
             text
             @click="
-              createMcqQuestionDialog = false;
+              addQuestionDialog = false;
               newQuestion = {
                 label: '',
                 answers: [
@@ -340,57 +440,29 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="editJobDialog" max-width="600">
+    <v-dialog v-model="mcqDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Edit this job</h2>
+          <h2>Create MCQ</h2>
         </v-card-title>
         <v-card-subtitle>
-          Are you sure you want to update this job ?
+          Are you sure you want to create this MCQ ?
         </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <label>Job Title</label>
+            <label>MCQ Title</label>
             <v-text-field
               clearable
               placeholder="Title"
               type="text"
-              v-model="jobEdit.title"
+              v-model="newMcq.title"
             />
-            <label>Job Description</label>
-            <v-textarea
-              clearable
-              placeholder="Description"
-              type="text"
-              v-model="jobEdit.description"
-            />
-            <label>Job City</label>
+            <label>MCQ time / question (s)</label>
             <v-text-field
               clearable
-              placeholder="City"
-              type="text"
-              v-model="jobEdit.city"
-            />
-            <label>Job Country</label>
-            <v-text-field
-              clearable
-              placeholder="Country"
-              type="text"
-              v-model="jobEdit.country"
-            />
-            <label>Job Contract Type</label>
-            <v-text-field
-              clearable
-              placeholder="Contract Type"
-              type="text"
-              v-model="jobEdit.contractType"
-            />
-            <label>Job Salary</label>
-            <v-text-field
-              clearable
-              placeholder="Salary"
+              placeholder="20"
               type="number"
-              v-model="jobEdit.salary"
+              v-model="newMcq.tempsParQuestionSecond"
             />
           </v-form>
         </v-card-text>
@@ -398,86 +470,20 @@
           <v-btn
             color="red-500"
             text
-            @click="editJobDialog = false"
-          >
+            @click="
+              newJobDialog = false;
+              newMcq = {
+                title: '',
+                tempsParQuestionSecond: null,
+                idJobAds: selectedJob.value.id
+              }
+            ">
             Cancel
           </v-btn>
           <v-btn
             color="blue-800"
             text
-            @click="updateJob"
-          >
-            Yes
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="editMcqDialog" max-width="600">
-      <v-card class="pa-5 bg-green-300" variant="outlined">
-        <v-card-title>
-          <h2>Edit this Quiz</h2>
-        </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to update this Quiz ?
-        </v-card-subtitle>
-        <v-card-text>
-          <v-form>
-            <label>Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="mcqEdit.title"
-            />
-            <label>Duration</label>
-            <v-text-field
-              clearable
-              placeholder="20s"
-              type="number"
-              v-model="mcqEdit.tempsParQuestionSecond"
-            />
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="editMcqDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="updateQuiz"
-          >
-            Yes
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="deleteJobDialog" max-width="600">
-      <v-card class="pa-5 bg-green-300" variant="outlined">
-        <v-card-title>
-          <h2>Delete this job</h2>
-        </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to delete this job ?
-        </v-card-subtitle>
-        <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="deleteJobDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="deleteJob"
+            @click="createMcq"
           >
             Yes
           </v-btn>
@@ -494,41 +500,32 @@ import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useQuizStore } from '../../stores/quiz.store';
 import { useToastStore } from '@/stores'
 import { useRouter } from 'vue-router';
-import { useUsersStore } from '../../stores/users.store'
-
-const { me } = storeToRefs(useUsersStore())
+import { useUserStore } from '@/stores'
 
 await useJobAdsStore().getMyJobs();
 const { myJobs } = storeToRefs(useJobAdsStore());
 let selectedJob = ref(myJobs.value[0]);
-// onMounted(() => {
-//   selectedJob.value = myJobs.value[0];
-// });
 const stores = {
   toast: useToastStore()
 }
-if (selectedJob.value?.id) {
-  await useQuizStore().getQuizByJobId(selectedJob.value?.id);
-}
-
+await useQuizStore().getQuizByJobId(selectedJob.value?.id);
 const { quiz } = storeToRefs(useQuizStore());
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
 
 const router = useRouter();
 
 watch(() => selectedJob.value?.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
 });
-watch(myJobs, () => {
-  console.log('myJobs', myJobs.value);
-  selectedJob.value = myJobs.value[0] ?? null;
-});
 
-let createMcqQuestionDialog = ref(false);
-let deleteJobDialog = ref(false);
-let editJobDialog = ref(false);
+let addQuestionDialog = ref(false);
+let deleteDialog = ref(false);
+let editDialog = ref(false);
 let editMcqDialog = ref(false);
-let createMcqDialog = ref(false);
-let createJobDialog = ref(false);
+let mcqDialog = ref(false);
+let newJobDialog = ref(false);
 
 const jobEdit = ref({...selectedJob.value});
 const mcqEdit = ref({...quiz.value});
@@ -598,8 +595,7 @@ const createJob = () => {
       type: 'success',
       message: 'job ads created'
     });
-    await useJobAdsStore().getMyJobs();
-    createJobDialog.value = false;
+    newJobDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
   }).catch(() => {
@@ -610,7 +606,7 @@ const createJob = () => {
   });
 };
 
-const createMcq = async () => {
+const createMcq = () => {
   if (isNaN(newMcq.value.tempsParQuestionSecond)) {
     stores.toast.createToast({
       type: 'error',
@@ -618,59 +614,19 @@ const createMcq = async () => {
     });
     return;
   }
-  useQuizStore().createQuiz(newMcq.value).then(async (res) => {
-    if (res.statusCode === 400) {
-      stores.toast.createToast({
-        type: 'error',
-        message: res.message
-      });
-      createMcqDialog.value = false;
-      newMcq.value = {
-        title: '',
-        tempsParQuestionSecond: null,
-        idJobAds: selectedJob.value?.id.toString()
-      };
-      return;
-    }
+  useQuizStore().createQuiz(newMcq.value).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'mcq created'
+    });
     await useQuizStore().getQuizByJobId(selectedJob.value.id);
-    createMcqDialog.value = false;
+    mcqDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
   }).catch(() => {
     stores.toast.createToast({
       type: 'error',
       message: 'mcq not created'
-    });
-    createMcqDialog.value = false;
-    newMcq.value = {
-      title: '',
-      tempsParQuestionSecond: null,
-      idJobAds: selectedJob.value?.id.toString()
-    };
-  });
-};
-
-const addQuestionToQuiz = () => {
-  if (newQuestion.value.answers[0].label === '' || newQuestion.value.answers[1].label === '') {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'you must fill at least two answers'
-    });
-    return;
-  }
-  useQuizStore().addQuestionToQuiz(quiz.value._id, newQuestion.value).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'question added'
-    });
-    await useQuizStore().getQuizByJobId(selectedJob.value.id);
-    createMcqQuestionDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'question not added'
     });
   });
 };
@@ -690,7 +646,7 @@ const updateJob = () => {
       message: 'job ad updated'
     });
     await useJobAdsStore().getMyJobs();
-    editJobDialog.value = false;
+    editDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
   }).catch(() => {
@@ -708,7 +664,7 @@ const deleteJob = () => {
       message: 'job ad deleted'
     });
     await useJobAdsStore().getMyJobs();
-    deleteJobDialog.value = false;
+    deleteDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
   }).catch(() => {
@@ -727,7 +683,7 @@ const updateQuiz = () => {
   useQuizStore().updateQuiz(quiz.value._id, formattedQuiz).then(async () => {
     stores.toast.createToast({
       type: 'success',
-      message: 'Quiz updated'
+      message: 'mcq updated'
     });
     await useQuizStore().getQuizByJobId(selectedJob.value.id);
     editMcqDialog.value = false;
@@ -736,10 +692,36 @@ const updateQuiz = () => {
   }).catch(() => {
     stores.toast.createToast({
       type: 'error',
-      message: 'Quiz not updated'
+      message: 'mcq not updated'
     });
   });
 };
+
+const addQuestionToQuiz = () => {
+  // check that at least two answers are filled
+  if (newQuestion.value.answers[0].label === '' || newQuestion.value.answers[1].label === '') {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'you must fill at least two answers'
+    });
+    return;
+  }
+  useQuizStore().addQuestionToQuiz(quiz.value._id, newQuestion.value).then(async () => {
+    stores.toast.createToast({
+      type: 'success',
+      message: 'question added'
+    });
+    await useQuizStore().getQuizByJobId(selectedJob.value.id);
+    addQuestionDialog.value = false;
+    selectedJob.value = myJobs.value[0];
+    jobEdit.value = {...selectedJob.value};
+  }).catch(() => {
+    stores.toast.createToast({
+      type: 'error',
+      message: 'question not added'
+    });
+  });
+}; 
 </script>
 
 <style scoped>

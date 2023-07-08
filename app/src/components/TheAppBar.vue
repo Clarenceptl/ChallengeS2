@@ -7,14 +7,14 @@
           <v-btn class="ml-1" variant="outlined" @click="router.push('/register')">Register</v-btn>
         </div>
         <div v-else>
-          <v-btn v-if="isUser" class="ml-1" color="green-800" variant="outlined" @click="router.push('/appointment-list')">Appointments</v-btn>
-          <v-btn v-if="isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/employer/appointments')">Appointments</v-btn>
-          <v-btn v-if="isUser" class="ml-1" color="green-800" variant="outlined" @click="router.push('/applied-list')">Applied list</v-btn>
-          <v-btn v-if="!isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/job-offers')">Job Offers</v-btn>
+          <v-btn  v-if="!isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/job-offers')">Job Offers</v-btn>
+          <v-btn class="ml-1" color="green-800" variant="outlined" @click="router.push('/profile')">Profile</v-btn>
+          <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/register-company')">Register Company</v-btn>
+          <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/applied-list')">Applied list</v-btn>
           <v-btn v-if="isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/employer/jobs')">My Jobs</v-btn>
-          <v-btn v-if="isUser" class="ml-1" color="green-800" variant="outlined" @click="router.push('/register-company')">Register Company</v-btn>
+          <v-btn v-if="isEmployer" class="ml-1" color="green-800" variant="outlined" @click="router.push('/employer/appointments')">Appointments</v-btn>
+          <v-btn v-if="!isEmployer && !isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/appointment-list')">Appointments</v-btn>
           <v-btn v-if="isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/admin')">Admin</v-btn>
-          <v-btn v-if="!isAdmin" class="ml-1" color="green-800" variant="outlined" @click="router.push('/profile')">Profile</v-btn>
           <v-btn class="ml-1" color="red-800" variant="outlined" @click="logout">Logout</v-btn>
         </div>
       </template>
@@ -25,17 +25,18 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user.store'
+import { computed } from 'vue'
 
-const { isAdmin, isEmployer, isUser, isConnected } = storeToRefs(useUsersStore())
-if (isConnected.value) {
-  await useUsersStore().getSelfUser()
-}
 const router = useRouter()
+const userStore = useUserStore()
+await userStore.loadContextUser()
+const isConnected = computed(() => userStore.isConnected)
+const isAdmin = computed(() => userStore.isAdmin)
+const isEmployer = computed(() => userStore.isEmployer)
 
 const logout = () => {
-  useUsersStore().logout()
+  userStore.logout()
   router.push('/login')
 }
 </script>

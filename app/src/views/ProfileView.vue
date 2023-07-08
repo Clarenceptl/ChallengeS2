@@ -179,10 +179,12 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores'
 
-const { me } = storeToRefs(useUsersStore());
+const userStore = useUserStore()
+
+const me = computed(() => userStore.getContextUser)
+
 const formatedBirthdate = computed(() => {
   if (me.value?.birthdate) {
     const date = me.value?.birthdate.split('/');

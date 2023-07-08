@@ -71,14 +71,14 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useToastStore } from '@/stores'
+import { useToastStore, useUserStore } from '@/stores'
 import { useForm, useField } from 'vee-validate'
 import { loginSchema } from '@/models'
 import { useRouter } from 'vue-router'
-import { useUsersStore } from '../../stores/users.store'
 
 const router = useRouter()
 const stores = {
+  user: useUserStore(),
   toast: useToastStore()
 }
 
@@ -99,7 +99,7 @@ const user = {
 }
 
 const submit = handleSubmit(async (values) => {
-  const res = await useUsersStore().login(values)
+  const res = await stores.user.login(values)
   if (res.success) {
     resetForm()
     router.push({ name: 'Home' })

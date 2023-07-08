@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
           </v-toolbar>
 
-          <v-table dense>
+          <v-simple-table dense>
             <template v-slot:default>
               <thead>
                 <tr>
@@ -17,7 +17,7 @@
                   <th class="px-4">Salary</th>
                   <th class="px-4">Appointment</th>
                   <th class="px-4">Status</th>
-                  <th class="px-4 text-center">Actions</th>
+                  <th class="px-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -26,7 +26,7 @@
                   <td class="px-4">{{ appointment.job.contractType }}</td>
                   <td class="px-4">{{ appointment.job.salary }}</td>
                   <td class="px-4">{{ formatDate(appointment.time) }}</td>
-                  <td class="text-center">
+                  <td>
                     <v-icon color="green" v-if="appointment.accepted === true">mdi-check</v-icon>
                     <v-icon color="red" v-else-if="appointment.accepted === false">mdi-close</v-icon>
                     <v-icon color="orange" v-else>mdi-clock</v-icon>
@@ -54,7 +54,7 @@
                 </tr>
               </tbody>
             </template>
-          </v-table>
+          </v-simple-table>
         </v-card>
         <v-card v-else class="pa-5 bg-green-300" variant="outlined">
           <v-card-title>
@@ -71,7 +71,7 @@
         <v-card-subtitle> Are you sure you want to accept this appointment ? </v-card-subtitle>
         <v-card-actions>
           <v-btn color="red-500" text @click="acceptDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text @click="respondToAppointment(true); acceptDialog = false">Yes</v-btn>
+          <v-btn color="blue-800" text @click="respondToAppointment(true)">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -83,7 +83,7 @@
         <v-card-subtitle> Are you sure you want to decline this appointment ? </v-card-subtitle>
         <v-card-actions>
           <v-btn color="red-500" text @click="declineDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text @click="respondToAppointment(false); declineDialog = false">Yes</v-btn>
+          <v-btn color="blue-800" text @click="respondToAppointment(false)">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

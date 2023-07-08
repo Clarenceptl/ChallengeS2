@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia';
+import { isConnected } from '@/middleware'
+import { useUserStore } from '@/stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,9 +15,7 @@ const router = createRouter({
       name: 'Login',
       component: () => import('@/views/auth/LoginView.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected } = storeToRefs(useUsersStore())
-        if (!isConnected.value) {
+        if (!(await isConnected())) {
           return next()
         }
         return next({ name: 'Home' })
@@ -28,9 +26,7 @@ const router = createRouter({
       name: 'Register',
       component: () => import('@/views/auth/RegisterView.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected } = storeToRefs(useUsersStore())
-        if (!isConnected.value) {
+        if (!(await isConnected())) {
           return next()
         }
         return next({ name: 'Home' })
@@ -41,9 +37,7 @@ const router = createRouter({
       name: 'ResetPassword',
       component: () => import('@/views/auth/ResetPassword.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected } = storeToRefs(useUsersStore())
-        if (!isConnected.value) {
+        if (!(await isConnected())) {
           return next()
         }
         return next({ name: 'Home' })
@@ -54,9 +48,7 @@ const router = createRouter({
       name: 'ValidateAccount',
       component: () => import('@/views/auth/ValidateAccount.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected } = storeToRefs(useUsersStore())
-        if (!isConnected.value) {
+        if (!(await isConnected())) {
           return next()
         }
         return next({ name: 'Home' })
@@ -67,10 +59,8 @@ const router = createRouter({
       name: 'Profile',
       component: () => import('@/views/ProfileView.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected } = storeToRefs(useUsersStore())
-        if (!isConnected.value) {
-          return next({ name: 'Home' })
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
         }
         return next()
       }
@@ -80,10 +70,9 @@ const router = createRouter({
       name: 'RegisterCompany',
       component: () => import('@/views/RegisterCompany.vue'),
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isUser } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isUser.value)) {
-          return next({ name: 'Home' })
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
+          return next({ name: 'Login' })
         }
         return next()
       }
@@ -91,11 +80,10 @@ const router = createRouter({
     {
       path: '/job-offers',
       name: 'JobOffers',
-      beforeEnter: async(to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isUser } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isUser.value)) {
-          return next({ name: 'Home' })
+      beforeEnter: async (to, from, next) => {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
+          return next({ name: 'Login' })
         }
         return next()
       },
@@ -105,10 +93,9 @@ const router = createRouter({
       path: '/applied-list',
       name: 'AppliedList',
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isUser } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isUser.value)) {
-          return next({ name: 'Home' })
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
+          return next({ name: 'Login' })
         }
         return next()
       },
@@ -128,11 +115,10 @@ const router = createRouter({
     {
       path: '/appointment-list',
       name: 'AppointmentList',
-      beforeEnter: async(to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isUser } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isUser.value)) {
-          return next({ name: 'Home' })
+      beforeEnter: async (to, from, next) => {
+        const userStore = useUserStore()
+        if (!(await isConnected() && !userStore.isAdmin && !userStore.isEmployer)) {
+          return next({ name: 'Login' })
         }
         return next()
       },
@@ -141,9 +127,11 @@ const router = createRouter({
     {
       path: '/admin/',
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isAdmin } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isAdmin.value)) {
+        const userStore = useUserStore()
+        if (!(await isConnected())) {
+          return next({ name: 'Login' })
+        }
+        if (!userStore.isAdmin) {
           return next({ name: 'Home' })
         }
         return next()
@@ -179,10 +167,9 @@ const router = createRouter({
       path: '/employer/',
       name: 'Employer',
       beforeEnter: async (to, from, next) => {
-        await useUsersStore().getSelfUser()
-        const { isConnected, isEmployer } = storeToRefs(useUsersStore())
-        if (!(isConnected.value && isEmployer.value)) {
-          return next({ name: 'Home' })
+        const userStore = useUserStore()
+        if (!(await isConnected() && userStore.isEmployer)) {
+          return next({ name: 'Login' })
         }
         return next()
       },
