@@ -519,7 +519,6 @@ watch(() => selectedJob.value?.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
 });
 watch(myJobs, () => {
-  console.log('myJobs', myJobs.value);
   selectedJob.value = myJobs.value[0] ?? null;
 });
 
