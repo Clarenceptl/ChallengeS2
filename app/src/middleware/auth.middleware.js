@@ -1,12 +1,14 @@
-import { checkDateForRefreshToken, checkToken } from '@/helpers'
+import { checkDateForRefreshToken, checkToken, clearTokens } from '@/helpers'
 import { AuthService } from '@/services'
 
 export const isConnected = async () => {
   const token = localStorage.getItem('bearer-token')
   const refreshToken = localStorage.getItem('refresh-token')
   const exp = checkToken(token)
-  if (!exp) return false
-
+  if (!exp) {
+    clearTokens()
+    return false
+  }
   if (!refreshToken) return false
   const expRefresToken = checkToken(refreshToken)
   if (!expRefresToken) return true

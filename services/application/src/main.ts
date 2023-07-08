@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { RolesAndOwnerGlobalGuard } from './global';
+import { ExceptionFilter } from './global/rcp-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -20,6 +21,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
+  app.useGlobalFilters(new ExceptionFilter());
   app.useGlobalGuards(new RolesAndOwnerGlobalGuard(new Reflector()));
   await app.listen();
 }

@@ -2,8 +2,12 @@ import { now } from './date.helper'
 import jwtDecode from 'jwt-decode'
 
 export const clearTokens = () => {
-  localStorage.removeItem('bearer-token')
-  localStorage.removeItem('refresh-token')
+  if (localStorage.getItem('bearer-token')) {
+    localStorage.removeItem('bearer-token')
+  }
+  if (localStorage.getItem('refresh-token')) {
+    localStorage.removeItem('refresh-token')
+  }
 }
 
 export const checkToken = (token) => {

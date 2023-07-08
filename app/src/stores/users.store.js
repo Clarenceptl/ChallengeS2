@@ -29,6 +29,9 @@ export const useUsersStore = defineStore('usersStore', {
       const res = await UsersService.getSelfUser()
       if (res?.success) {
         this.me = res.data
+      } else {
+        this.me = {}
+        clearTokens()
       }
       return res
     },
