@@ -40,7 +40,7 @@
             <v-card-title class="d-flex justify-space-between">
               {{ selectedJob?.title }}
               <div>
-                <v-btn v-if="Object.keys(quiz).length === 0" color="green-500" @click="createMcqDialog = true">Create MCQ</v-btn>
+                <v-btn v-if="Object.keys(quiz).length === 0" color="green-500" @click="createMcqDialog = true">Create Quiz</v-btn>
                 <v-btn color="blue-500 ml-2" @click="editJobDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteJobDialog = true">Delete</v-btn>
                 <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
@@ -78,7 +78,7 @@
 
           <v-card variant="flat" color="green-400" class="mt-4" v-if="Object.keys(quiz).length > 0">
             <v-card-title class="d-flex justify-space-between">
-              <h2>MCQ</h2>
+              <h2>Quiz</h2>
               <div v-if="quiz">
                 <v-btn color="blue-500 ml-2" @click="editMcqDialog = true">Edit</v-btn>
                 <v-btn color="yellow-500 ml-2" @click="createMcqQuestionDialog = true">Add a question</v-btn>
@@ -203,21 +203,21 @@
     <v-dialog v-model="createMcqDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Create MCQ</h2>
+          <h2>Create Quiz</h2>
         </v-card-title>
         <v-card-subtitle>
-          Are you sure you want to create this MCQ ?
+          Are you sure you want to create this Quiz ?
         </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <label>MCQ Title</label>
+            <label>Quiz Title</label>
             <v-text-field
               clearable
               placeholder="Title"
               type="text"
               v-model="newMcq.title"
             />
-            <label>MCQ time / question (s)</label>
+            <label>Quiz time / question (s)</label>
             <v-text-field
               clearable
               placeholder="20"
@@ -257,7 +257,7 @@
           <h2>Create Qeustion</h2>
         </v-card-title>
         <v-card-subtitle>
-          Are you sure you want to add a question to this MCQ ?
+          Are you sure you want to add a question to this Quiz ?
         </v-card-subtitle>
         <v-card-text>
           <v-form>
@@ -416,10 +416,10 @@
     <v-dialog v-model="editMcqDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Edit this MCQ</h2>
+          <h2>Edit this Quiz</h2>
         </v-card-title>
         <v-card-subtitle>
-          Are you sure you want to update this MCQ ?
+          Are you sure you want to update this Quiz ?
         </v-card-subtitle>
         <v-card-text>
           <v-form>
@@ -489,7 +489,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useQuizStore } from '../../stores/quiz.store';
 import { useToastStore } from '@/stores'
@@ -507,7 +507,10 @@ let selectedJob = ref(myJobs.value[0]);
 const stores = {
   toast: useToastStore()
 }
-await useQuizStore().getQuizByJobId(selectedJob.value?.id);
+if (selectedJob.value?.id) {
+  await useQuizStore().getQuizByJobId(selectedJob.value?.id);
+}
+
 const { quiz } = storeToRefs(useQuizStore());
 
 const router = useRouter();
@@ -724,7 +727,7 @@ const updateQuiz = () => {
   useQuizStore().updateQuiz(quiz.value._id, formattedQuiz).then(async () => {
     stores.toast.createToast({
       type: 'success',
-      message: 'mcq updated'
+      message: 'Quiz updated'
     });
     await useQuizStore().getQuizByJobId(selectedJob.value.id);
     editMcqDialog.value = false;
@@ -733,7 +736,7 @@ const updateQuiz = () => {
   }).catch(() => {
     stores.toast.createToast({
       type: 'error',
-      message: 'mcq not updated'
+      message: 'Quiz not updated'
     });
   });
 };

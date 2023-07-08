@@ -16,7 +16,7 @@
                 <th class="px-4">City</th>
                 <th class="px-4">Country</th>
                 <th class="px-4">Salary</th>
-                <th class="px-4 text-center">MCQ</th>
+                <th class="px-4 text-center">Quiz</th>
               </tr>
             </thead>
             <tbody>
