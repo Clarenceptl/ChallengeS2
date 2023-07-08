@@ -32,4 +32,22 @@ export class CompaniesService {
       return error.response
     }
   }
+
+  static async updateCompany(company) {
+    const { id, ...data } = company
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/companies/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`
+        },
+        body: JSON.stringify(data)
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }
