@@ -17,7 +17,6 @@ export const checkToken = (token) => {
 
   if (!exp) return false
   if (exp < now.unix()) {
-    clearTokens()
     return false
   }
   return exp
