@@ -110,6 +110,7 @@ import { storeToRefs } from 'pinia';
 import { useCompanySizeOptionsStore } from '@/stores/company-size-options';
 import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options';
 import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
+import { useUsersStore } from '../stores/users.store';
 import { useCompaniesStore } from '@/stores/companies';
 import { computed, ref } from 'vue';
 import { useToastStore } from '@/stores'
@@ -181,16 +182,16 @@ let companyData = ref({
   sector: null,
 })
 
-const createCompany = (e) => {
+const createCompany = async (e) => {
   e.preventDefault();
   if (isDateInPast.value && !isSiretTaken.value && isFormValid.value) {
     useCompaniesStore().createCompany(companyData.value);
     stores.toast.createToast({
-      message: 'Company created',
+      message: 'Company created, please login',
       type: 'success'
     });
-
-    router.push('/profile');
+    useUsersStore().logout();
+    router.push('/login');
   } else {
     stores.toast.createToast({
       message: 'Please fill all the fields',
