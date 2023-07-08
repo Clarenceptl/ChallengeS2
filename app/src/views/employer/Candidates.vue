@@ -1,6 +1,10 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your candidates list</h1>
+    <div class="text-center">
+      Buttons are disabled if the candidate already has an appointment,
+      or if the candidate has not taken the test yet.
+    </div>
     <div class="d-flex justify-center mb-2">
       <v-card class="mx-auto" v-if="jobAd?.candidates?.length">
         <v-toolbar color="appgrey">
@@ -16,6 +20,8 @@
                 <th class="px-4">Lastname</th>
                 <th class="px-4">Email</th>
                 <th class="px-4">Birthdate</th>
+                <th class="px-4">Score</th>
+                <th class="px-4">Attempts</th>
                 <th class="px-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -29,9 +35,11 @@
                 <td class="px-4">{{ candidate.lastname }}</td>
                 <td class="px-4">{{ candidate.email }}</td>
                 <td class="px-4">{{ candidate.birthdate }}</td>
+                <td class="px-4 text-center">{{ getQuizScore(candidate.id) }}</td>
+                <td class="px-4 text-center">{{ getQuizTentative(candidate.id) }}</td>
                 <td class="px-4 py-4">
-                  <v-btn color="blue-500" @click="appointmentDialog = true; selectedId = candidate.id">Set appointment</v-btn>
-                  <v-btn color="red-500 ml-2" @click="appointmentDialog = true">Decline</v-btn>
+                  <v-btn :disabled="getQuizScore(candidate.id) === 'Not taken' || isCandidateInAppointments(candidate.id)" color="blue-500" @click="appointmentDialog = true; selectedId = candidate.id">Set appointment</v-btn>
+                  <v-btn :disabled="getQuizScore(candidate.id) === 'Not taken' || isCandidateInAppointments(candidate.id)" color="red-500 ml-2" @click="appointmentDialog = true">Decline</v-btn>
                 </td>
               </tr>
             </tbody>
@@ -109,6 +117,7 @@ import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useJobAdsStore } from '../../stores/job-ads.store';
 import { useAppointmentsStore } from "../../stores/appointments.store";
+import { useQuizStore } from "../../stores/quiz.store";
 import { useToastStore } from '@/stores'
 import { storeToRefs } from "pinia";
 
@@ -118,7 +127,11 @@ const stores = {
 const route = useRoute();
 const router = useRouter();
 const { jobAd } = storeToRefs(useJobAdsStore());
+const { appointments } = storeToRefs(useAppointmentsStore());
+const { quiz } = storeToRefs(useQuizStore());
 await useJobAdsStore().getJobAd(route.params.id);
+await useQuizStore().getQuizByJobId(route.params.id);
+await useAppointmentsStore().getAppointments();
 
 let appointmentDialog = ref(false);
 let deleteDialog = ref(false);
@@ -171,6 +184,36 @@ const createAppointment = () => {
       type: 'error',
       message: 'Something went wrong',
     });
+  });
+};
+
+// computed that returns appointments for this job
+const jobAppointments = computed(() => {
+  return appointments.value.filter((appointment) => {
+    return appointment.job.id === jobAd.value.id;
+  });
+});
+
+// method that returns the quiz score for a candidate, find response by candidate id
+const getQuizScore = (candidateId) => {
+  const response = quiz.value.reponses.find((response) => {
+    return response.userId === candidateId;
+  });
+  return response ? response.score : 'Not taken';
+};
+
+// method that returns the quiz tentative for a candidate, find response by candidate id
+const getQuizTentative = (candidateId) => {
+  const response = quiz.value.reponses.find((response) => {
+    return response.userId === candidateId;
+  });
+  return response ? response.tentative : 'Not taken';
+};
+
+// method that check if candidate id is in job appointments candidate id
+const isCandidateInAppointments = (candidateId) => {
+  return jobAppointments.value.some((appointment) => {
+    return appointment.candidate.id === candidateId;
   });
 };
 </script>
