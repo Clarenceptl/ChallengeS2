@@ -27,6 +27,8 @@ export const useUserStore = defineStore('userStore', () => {
       const res = await UserService.getSelfUser()
       if (res?.success) {
         Object.assign(contextUser.user, res.data)
+      } else {
+        clearTokens()
       }
       return true
     }
