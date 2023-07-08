@@ -31,10 +31,8 @@
             <v-card-title>{{ job?.title }}</v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                <v-list-item-content>
                   <v-list-item-title>{{ job.company?.name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ job.company?.address }}</v-list-item-subtitle>
-                </v-list-item-content>
               </v-list-item>
               <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
@@ -56,10 +54,8 @@
             </v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                <v-list-item-content>
                   <v-list-item-title>{{ selectedJob?.company?.name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ selectedJob?.company?.address }}</v-list-item-subtitle>
-                </v-list-item-content>
               </v-list-item>
               <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
@@ -108,17 +104,12 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useJobAdsStore } from '../stores/job-ads.store'
 import { useToastStore } from '@/stores'
-import { useUserStore } from '@/stores'
 
 let search = ref('');
 
-const userStore = useUserStore()
-onMounted(() => {
-  userStore.loadContextUser()
-})
 const stores = {
   toast: useToastStore()
 }
