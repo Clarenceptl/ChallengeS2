@@ -8,7 +8,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
 
-        <v-simple-table dense>
+        <v-table dense>
           <template v-slot:default>
             <thead>
               <tr>
@@ -37,7 +37,7 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
+        </v-table>
       </v-card>
       <v-card v-else class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>

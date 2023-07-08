@@ -78,12 +78,14 @@ export class UsersService {
   public async getMyJobs(tokenUser: any) {
     let res: JobAds[];
     try {
+      console.log(tokenUser.company.id);
       const userCompany = tokenUser?.company?.id;
       const jobAds = await this.jobAdsRepository.find({
         where: { company: userCompany },
         relations: ['candidates'],
         order: { created_at: 'DESC' }
       });
+      console.log(jobAds);
       res = jobAds;
     } catch (error) {
       throw new RpcException({

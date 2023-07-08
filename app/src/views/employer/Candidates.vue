@@ -8,7 +8,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
 
-        <v-simple-table dense>
+        <v-table dense>
           <template v-slot:default>
             <thead>
               <tr>
@@ -16,7 +16,7 @@
                 <th class="px-4">Lastname</th>
                 <th class="px-4">Email</th>
                 <th class="px-4">Birthdate</th>
-                <th class="px-4">Actions</th>
+                <th class="px-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -36,7 +36,7 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
+        </v-table>
       </v-card>
       <v-card v-else class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>

@@ -45,6 +45,8 @@ export class AuthService {
       this.client.send({ cmd: SERVICE_CMD.GET_USER_BY_EMAIL }, data.email)
     );
 
+    console.log(user);
+
     if (!user) {
       throw new RpcException({
         statusCode: 400,
@@ -87,7 +89,17 @@ export class AuthService {
 
     const response = {
       refreshToken,
-      token
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        birthdate: user.birthdate,
+        roles: user.roles,
+        company: user.company,
+        candidatures: user.candidatures
+      }
     };
 
     return { success: true, data: response };

@@ -3,10 +3,6 @@
     <v-row>
       <v-col cols="5">
         <div class="catch-phrase">Find a job that matches your passion</div>
-        <!-- <div class="small-text mb-16">
-          Hand-picked opportunities to work from home, remotely, freelance, full-time, part-time,
-          contract and internships.
-        </div> -->
         <div class="smaller-text mt-16">
           Supercharge your career with our job search website! Connect with top companies and access
           exclusive opportunities tailored just for you. From entry-level to executive positions,
@@ -19,13 +15,9 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useUserStore } from '@/stores'
+import { useUsersStore } from '../stores/users.store'
 
-const userStore = useUserStore()
-onMounted(async () => {
-  await userStore.loadContextUser()
-})
+await useUsersStore().getSelfUser()
 </script>
 
 <style scoped>
