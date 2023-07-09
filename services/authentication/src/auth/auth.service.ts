@@ -4,7 +4,7 @@ import { SERVICE_NAME, SERVICE_CMD } from '../enum';
 import { lastValueFrom } from 'rxjs';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginRequest, CreatedUserRequest } from './auth.dto';
+import { LoginRequest, CreatedUserRequest, ResetPassword } from './auth.dto';
 import { checkDate, formatDate } from 'src/helpers';
 import { User } from './auth.dto';
 import { SuccessResponse } from 'src/global';
@@ -165,6 +165,32 @@ export class AuthService {
       success: true,
       data: {
         message: 'Email sent'
+      }
+    };
+  }
+
+  async resetPassword(data: ResetPassword): Promise<SuccessResponse> {
+    const { token, password, confirmPassword } = data;
+    if (password !== confirmPassword) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Password and confirm password must be equal'
+      });
+    }
+    try {
+      await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.RESET_PASSWORD },
+          { token, password }
+        )
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
+    return {
+      success: true,
+      data: {
+        message: 'Password updated'
       }
     };
   }

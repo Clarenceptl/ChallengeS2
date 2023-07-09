@@ -1,6 +1,6 @@
 import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreatedUserRequest, LoginRequest } from './auth.dto';
+import { CreatedUserRequest, LoginRequest, ResetPassword } from './auth.dto';
 import {
   SERVICE_CMD,
   SERVICE_NAME,
@@ -74,6 +74,18 @@ export class AuthService {
     try {
       res = await lastValueFrom(
         this.client.send({ cmd: SERVICE_CMD.SEND_EMAIL_RESET_PASSWORD }, email)
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async resetPassword(data: ResetPassword) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.RESET_PASSWORD }, data)
       );
     } catch (error) {
       handleErrors(error);

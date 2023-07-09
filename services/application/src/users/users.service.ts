@@ -5,7 +5,8 @@ import { User, UserRole } from './users.entity';
 import {
   CreatedUserRequest,
   UpdatedUserRequest,
-  SendEmailRequest
+  SendEmailRequest,
+  UpdatePassword
 } from './users.dto';
 import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -138,6 +139,21 @@ export class UsersService {
 
   public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
     return await this.userRepository.update({ id }, updatedUser);
+  }
+
+  public async updateUserByToken(data: UpdatePassword) {
+    const { token, ...updatedUser } = data;
+    try {
+      return await this.userRepository.update(
+        { token },
+        { ...updatedUser, isVerified: true }
+      );
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
   }
 
   public async deleteUser(id: string) {

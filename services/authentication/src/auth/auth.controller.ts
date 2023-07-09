@@ -1,8 +1,8 @@
-import { Body, Controller, ValidationPipe } from '@nestjs/common';
+import { Controller, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { SERVICE_CMD } from '../enum';
-import { CreatedUserRequest, LoginRequest } from './auth.dto';
+import { CreatedUserRequest, LoginRequest, ResetPassword } from './auth.dto';
 import { User } from './auth.dto';
 
 @Controller('auth')
@@ -36,5 +36,13 @@ export class AuthController {
     @Payload(ValidationPipe) data: { user: User; refreshToken: string }
   ) {
     return this.authService.getRefreshToken(data);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.RESET_PASSWORD })
+  public resetPassword(
+    @Payload(ValidationPipe)
+    data: ResetPassword
+  ) {
+    return this.authService.resetPassword(data);
   }
 }

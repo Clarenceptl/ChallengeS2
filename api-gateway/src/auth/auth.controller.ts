@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   HttpCode,
+  Patch,
   Post,
   Put,
   Req,
@@ -11,6 +12,7 @@ import { AuthService } from './auth.service';
 import {
   CreatedUserRequest,
   LoginRequest,
+  ResetPassword,
   SendEmailResetPassword,
   VerifyAccountRequest
 } from './auth.dto';
@@ -80,6 +82,19 @@ export class AuthController {
   ) {
     const { email } = data;
     return this.authService.emailResetPassword(email);
+  }
+
+  @Patch('reset-password')
+  @isPublic()
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    type: SuccessResponse,
+    description: 'The password has been reset.'
+  })
+  @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
+  public resetPassword(@Body(ValidationPipe) data: ResetPassword) {
+    return this.authService.resetPassword(data);
   }
 
   @ApiBearerAuth()

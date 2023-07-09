@@ -98,3 +98,17 @@ export class SendEmailResetPassword {
   })
   email: string;
 }
+
+export class ResetPassword {
+  @IsString()
+  @IsDefined()
+  password: string;
+
+  @IsString()
+  @IsDefined()
+  confirmPassword: string;
+
+  @IsString()
+  @IsDefined()
+  token: string;
+}

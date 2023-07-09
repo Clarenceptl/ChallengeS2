@@ -44,7 +44,8 @@ export enum SERVICE_CMD {
   DELETE_QUESTION = 'delete-questions',
   ADD_USER_ANSWERS = 'add-user-answers',
   GET_QUIZ = 'get-quiz',
-  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password'
+  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password',
+  RESET_PASSWORD = 'reset-password'
 }
 
 export enum SERVICE_NAME {

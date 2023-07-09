@@ -6,7 +6,8 @@ export enum SERVICE_CMD {
   VERIFY_ACCOUNT = 'auth_verify_account',
   GET_REFRESH_TOKEN = 'get-refresh-token',
   UPDATE_TOKEN_USER = 'update-token-user',
-  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password'
+  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password',
+  RESET_PASSWORD = 'reset-password'
 }
 
 export enum SERVICE_NAME {
