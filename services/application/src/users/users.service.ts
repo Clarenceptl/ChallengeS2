@@ -14,6 +14,7 @@ import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
 import { Company } from 'src/company/company.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
+import e from 'express';
 
 @Injectable()
 export class UsersService {
@@ -123,8 +124,35 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email });
   }
 
-  public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
-    return await this.userRepository.update({ id }, updatedUser);
+  public async updateUser(
+    id: string,
+    updatedUser: UpdatedUserRequest,
+    tokenUser: any
+  ) {
+    let res: User;
+    try {
+      let userToUpdate: User = await this.userRepository.findOneBy({ id });
+      if (!userToUpdate) {
+        throw new RpcException({
+          statusCode: 404,
+          message: 'User not found'
+        } as ErrorModel);
+      }
+      if (tokenUser.id !== id) {
+        throw new RpcException({
+          statusCode: 401,
+          message: 'Unauthorized'
+        } as ErrorModel);
+      }
+      userToUpdate = Object.assign(userToUpdate, updatedUser);
+      res = await this.userRepository.save(userToUpdate);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: error.message
+      } as ErrorModel);
+    }
+    return { success: true, data: res };
   }
 
   public async deleteUser(id: string) {

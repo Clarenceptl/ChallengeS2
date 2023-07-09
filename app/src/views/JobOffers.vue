@@ -20,7 +20,7 @@
     </v-card>
     <div v-else-if="filteredJobAds.length">
       <v-row>
-        <v-col cols="4" class="column-scrollable">
+        <v-col cols="12" md="4" class="column-scrollable">
           <v-card
             variant="outlined"
             class="mb-2 bg-green-200"

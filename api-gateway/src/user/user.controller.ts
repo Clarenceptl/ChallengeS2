@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Req
 } from '@nestjs/common';
@@ -51,4 +53,20 @@ export class UserController {
     return this.userService.getUser(uuid);
   }
 
+  @Patch(':uuid')
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    type: SuccessResponse,
+    description: 'Update user data'
+  })
+  @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
+  public updateUser(
+    @Param('uuid', ParseUUIDPipe) uuid: string,
+    @Req() req: any,
+    @Body() payload: any
+  ) {
+    const tokenUser = req?.user ?? null;
+    return this.userService.updateUser(uuid, payload, tokenUser);
+  }
 }

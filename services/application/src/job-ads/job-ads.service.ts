@@ -172,7 +172,6 @@ export class JobAdsService {
   public async applyJobAds(id: string, user: User): Promise<SuccessResponse> {
     let res: JobAds;
     if (user.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
-      console.log('user 1', user);
       throw new RpcException({
         success: false,
         statusCode: 403,

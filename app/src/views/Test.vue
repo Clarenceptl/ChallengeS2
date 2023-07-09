@@ -30,12 +30,12 @@ import { storeToRefs } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { useToastStore } from '@/stores'
 
-let timer = ref(null);
-
 const route = useRoute();
 const router = useRouter();
 await useQuizStore().getQuizByJobId(route.params.id);
 const { quiz } = storeToRefs(useQuizStore());
+
+let timer = ref(quiz.tempsParQuestionSecond * quiz.questions?.length);
 
 watch(() => quiz.value, (quiz) => {
   if (quiz) {

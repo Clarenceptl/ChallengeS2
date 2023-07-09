@@ -23,8 +23,8 @@ export class AppointmentController {
   @MessagePattern({ cmd: SERVICE_CMD.ACCEPT_APPOINTMENT })
   @Roles(UserRole.ROLE_USER)
   public async acceptAppointment(@Payload(ValidationPipe) payload) {
-    const { id, accepted, tokenUser } = payload;
-    return this.appointmentService.acceptAppointment(id, accepted, tokenUser);
+    const { id, data, tokenUser } = payload;
+    return this.appointmentService.acceptAppointment(id, data, tokenUser);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_APPOINTMENT_BY_ID })

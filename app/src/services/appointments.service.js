@@ -1,5 +1,4 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
-const authToken = localStorage.getItem('bearer-token') ?? ''
 export class AppointmentsService {
   static async getAppointments() {
     try {
@@ -7,7 +6,7 @@ export class AppointmentsService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         }
       })
       return await response.json()
@@ -22,7 +21,7 @@ export class AppointmentsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify(appointment)
       })
@@ -33,15 +32,15 @@ export class AppointmentsService {
     }
   }
 
-  static async acceptAppointment(appointmentId, boolean) {
+  static async acceptAppointment(appointmentId, appointment) {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/appointments/${appointmentId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
-        body: JSON.stringify({ accepted: boolean })
+        body: JSON.stringify(appointment)
       })
       return await response.json()
     } catch (error) {

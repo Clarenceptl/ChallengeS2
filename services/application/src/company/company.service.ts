@@ -69,7 +69,7 @@ export class CompanyService {
   public async updateCompany(
     payload: UpdateCompanyDto
   ): Promise<SuccessResponse> {
-    const { id, data, tokenUser } = payload;
+    const { id, company, tokenUser } = payload;
     if (tokenUser.company.id !== parseInt(id)) {
       throw new RpcException({
         statusCode: 403,
@@ -78,7 +78,7 @@ export class CompanyService {
     }
 
     try {
-      await this.companyRepository.update({ id: parseInt(id) }, data);
+      await this.companyRepository.update({ id: parseInt(id) }, company);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

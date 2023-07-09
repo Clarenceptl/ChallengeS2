@@ -50,7 +50,7 @@ export class AppointmentController {
   @HttpCode(200)
   public acceptAppointment(
     @Param('id') id: string,
-    @Body() data: AcceptAppointmentRequest,
+    @Body() data: any,
     @Req() req: any
   ) {
     const tokenUser = req?.user ?? null;

@@ -63,8 +63,6 @@ export class JobAdsController {
   @Post('apply/:id')
   @HttpCode(200)
   public applyJobAds(@Param('id') id: string, @Req() req: any) {
-    console.log('cancelApplyJobAds');
-    console.log(req.user);
     const tokenUser = req?.user ?? null;
     return this.jobAdsService.applyJobAds(id, tokenUser);
   }

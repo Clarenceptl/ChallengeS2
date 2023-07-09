@@ -125,7 +125,7 @@ export class UpdateCompanyDto {
   @IsString()
   id: string;
   @IsNotEmpty()
-  data: UpdateCompany;
+  company: UpdateCompany;
   @IsNotEmpty()
   tokenUser: User;
 }

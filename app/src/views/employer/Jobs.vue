@@ -7,7 +7,7 @@
 
     <div v-if="myJobs.length">
       <v-row>
-        <v-col cols="4" class="column-scrollable">
+        <v-col cols="12" md="4" class="column-scrollable">
           <v-card
             variant="outlined"
             class="mb-2 bg-green-200"
@@ -510,7 +510,7 @@ const stores = {
 const { quiz } = storeToRefs(useQuizStore());
 
 const router = useRouter();
-
+await useQuizStore().getQuizByJobId(selectedJob.value?.id);
 watch(() => selectedJob.value?.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
 });
