@@ -11,7 +11,7 @@ import { SERVICE_NAME } from 'src/global';
         name: SERVICE_NAME.APP,
         transport: Transport.TCP,
         options: {
-          host: process.env.APP_SERVICE_HOST ?? 'application-service',
+          host: process.env.APP_SERVICE_HOST ?? 'app-service',
           port: parseInt(process.env.APP_SERVICE_PORT) ?? 3021
         }
       }

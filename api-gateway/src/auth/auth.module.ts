@@ -11,7 +11,7 @@ import { SERVICE_NAME } from 'src/global';
         name: SERVICE_NAME.AUTH,
         transport: Transport.TCP,
         options: {
-          host: process.env.AUTH_SERVICE_HOST ?? 'authentication-service',
+          host: process.env.AUTH_SERVICE_HOST ?? 'auth-service',
           port: parseInt(process.env.AUTH_SERVICE_PORT) ?? 3022
         }
       }
