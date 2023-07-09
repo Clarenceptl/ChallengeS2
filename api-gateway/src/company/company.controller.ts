@@ -4,17 +4,21 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Req,
   ValidationPipe
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { CreateCompanyRequest } from './company.dto';
+import { CreateCompanyRequest, UpdateCompanyRequest } from './company.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'companies',
   version: '1'
 })
+@ApiTags('companies')
+@ApiBearerAuth()
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
@@ -38,5 +42,16 @@ export class CompanyController {
   ) {
     const user = req?.user ?? null;
     return this.companyService.createCompany(data, user);
+  }
+
+  @Patch(':id')
+  @HttpCode(201)
+  public updateCompany(
+    @Body(ValidationPipe) data: UpdateCompanyRequest,
+    @Req() req: any,
+    @Param('id') id: string
+  ) {
+    const user = req?.user ?? null;
+    return this.companyService.updateCompany(data, user, id);
   }
 }
