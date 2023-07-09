@@ -4,7 +4,7 @@ import { Company } from './company.entity';
 import { SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateCompanyRequest } from './company.dto';
+import { CreateCompany, UpdateCompanyDto } from './company.dto';
 import { User, UserRole } from 'src/users/users.entity';
 import { encryptPassword } from 'src/helpers';
 import { CompanySizeOptions } from 'src/company-size-options/company-size-option.entity';
@@ -28,7 +28,7 @@ export class CompanyService {
   ) {}
 
   public async createCompany(
-    company: CreateCompanyRequest,
+    company: CreateCompany,
     user: User
   ): Promise<SuccessResponse> {
     const isEmployer: boolean = user.roles.includes(UserRole.ROLE_EMPLOYEUR);
@@ -64,6 +64,31 @@ export class CompanyService {
         data: res
       };
     }
+  }
+
+  public async updateCompany(
+    payload: UpdateCompanyDto
+  ): Promise<SuccessResponse> {
+    const { id, data, tokenUser } = payload;
+    if (tokenUser.company.id !== parseInt(id)) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'You are not allowed to update this company'
+      });
+    }
+
+    try {
+      await this.companyRepository.update({ id: parseInt(id) }, data);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: 'Company updated successfully'
+    };
   }
 
   public async getCompanyById(id: string): Promise<SuccessResponse> {

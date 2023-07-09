@@ -25,6 +25,7 @@ export enum SERVICE_CMD {
   GET_COMPANIES = 'get-companies',
   GET_COMPANY = 'get-company',
   CREATE_COMPANY = 'create-company',
+  UPDATE_COMPANY = 'update-company',
   GET_JOB_ADS = 'get-job-ads',
   GET_JOB_ADS_BY_ID = 'get-job-ads-by-id',
   CREATE_JOB_ADS = 'create-job-ads',
