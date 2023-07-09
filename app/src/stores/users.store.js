@@ -29,11 +29,12 @@ export const useUsersStore = defineStore('usersStore', {
       const res = await UsersService.getSelfUser()
       if (res?.success) {
         this.me = res.data
+        return res.data
       } else {
         this.me = {}
         clearTokens()
+        return {}
       }
-      return res
     },
     async register(user) {
       const body = { ...user, birthdate: formatDateToApi(user.birthdate) }
@@ -54,6 +55,11 @@ export const useUsersStore = defineStore('usersStore', {
     },
     async verifyEmail(token) {
       return await AuthService.verifyEmail({ token })
+    },
+    async loadData() {
+      if (!this.me?.id) {
+        await this.getSelfUser()
+      }
     }
   },
   getters: {

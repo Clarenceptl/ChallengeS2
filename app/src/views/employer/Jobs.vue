@@ -511,6 +511,13 @@ const { quiz } = storeToRefs(useQuizStore());
 
 const router = useRouter();
 
+watch(() => selectedJob.value?.id, async () => {
+  await useQuizStore().getQuizByJobId(selectedJob.value.id);
+});
+watch(myJobs, () => {
+  selectedJob.value = myJobs.value[0] ?? null;
+});
+
 let createMcqQuestionDialog = ref(false);
 let deleteJobDialog = ref(false);
 let editJobDialog = ref(false);

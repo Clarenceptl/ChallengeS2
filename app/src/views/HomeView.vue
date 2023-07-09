@@ -14,11 +14,7 @@
   </div>
 </template>
 
-<script setup>
-import { useUsersStore } from '../stores/users.store'
-
-await useUsersStore().getSelfUser()
-</script>
+<script setup></script>
 
 <style scoped>
 .div-background {
