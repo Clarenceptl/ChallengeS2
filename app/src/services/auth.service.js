@@ -65,4 +65,20 @@ export class AuthService {
       return error.response
     }
   }
+
+  static async sendEmailResetPassword(email) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/auth/send-email-reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }
