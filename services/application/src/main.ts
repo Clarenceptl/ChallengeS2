@@ -11,8 +11,8 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: 'app-service',
-        port: 3021
+        host: process.env.APP_SERVICE_HOST ?? 'application-service',
+        port: parseInt(process.env.APP_SERVICE_PORT) ?? 3021
       }
     }
   );

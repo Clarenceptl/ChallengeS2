@@ -9,8 +9,8 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: 'quiz-service',
-        port: 3028
+        host: process.env.QUIZ_SERVICE_HOST ?? 'quiz-service',
+        port: process.env.QUIZ_SERVICE_PORT
       }
     }
   );
