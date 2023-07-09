@@ -5,22 +5,20 @@ import { User, UserRole } from './users.entity';
 import {
   CreatedUserRequest,
   UpdatedUserRequest,
-  SendEmailRequest
+  SendEmailRequest,
+  UpdatePassword
 } from './users.dto';
 import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
-import { Company } from 'src/company/company.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
 
 @Injectable()
 export class UsersService {
   public constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Company)
-    private readonly companyRepository: Repository<Company>,
     @InjectRepository(JobAds)
     private readonly jobAdsRepository: Repository<JobAds>,
     @Inject(SERVICE_NAME.MAILING) private readonly mailingService: ClientProxy
@@ -53,6 +51,22 @@ export class UsersService {
     );
 
     return { success: true, message: 'User created' };
+  }
+
+  public async updateTokenUser(email: string) {
+    // generate token
+    const token = createRandToken();
+    const user = await this.userRepository.findOneBy({ email });
+    if (!user) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    user.token = token;
+    await this.userRepository.save(user);
+
+    return { success: true, data: user };
   }
 
   public async verifyUser(token: string) {
@@ -125,6 +139,29 @@ export class UsersService {
 
   public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
     return await this.userRepository.update({ id }, updatedUser);
+  }
+
+  public async updateUserByToken(data: UpdatePassword) {
+    const { token, ...updatedUser } = data;
+    let res;
+    try {
+      res = await this.userRepository.update(
+        { token },
+        { ...updatedUser, isVerified: true }
+      );
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    if (res.affected === 0) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    return res;
   }
 
   public async deleteUser(id: string) {

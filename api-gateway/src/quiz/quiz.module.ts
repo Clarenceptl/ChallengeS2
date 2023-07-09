@@ -11,8 +11,8 @@ import { SERVICE_NAME } from 'src/global';
         name: SERVICE_NAME.QUIZ,
         transport: Transport.TCP,
         options: {
-          host: 'quiz-service',
-          port: 3028
+          host: process.env.QUIZ_SERVICE_HOST ?? 'quiz-service',
+          port: parseInt(process.env.QUIZ_SERVICE_PORT) ?? 3028
         }
       }
     ])

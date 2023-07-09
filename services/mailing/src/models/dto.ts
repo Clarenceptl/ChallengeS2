@@ -3,3 +3,5 @@ export interface RegisterMailRequest {
   token: string;
   firstname: string;
 }
+
+export interface ResetPasswordMailRequest extends RegisterMailRequest { }

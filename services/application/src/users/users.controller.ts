@@ -6,7 +6,11 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreatedUserRequest, UpdatedUserRequest } from './users.dto';
+import {
+  CreatedUserRequest,
+  UpdatePassword,
+  UpdatedUserRequest
+} from './users.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
 import { Roles, SERVICE_CMD } from '../global';
@@ -52,11 +56,23 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
+  @HashPassword()
   public updateUser(
     @Param('user', ParseUUIDPipe) user: string,
     @Payload(ValidationPipe) payload: UpdatedUserRequest
   ) {
     return this.usersService.updateUser(user, payload);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.RESET_PASSWORD })
+  @HashPassword()
+  public resetPassword(@Payload(ValidationPipe) payload: UpdatePassword) {
+    return this.usersService.updateUserByToken(payload);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER })
+  public updateTokenUser(@Payload(ValidationPipe) email: string) {
+    return this.usersService.updateTokenUser(email);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })

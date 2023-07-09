@@ -62,7 +62,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="red-500" text @click="forgotPassword = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Send</v-btn>
+          <v-btn color="blue-800" text @click="sendEmail">Send</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -76,6 +76,7 @@ import { useForm, useField } from 'vee-validate'
 import { loginSchema } from '@/models'
 import { useRouter } from 'vue-router'
 import { useUsersStore } from '../../stores/users.store'
+import { AuthService } from '@/services'
 
 const router = useRouter()
 const stores = {
@@ -96,6 +97,22 @@ const { errorBag, handleSubmit, resetForm } = useForm({
 const user = {
   email: useField('email'),
   password: useField('password')
+}
+
+const sendEmail = async () => {
+  const res = await AuthService.sendEmailResetPassword(user.email.value.value)
+  if (res.success) {
+    stores.toast.createToast({
+      message: res.data.message,
+      type: 'success'
+    })
+    forgotPassword.value = false
+  } else {
+    stores.toast.createToast({
+      message: res.message,
+      type: 'error'
+    })
+  }
 }
 
 const submit = handleSubmit(async (values) => {
