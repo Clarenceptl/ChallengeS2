@@ -257,9 +257,6 @@ const formatedBirthdate = computed(() => {
   return '';
 });
 
-watch(() => birthdate.value, () => {
-  console.log('birthdate changed');
-});
 let user = ref({
   newPassword: '',
   confirmPassword: '',
