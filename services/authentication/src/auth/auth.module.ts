@@ -14,6 +14,14 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           host: 'app-service',
           port: 3021
         }
+      },
+      {
+        name: SERVICE_NAME.MAIL,
+        transport: Transport.TCP,
+        options: {
+          host: 'mailing-service',
+          port: 3024
+        }
       }
     ])
   ],

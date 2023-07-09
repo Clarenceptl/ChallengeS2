@@ -59,6 +59,11 @@ export class UsersController {
     return this.usersService.updateUser(user, payload);
   }
 
+  @MessagePattern({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER })
+  public updateTokenUser(@Payload(ValidationPipe) email: string) {
+    return this.usersService.updateTokenUser(email);
+  }
+
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })
   public async deleteUser(@Body(ValidationPipe) uuid: string) {
     return this.usersService.deleteUser(uuid);

@@ -7,12 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginRequest, CreatedUserRequest } from './auth.dto';
 import { checkDate, formatDate } from 'src/helpers';
 import { User } from './auth.dto';
+import { SuccessResponse } from 'src/global';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
+    @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy,
+    @Inject(SERVICE_NAME.MAIL) private readonly clientMail: ClientProxy
   ) {}
 
   public getRefreshToken(data: { user: User; refreshToken: string }) {
@@ -138,5 +140,34 @@ export class AuthService {
     }
 
     return res;
+  }
+
+  public async sendMailResetPassword(emailSend: string) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER }, emailSend)
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
+
+    if (!res.success) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Email not found'
+      });
+    }
+
+    const { token, email, firstname } = res.data;
+
+    const data = { token, email, firstname };
+    this.clientMail.emit(SERVICE_CMD.SEND_EMAIL_RESET_PASSWORD, data);
+    return {
+      success: true,
+      data: {
+        message: 'Email sent'
+      }
+    };
   }
 }

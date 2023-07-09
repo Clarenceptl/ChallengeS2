@@ -87,3 +87,14 @@ export class VerifyAccountRequest {
   })
   token: string;
 }
+
+export class SendEmailResetPassword {
+  @IsString()
+  @IsDefined()
+  @ApiProperty({
+    description: 'Email of the user',
+    type: String,
+    required: true
+  })
+  email: string;
+}

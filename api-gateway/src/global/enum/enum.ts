@@ -42,7 +42,8 @@ export enum SERVICE_CMD {
   ADD_QUESTIONS_ANSWERS = 'add-questions-answers',
   DELETE_QUESTION = 'delete-questions',
   ADD_USER_ANSWERS = 'add-user-answers',
-  GET_QUIZ = 'get-quiz'
+  GET_QUIZ = 'get-quiz',
+  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password'
 }
 
 export enum SERVICE_NAME {

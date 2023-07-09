@@ -68,4 +68,16 @@ export class AuthService {
     }
     return res;
   }
+
+  public async emailResetPassword(email: string) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.SEND_EMAIL_RESET_PASSWORD }, email)
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
 }
