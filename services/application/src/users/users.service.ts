@@ -143,8 +143,9 @@ export class UsersService {
 
   public async updateUserByToken(data: UpdatePassword) {
     const { token, ...updatedUser } = data;
+    let res;
     try {
-      return await this.userRepository.update(
+      res = await this.userRepository.update(
         { token },
         { ...updatedUser, isVerified: true }
       );
@@ -154,6 +155,13 @@ export class UsersService {
         message: 'User not found'
       } as ErrorModel);
     }
+    if (res.affected === 0) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    return res;
   }
 
   public async deleteUser(id: string) {

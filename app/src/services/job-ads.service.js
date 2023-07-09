@@ -43,7 +43,7 @@ export class JobAdsService {
         },
         body: JSON.stringify({
           ...jobAd,
-          salary: parseInt(jobAd.salary),
+          salary: parseInt(jobAd.salary)
         })
       })
       return await response.json()
@@ -63,7 +63,7 @@ export class JobAdsService {
         },
         body: JSON.stringify({
           ...jobAd,
-          salary: parseInt(jobAd.salary),
+          salary: parseInt(jobAd.salary)
         })
       })
       return await response.json()
