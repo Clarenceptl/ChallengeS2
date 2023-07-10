@@ -1,5 +1,4 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
-const authToken = localStorage.getItem('bearer-token') ?? ''
 export class CompaniesService {
   static async getCompanies() {
     try {
@@ -7,7 +6,7 @@ export class CompaniesService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         }
       })
       return await response.json()
@@ -22,7 +21,7 @@ export class CompaniesService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify(company)
       })
@@ -33,16 +32,15 @@ export class CompaniesService {
     }
   }
 
-  static async updateCompany(company) {
-    const { id, ...data } = company
+  static async updateCompany(id, company) {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/companies/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(company)
       })
       return await response.json()
     } catch (error) {

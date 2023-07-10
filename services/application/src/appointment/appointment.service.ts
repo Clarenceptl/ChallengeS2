@@ -200,7 +200,7 @@ export class AppointmentService {
 
   public async acceptAppointment(
     id: string,
-    accepted: boolean,
+    data: any,
     tokenUser: User
   ): Promise<SuccessResponse> {
     let res: Appointment;
@@ -214,13 +214,7 @@ export class AppointmentService {
           message: 'Appointment not found'
         });
       }
-      if (tokenUser.id !== appointment.candidate.id) {
-        throw new RpcException({
-          statusCode: 403,
-          message: 'Forbidden'
-        });
-      }
-      appointment.accepted = accepted;
+      Object.assign(appointment, data);
       res = await this.appointmentRepository.save(appointment);
     } catch (error) {
       throw new RpcException({

@@ -1,5 +1,4 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
-const authToken = localStorage.getItem('bearer-token') ?? ''
 export class AuthService {
   static async registerUser(user) {
     try {
@@ -55,7 +54,7 @@ export class AuthService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({ refreshToken })
       })

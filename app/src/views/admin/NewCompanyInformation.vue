@@ -1,12 +1,12 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="6" class="text-center justify-content-center d-none d-md-flex">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo"/>
     </v-col>
     <v-col>
       <h1 class="mt-16 mb-10 text-center">Create company informations</h1>
       <v-row>
-        <v-col cols="8">
+        <v-col cols="12" md="8">
           <v-text-field
             clearable
             type="text"
@@ -16,7 +16,7 @@
             v-model="companyRevenue"
           />
         </v-col>
-        <v-col cols="3">
+        <v-col cols="12" md="3">
           <v-btn
             class="w-100"
             color="appgrey"
@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="8">
+        <v-col cols="12" md="8">
           <v-text-field
             clearable
             type="text"
@@ -37,7 +37,7 @@
             v-model="companySector"
           />
         </v-col>
-        <v-col cols="3">
+        <v-col cols="12" md="3">
           <v-btn
             class="w-100"
             color="appgrey"
@@ -48,7 +48,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="8">
+        <v-col cols="12" md="8">
           <v-text-field
             clearable
             type="text"
@@ -58,7 +58,7 @@
             v-model="companySize"
           />
         </v-col>
-        <v-col cols="3">
+        <v-col cols="12" md="3">
           <v-btn
             class="w-100"
             color="appgrey"

@@ -1,9 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="6" class="text-center justify-content-center d-none d-md-flex">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
+    <v-col cols="12" md="6">
       <h1 class="mt-16 mb-10">Create Your Company</h1>
       <div class="form-width">
         <v-form>
@@ -220,17 +220,5 @@ const createCompany = async (e) => {
   background-position: center;
   width: 100%;
   height: 100vh;
-}
-
-@media (min-width: 768px) {
-}
-
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
-  }
 }
 </style>

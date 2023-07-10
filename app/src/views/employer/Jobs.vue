@@ -7,7 +7,7 @@
 
     <div v-if="myJobs.length">
       <v-row>
-        <v-col cols="4" class="column-scrollable">
+        <v-col cols="12" md="4" class="column-scrollable">
           <v-card
             variant="outlined"
             class="mb-2 bg-green-200"
@@ -243,7 +243,7 @@
           <v-btn
             color="blue-800"
             text
-            @click="createMcq"
+            @click="createMcq(); createMcqDialog = false"
           >
             Yes
           </v-btn>
@@ -497,24 +497,20 @@ import { useRouter } from 'vue-router';
 import { useUsersStore } from '../../stores/users.store'
 
 const { me } = storeToRefs(useUsersStore())
+await useUsersStore().getSelfUser();
 
 await useJobAdsStore().getMyJobs();
 const { myJobs } = storeToRefs(useJobAdsStore());
 let selectedJob = ref(myJobs.value[0]);
-// onMounted(() => {
-//   selectedJob.value = myJobs.value[0];
-// });
+
 const stores = {
   toast: useToastStore()
-}
-if (selectedJob.value?.id) {
-  await useQuizStore().getQuizByJobId(selectedJob.value?.id);
 }
 
 const { quiz } = storeToRefs(useQuizStore());
 
 const router = useRouter();
-
+await useQuizStore().getQuizByJobId(selectedJob.value?.id);
 watch(() => selectedJob.value?.id, async () => {
   await useQuizStore().getQuizByJobId(selectedJob.value.id);
 });
@@ -601,6 +597,14 @@ const createJob = () => {
     createJobDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
+    newJob.value = {
+      title: '',
+      description: '',
+      city: '',
+      country: '',
+      contractType: '',
+      salary: null
+    };
   }).catch(() => {
     stores.toast.createToast({
       type: 'error',
@@ -617,7 +621,11 @@ const createMcq = async () => {
     });
     return;
   }
-  useQuizStore().createQuiz(newMcq.value).then(async (res) => {
+  const formatedMcq = {
+    ...newMcq.value,
+    idJobAds: selectedJob.value?.id.toString()
+  };
+  useQuizStore().createQuiz(formatedMcq).then(async (res) => {
     if (res.statusCode === 400) {
       stores.toast.createToast({
         type: 'error',

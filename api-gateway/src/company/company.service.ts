@@ -62,7 +62,7 @@ export class CompanyService {
         this.client.send(
           { cmd: SERVICE_CMD.UPDATE_COMPANY },
           {
-            data,
+            company: data,
             tokenUser: user,
             id
           }

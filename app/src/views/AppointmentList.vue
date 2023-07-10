@@ -109,7 +109,9 @@ const declineDialog = ref(false)
 const respondToAppointment = async (accepted) => {
   try {
     useAppointmentsStore()
-      .acceptAppointment(selectedAppointmentId.value, accepted)
+      .acceptAppointment(selectedAppointmentId.value, {
+        accepted: accepted
+      })
       .then(async () => {
         acceptDialog.value = false
         await useAppointmentsStore().getAppointments()

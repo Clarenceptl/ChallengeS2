@@ -63,6 +63,7 @@ import { useUsersStore } from '../stores/users.store'
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
+await useUsersStore().getSelfUser()
 const { me } = storeToRefs(useUsersStore())
 const router = useRouter()
 

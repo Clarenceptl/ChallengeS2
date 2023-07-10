@@ -68,7 +68,7 @@ export class AppointmentService {
       res = await lastValueFrom(
         this.client.send(
           { cmd: SERVICE_CMD.ACCEPT_APPOINTMENT },
-          { id, accepted: data.accepted, tokenUser }
+          { id, data, tokenUser }
         )
       );
     } catch (error) {

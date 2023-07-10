@@ -4,6 +4,7 @@ export enum SERVICE_CMD {
   VERIFY_ACCOUNT = 'auth_verify_account',
   GET_USER = 'get-user',
   GET_USERS = 'get-users',
+  UPDATE_USER = 'update-user',
   GET_MY_JOBS = 'get-my-jobs',
   GET_SELF_USER = 'get-self-user',
   GET_REFRESH_TOKEN = 'get-refresh-token',

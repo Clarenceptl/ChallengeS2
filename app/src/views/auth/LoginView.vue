@@ -1,9 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="6" class="text-center justify-content-center d-none d-md-flex">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
+    <v-col cols="12" md="6">
       <h1 class="mt-16">Login</h1>
       <div class="mb-10">
         Don't have an account ? <router-link to="/register">Create new account</router-link>
@@ -143,12 +143,9 @@ const submit = handleSubmit(async (values) => {
   height: 100vh;
 }
 
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
+@media (max-width: 425px) {
+  .col-bg-image {
+    background-image: none;
   }
 }
 </style>

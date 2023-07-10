@@ -56,12 +56,9 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
-  @HashPassword()
-  public updateUser(
-    @Param('user', ParseUUIDPipe) user: string,
-    @Payload(ValidationPipe) payload: UpdatedUserRequest
-  ) {
-    return this.usersService.updateUser(user, payload);
+  public updateUser(@Payload(ValidationPipe) payload: any) {
+    const { id, data, tokenUser } = payload;
+    return this.usersService.updateUser(id, data, tokenUser);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.RESET_PASSWORD })

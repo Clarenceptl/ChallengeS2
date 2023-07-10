@@ -30,11 +30,16 @@ export const useUsersStore = defineStore('usersStore', {
       if (res?.success) {
         this.me = res.data
         return res.data
-      } else {
-        this.me = {}
-        clearTokens()
-        return {}
       }
+      return res.data
+    },
+    async updateUser(id, data) {
+      const res = await UsersService.updateUser(id, data)
+      if (res?.success) {
+        this.me = res.data
+        await UsersService.getSelfUser()
+      }
+      return res
     },
     async register(user) {
       const body = { ...user, birthdate: formatDateToApi(user.birthdate) }
