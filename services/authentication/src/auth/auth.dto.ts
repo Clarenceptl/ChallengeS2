@@ -67,3 +67,19 @@ export class LoginRequest {
   @IsDefined()
   password: string;
 }
+
+export class ResetPassword {
+  @IsString()
+  @IsDefined()
+  token: string;
+
+  @IsString()
+  @IsDefined()
+  @IsStrongPassword()
+  password: string;
+
+  @IsString()
+  @IsDefined()
+  @IsStrongPassword()
+  confirmPassword: string;
+}

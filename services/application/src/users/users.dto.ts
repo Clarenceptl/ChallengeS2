@@ -58,6 +58,17 @@ export class UpdatedUserRequest {
   confirmPassword: string;
 }
 
+export class UpdatePassword {
+  @IsString()
+  @IsDefined()
+  token: string;
+
+  @IsString()
+  @IsDefined()
+  @IsStrongPassword()
+  password: string;
+}
+
 export interface SendEmailRequest {
   email: string;
   token?: string;

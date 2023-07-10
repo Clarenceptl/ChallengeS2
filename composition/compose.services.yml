@@ -16,7 +16,7 @@ services:
     build:
       context: ../services/authentication
       dockerfile: Dockerfile
-    container_name: challenges2_authentication-service
+    container_name: challenges2_auth-service
     env_file:
       - ../.env
     volumes:

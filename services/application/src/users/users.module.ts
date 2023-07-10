@@ -16,8 +16,8 @@ import { Company } from 'src/company/company.entity';
         name: SERVICE_NAME.MAILING,
         transport: Transport.TCP,
         options: {
-          host: 'mailing-service',
-          port: 3024
+          host: process.env.MAILING_SERVICE_HOST ?? 'mailing-service',
+          port: parseInt(process.env.MAILING_SERVICE_PORT) ?? 3024
         }
       }
     ])
