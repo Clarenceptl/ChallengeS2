@@ -14,7 +14,6 @@ import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
 import { JobAds } from 'src/job-ads/job-ads.entity';
-import e from 'express';
 
 @Injectable()
 export class UsersService {
@@ -157,6 +156,9 @@ export class UsersService {
           statusCode: 401,
           message: 'Unauthorized'
         } as ErrorModel);
+      }
+      if (updatedUser.password) {
+        updatedUser.password = encryptPassword(updatedUser.password);
       }
       userToUpdate = Object.assign(userToUpdate, updatedUser);
       res = await this.userRepository.save(userToUpdate);

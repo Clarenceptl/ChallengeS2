@@ -54,9 +54,8 @@ export class UsersController {
   public getUserByEmail(@Payload(ValidationPipe) email: string) {
     return this.usersService.getUserByEmail(email);
   }
-  
+
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
-  @HashPassword()
   public updateUser(@Payload(ValidationPipe) payload: any) {
     const { id, data, tokenUser } = payload;
     return this.usersService.updateUser(id, data, tokenUser);
