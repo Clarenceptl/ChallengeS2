@@ -84,7 +84,6 @@ const sendUserAnswers = async () => {
   });
 };
 
-// computed that shuffles the answers
 const shuffledAnswers = computed(() => {
   return quiz.value.questions?.map((question) => {
     return {
