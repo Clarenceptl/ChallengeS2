@@ -254,7 +254,7 @@
     <v-dialog v-model="createMcqQuestionDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Create Qeustion</h2>
+          <h2>Create Question</h2>
         </v-card-title>
         <v-card-subtitle>
           Are you sure you want to add a question to this Quiz ?
