@@ -674,6 +674,27 @@ const addQuestionToQuiz = () => {
     createMcqQuestionDialog.value = false;
     selectedJob.value = myJobs.value[0];
     jobEdit.value = {...selectedJob.value};
+    newQuestion.value = {
+      label: '',
+      answers: [
+        {
+          id: 1,
+          label: '',
+        },
+        {
+          id: 2,
+          label: '',
+        },
+        {
+          id: 3,
+          label: '',
+        },
+        {
+          id: 4,
+          label: '',
+        },
+      ]
+    };
   }).catch(() => {
     stores.toast.createToast({
       type: 'error',

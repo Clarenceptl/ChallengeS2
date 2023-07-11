@@ -3,7 +3,7 @@
     <h1 class="text-center">{{ quiz.title }}</h1>
     <h2 class="text-center">{{ timer }} seconds</h2>
     <v-window v-model="selected" name="question">
-      <v-card v-for="(question, index) in quiz.questions" :key="index" flat>
+      <v-card v-for="(question, index) in shuffledAnswers" :key="index" flat>
         <v-card-title>
           <h2>{{ question.label }}</h2>
         </v-card-title>
@@ -83,6 +83,16 @@ const sendUserAnswers = async () => {
     });
   });
 };
+
+// computed that shuffles the answers
+const shuffledAnswers = computed(() => {
+  return quiz.value.questions?.map((question) => {
+    return {
+      ...question,
+      answers: question.answers.sort(() => Math.random() - 0.5),
+    };
+  });
+});
 
 </script>
 

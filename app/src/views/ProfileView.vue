@@ -248,11 +248,9 @@ const { me } = storeToRefs(useUsersStore());
 let isCompanyToUpdate = ref(true);
 let isUserToUpdate = ref(true);
 
-const birthdate = me.value?.birthdate;
 const formatedBirthdate = computed(() => {
   if (me.value?.birthdate) {
-    const date = me.value?.birthdate.split('/');
-    return `${date[0]}`;
+    return me.value?.birthdate.split('/').reverse().join('-');
   }
   return '';
 });
