@@ -1,20 +1,10 @@
-import {
-  Body,
-  Controller,
-  Param,
-  ParseUUIDPipe,
-  ValidationPipe
-} from '@nestjs/common';
+import { Body, Controller, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
-import {
-  CreatedUserRequest,
-  UpdatePassword,
-  UpdatedUserRequest
-} from './users.dto';
+import { CreatedUserRequest, UpdatePassword } from './users.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { HashPassword, CleanResponseUser } from './decorator/users.decorator';
 import { Roles, SERVICE_CMD } from '../global';
-import { UserRole } from './users.entity';
+import { User, UserRole } from './users.entity';
 
 @Controller()
 export class UsersController {
@@ -72,9 +62,12 @@ export class UsersController {
     return this.usersService.updateTokenUser(email);
   }
 
+  @Roles(UserRole.ROLE_ADMIN)
   @MessagePattern({ cmd: SERVICE_CMD.DELETE_USER })
-  public async deleteUser(@Body(ValidationPipe) uuid: string) {
-    return this.usersService.deleteUser(uuid);
+  public async deleteUser(
+    @Body(ValidationPipe) { id, tokenUser }: { id: string; tokenUser: User }
+  ) {
+    return this.usersService.deleteUser(id);
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.GET_MY_JOBS })

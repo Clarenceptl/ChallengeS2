@@ -9,6 +9,12 @@ export const formatDateToApi = (date, separator = '-') => {
   return `${day}/${month}/${year}`
 }
 
+export const formatDateToInput = (date, separator = '/') => {
+  if (!date) return null
+  const [year, month, day] = date.split(separator)
+  return `${day}-${month}-${year}`
+}
+
 export const checkDateForRefreshToken = (dateMs) => {
   const nowMs = now.unix()
   const tenMinutesBeforeExp = dayjs.unix(dateMs).subtract(10, 'm').unix()

@@ -85,8 +85,12 @@ export class UsersService {
     return { success: true, message: 'User verified' };
   }
 
-  public async getUsers(): Promise<User[]> {
-    return await this.userRepository.find();
+  public async getUsers(): Promise<SuccessResponse> {
+    const users = await this.userRepository.find();
+    return {
+      success: true,
+      data: users
+    };
   }
 
   public async getMyJobs(tokenUser: any) {
@@ -142,33 +146,36 @@ export class UsersService {
     updatedUser: UpdatedUserRequest,
     tokenUser: any
   ) {
-    let res: User;
-    try {
-      let userToUpdate: User = await this.userRepository.findOneBy({ id });
-      if (!userToUpdate) {
-        throw new RpcException({
-          statusCode: 404,
-          message: 'User not found'
-        } as ErrorModel);
-      }
-      if (tokenUser.id !== id) {
-        throw new RpcException({
-          statusCode: 401,
-          message: 'Unauthorized'
-        } as ErrorModel);
-      }
-      if (updatedUser.password) {
-        updatedUser.password = encryptPassword(updatedUser.password);
-      }
-      userToUpdate = Object.assign(userToUpdate, updatedUser);
-      res = await this.userRepository.save(userToUpdate);
-    } catch (error) {
+    let userToUpdate: User = await this.userRepository.findOneBy({ id });
+    if (!userToUpdate) {
       throw new RpcException({
         statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+
+    if (tokenUser.id !== id && !tokenUser.roles.includes(UserRole.ROLE_ADMIN)) {
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Unauthorized'
+      } as ErrorModel);
+    }
+
+    if (updatedUser.password) {
+      updatedUser.password = encryptPassword(updatedUser.password);
+    }
+    userToUpdate = Object.assign(userToUpdate, updatedUser);
+    const { candidatures, ...data } = userToUpdate;
+
+    try {
+      await this.userRepository.update({ id: userToUpdate.id }, data);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
         message: error.message
       } as ErrorModel);
     }
-    return { success: true, data: res };
+    return { success: true, data: userToUpdate };
   }
 
   public async updateUserByToken(data: UpdatePassword) {
