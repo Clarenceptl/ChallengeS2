@@ -2,8 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -58,6 +56,13 @@ export class JobAds {
     update: true
   })
   salary: number;
+
+  @Column({
+    type: 'varchar',
+    update: true,
+    default: null
+  })
+  quizId: string | null;
 
   @ManyToOne(() => Company, (company) => company, {
     onDelete: 'SET NULL',
