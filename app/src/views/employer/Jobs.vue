@@ -18,14 +18,10 @@
             <v-card-title>{{ job?.title }}</v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                  <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
+                <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
               </v-list-item>
-              <v-chip
-                class="mb-4 ml-1"
-                v-for="(option, index) in companyOptions"
-                :key="index"
-              >
+              <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
               </v-chip>
               <p class="text-truncate">
@@ -40,22 +36,27 @@
             <v-card-title class="d-flex justify-space-between">
               {{ selectedJob?.title }}
               <div>
-                <v-btn v-if="Object.keys(quiz).length === 0" color="green-500" @click="createMcqDialog = true">Create Quiz</v-btn>
+                <v-btn
+                  v-if="Object.keys(quiz).length === 0"
+                  color="green-500"
+                  @click="createMcqDialog = true"
+                  >Create Quiz</v-btn
+                >
                 <v-btn color="blue-500 ml-2" @click="editJobDialog = true">Edit</v-btn>
                 <v-btn color="red-500 ml-2" @click="deleteJobDialog = true">Delete</v-btn>
-                <v-btn color="green-500 ml-2" @click="router.push(`jobs/${selectedJob?.id}/candidates`)">Candidates</v-btn>
+                <v-btn
+                  color="green-500 ml-2"
+                  @click="router.push(`jobs/${selectedJob?.id}/candidates`)"
+                  >Candidates</v-btn
+                >
               </div>
             </v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                  <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
+                <v-list-item-title>{{ me?.company?.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ me?.company?.address }}</v-list-item-subtitle>
               </v-list-item>
-              <v-chip
-                class="mb-4 ml-1"
-                v-for="(option, index) in companyOptions"
-                :key="index"
-              >
+              <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
               </v-chip>
               <h3 class="mb-2">Job Details</h3>
@@ -64,7 +65,7 @@
                   v-for="(detail, index) in jobDetails"
                   :key="index"
                   :class="{
-                    'ml-4': index !== 0,
+                    'ml-4': index !== 0
                   }"
                 >
                   {{ detail }}
@@ -81,32 +82,34 @@
               <h2>Quiz</h2>
               <div v-if="quiz">
                 <v-btn color="blue-500 ml-2" @click="editMcqDialog = true">Edit</v-btn>
-                <v-btn color="yellow-500 ml-2" @click="createMcqQuestionDialog = true">Add a question</v-btn>
+                <v-btn color="yellow-500 ml-2" @click="createMcqQuestionDialog = true"
+                  >Add a question</v-btn
+                >
               </div>
             </v-card-title>
             <v-card-subtitle class="d-flex flex-column">
-              <div>
-                Title: {{ quiz?.title }}
-              </div>
-              <div>
-                Temps / questions (s): {{ quiz?.tempsParQuestionSecond }}
-              </div>
+              <div>Title: {{ quiz?.title }}</div>
+              <div>Temps / questions (s): {{ quiz?.tempsParQuestionSecond }}</div>
             </v-card-subtitle>
             <v-card-text>
               <v-list-item class="mb-4" v-for="(question, index) in quiz?.questions" :key="index">
-                  <v-list-item-title>Questtion: {{ index + 1 }} {{ question?.label }}</v-list-item-title>
-                  <v-list-item-subtitle>
-                    <v-chip
-                      v-for="(answer, index) in question?.answers"
-                      :key="answer?.id"
-                      :class="{
-                        'ml-4': index !== 0,
-                      }"
+                <v-list-item-title
+                  >Questtion: {{ index + 1 }} {{ question?.label }}</v-list-item-title
+                >
+                <v-list-item-subtitle>
+                  <v-chip
+                    v-for="(answer, index) in question?.answers"
+                    :key="answer?.id"
+                    :class="{
+                      'ml-4': index !== 0
+                    }"
+                  >
+                    {{ answer?.label }}
+                    <v-icon v-if="answer?.id === question?.correctAnswer?.id" color="green"
+                      >mdi-check</v-icon
                     >
-                      {{ answer?.label }}
-                      <v-icon v-if="answer?.id === question?.correctAnswer?.id" color="green">mdi-check</v-icon>
-                    </v-chip>
-                  </v-list-item-subtitle>
+                  </v-chip>
+                </v-list-item-subtitle>
               </v-list-item>
             </v-card-text>
           </v-card>
@@ -123,18 +126,11 @@
         <v-card-title>
           <h2>Create Job</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to create this job ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to create this job ? </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Job Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="newJob.title"
-            />
+            <v-text-field clearable placeholder="Title" type="text" v-model="newJob.title" />
             <label>Job Description</label>
             <v-textarea
               clearable
@@ -143,19 +139,9 @@
               v-model="newJob.description"
             />
             <label>Job City</label>
-            <v-text-field
-              clearable
-              placeholder="City"
-              type="text"
-              v-model="newJob.city"
-            />
+            <v-text-field clearable placeholder="City" type="text" v-model="newJob.city" />
             <label>Job Country</label>
-            <v-text-field
-              clearable
-              placeholder="Country"
-              type="text"
-              v-model="newJob.country"
-            />
+            <v-text-field clearable placeholder="Country" type="text" v-model="newJob.country" />
             <label>Job Contract Type</label>
             <v-text-field
               clearable
@@ -164,38 +150,12 @@
               v-model="newJob.contractType"
             />
             <label>Job Salary</label>
-            <v-text-field
-              clearable
-              placeholder="Salary"
-              type="text"
-              v-model="newJob.salary"
-            />
+            <v-text-field clearable placeholder="Salary" type="text" v-model="newJob.salary" />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              createJobDialog = false;
-              newJob = {
-                title: '',
-                description: '',
-                city: '',
-                country: '',
-                contractType: '',
-                salary: '',
-              }
-            ">
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="createJob"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="cancelCreateJob"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="createJob"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -205,18 +165,11 @@
         <v-card-title>
           <h2>Create Quiz</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to create this Quiz ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to create this Quiz ? </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Quiz Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="newMcq.title"
-            />
+            <v-text-field clearable placeholder="Title" type="text" v-model="newMcq.title" />
             <label>Quiz time / question (s)</label>
             <v-text-field
               clearable
@@ -227,26 +180,8 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              createJobDialog = false;
-              newMcq = {
-                title: '',
-                tempsParQuestionSecond: null,
-                idJobAds: selectedJob.value.id
-              }
-            ">
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="createMcq(); createMcqDialog = false"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="cancel()"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="createMcq()"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -256,17 +191,15 @@
         <v-card-title>
           <h2>Create Question</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to add a question to this Quiz ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to add a question to this Quiz ? </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Question</label>
             <v-text-field
-            clearable
-            placeholder="Question"
-            type="text"
-            v-model="newQuestion.label"
+              clearable
+              placeholder="Question"
+              type="text"
+              v-model="newQuestion.label"
             />
             <label>Correct answer*</label>
             <b class="ml-2">Place the correct answer here</b>
@@ -300,42 +233,8 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              createMcqQuestionDialog = false;
-              newQuestion = {
-                label: '',
-                answers: [
-                  {
-                    id: 1,
-                    label: '',
-                  },
-                  {
-                    id: 2,
-                    label: '',
-                  },
-                  {
-                    id: 3,
-                    label: '',
-                  },
-                  {
-                    id: 4,
-                    label: '',
-                  },
-                ]
-              }
-            ">
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="addQuestionToQuiz"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="cancelQuestions"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="addQuestionToQuiz"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -345,18 +244,11 @@
         <v-card-title>
           <h2>Edit this job</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to update this job ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to update this job ? </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Job Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="jobEdit.title"
-            />
+            <v-text-field clearable placeholder="Title" type="text" v-model="jobEdit.title" />
             <label>Job Description</label>
             <v-textarea
               clearable
@@ -365,19 +257,9 @@
               v-model="jobEdit.description"
             />
             <label>Job City</label>
-            <v-text-field
-              clearable
-              placeholder="City"
-              type="text"
-              v-model="jobEdit.city"
-            />
+            <v-text-field clearable placeholder="City" type="text" v-model="jobEdit.city" />
             <label>Job Country</label>
-            <v-text-field
-              clearable
-              placeholder="Country"
-              type="text"
-              v-model="jobEdit.country"
-            />
+            <v-text-field clearable placeholder="Country" type="text" v-model="jobEdit.country" />
             <label>Job Contract Type</label>
             <v-text-field
               clearable
@@ -386,29 +268,12 @@
               v-model="jobEdit.contractType"
             />
             <label>Job Salary</label>
-            <v-text-field
-              clearable
-              placeholder="Salary"
-              type="number"
-              v-model="jobEdit.salary"
-            />
+            <v-text-field clearable placeholder="Salary" type="number" v-model="jobEdit.salary" />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="editJobDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="updateJob"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="editJobDialog = false"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="updateJob"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -418,18 +283,11 @@
         <v-card-title>
           <h2>Edit this Quiz</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to update this Quiz ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to update this Quiz ? </v-card-subtitle>
         <v-card-text>
           <v-form>
             <label>Title</label>
-            <v-text-field
-              clearable
-              placeholder="Title"
-              type="text"
-              v-model="mcqEdit.title"
-            />
+            <v-text-field clearable placeholder="Title" type="text" v-model="mcqEdit.title" />
             <label>Duration</label>
             <v-text-field
               clearable
@@ -440,20 +298,8 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="editMcqDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="updateQuiz"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="editMcqDialog = false"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="updateQuiz"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -463,24 +309,10 @@
         <v-card-title>
           <h2>Delete this job</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to delete this job ?
-        </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to delete this job ? </v-card-subtitle>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="deleteJobDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="deleteJob"
-          >
-            Yes
-          </v-btn>
+          <v-btn color="red-500" text @click="deleteJobDialog = false"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="deleteJob"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -488,45 +320,53 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
-import { useJobAdsStore } from '../../stores/job-ads.store';
-import { useQuizStore } from '../../stores/quiz.store';
+import { storeToRefs } from 'pinia'
+import { computed, ref, watch } from 'vue'
+import { useJobAdsStore } from '../../stores/job-ads.store'
+import { useQuizStore } from '../../stores/quiz.store'
 import { useToastStore } from '@/stores'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 import { useUsersStore } from '../../stores/users.store'
 
-const { me } = storeToRefs(useUsersStore())
-await useUsersStore().getSelfUser();
+await useUsersStore().getSelfUser()
+await useJobAdsStore().getMyJobs()
 
-await useJobAdsStore().getMyJobs();
-const { myJobs } = storeToRefs(useJobAdsStore());
-let selectedJob = ref(myJobs.value[0]);
+const { me } = storeToRefs(useUsersStore())
+const { myJobs } = storeToRefs(useJobAdsStore())
+let selectedJob = ref(myJobs.value[0])
 
 const stores = {
   toast: useToastStore()
 }
 
-const { quiz } = storeToRefs(useQuizStore());
+const { quiz } = storeToRefs(useQuizStore())
 
-const router = useRouter();
-await useQuizStore().getQuizByJobId(selectedJob.value?.id);
-watch(() => selectedJob.value?.id, async () => {
-  await useQuizStore().getQuizByJobId(selectedJob.value.id);
-});
+const router = useRouter()
+if (selectedJob.value?.quizId) {
+  await useQuizStore().getQuizByJobId(selectedJob.value?.id)
+}
+
+watch(
+  () => selectedJob.value?.id,
+  async () => {
+    if (selectedJob.value.quizId) {
+      await useQuizStore().getQuizByJobId(selectedJob.value?.id)
+    }
+  }
+)
 watch(myJobs, () => {
-  selectedJob.value = myJobs.value[0] ?? null;
-});
+  selectedJob.value = myJobs.value[0] ?? null
+})
 
-let createMcqQuestionDialog = ref(false);
-let deleteJobDialog = ref(false);
-let editJobDialog = ref(false);
-let editMcqDialog = ref(false);
-let createMcqDialog = ref(false);
-let createJobDialog = ref(false);
+let createMcqQuestionDialog = ref(false)
+let deleteJobDialog = ref(false)
+let editJobDialog = ref(false)
+let editMcqDialog = ref(false)
+let createMcqDialog = ref(false)
+let createJobDialog = ref(false)
 
-const jobEdit = ref({...selectedJob.value});
-const mcqEdit = ref({...quiz.value});
+const jobEdit = ref({ ...selectedJob.value })
+const mcqEdit = ref({ ...quiz.value })
 
 let newJob = ref({
   title: '',
@@ -535,152 +375,162 @@ let newJob = ref({
   country: '',
   contractType: '',
   salary: null
-});
+})
 let newQuestion = ref({
   label: '',
   answers: [
     {
       id: 1,
-      label: '',
+      label: ''
     },
     {
       id: 2,
-      label: '',
+      label: ''
     },
     {
       id: 3,
-      label: '',
+      label: ''
     },
     {
       id: 4,
-      label: '',
-    },
+      label: ''
+    }
   ]
-});
+})
 let newMcq = ref({
   title: '',
   tempsParQuestionSecond: null,
   idJobAds: selectedJob.value?.id.toString()
-});
+})
 
 const companyOptions = computed(() => {
   return [
     me.value?.company?.revenue?.revenue,
     me.value?.company?.sector?.sector,
-    me.value?.company?.size?.size,
-  ];
-});
+    me.value?.company?.size?.size
+  ]
+})
 
 const jobDetails = computed(() => {
   return [
     selectedJob.value?.city,
     selectedJob.value?.country,
     selectedJob.value?.contractType,
-    selectedJob.value?.salary,
-  ];
-});
+    selectedJob.value?.salary
+  ]
+})
 
 const createJob = () => {
   if (isNaN(newJob.value.salary)) {
     stores.toast.createToast({
       type: 'error',
       message: 'salary must be a number'
-    });
-    return;
+    })
+    return
   }
-  useJobAdsStore().createJobAd(newJob.value).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'job ads created'
-    });
-    await useJobAdsStore().getMyJobs();
-    createJobDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-    newJob.value = {
-      title: '',
-      description: '',
-      city: '',
-      country: '',
-      contractType: '',
-      salary: null
-    };
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'job ad not created'
-    });
-  });
-};
+  useJobAdsStore()
+    .createJobAd(newJob.value)
+    .then(async () => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'job ads created'
+      })
+      await useJobAdsStore().getMyJobs()
+      createJobDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+      newJob.value = {
+        title: '',
+        description: '',
+        city: '',
+        country: '',
+        contractType: '',
+        salary: null
+      }
+    })
+    .catch(() => {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'job ad not created'
+      })
+    })
+}
 
 const createMcq = async () => {
   if (isNaN(newMcq.value.tempsParQuestionSecond)) {
     stores.toast.createToast({
       type: 'error',
       message: 'duration must be a number'
-    });
-    return;
+    })
+    return
   }
   const formatedMcq = {
     ...newMcq.value,
     idJobAds: selectedJob.value?.id.toString()
-  };
-  useQuizStore().createQuiz(formatedMcq).then(async (res) => {
-    if (res.statusCode === 400) {
+  }
+  useQuizStore()
+    .createQuiz(formatedMcq)
+    .then(async (res) => {
+      if (res.statusCode === 400) {
+        stores.toast.createToast({
+          type: 'error',
+          message: res.message
+        })
+        createMcqDialog.value = false
+        newMcq.value = {
+          title: '',
+          tempsParQuestionSecond: null,
+          idJobAds: selectedJob.value?.id.toString()
+        }
+        return
+      }
+      await useQuizStore().getQuizByJobId(selectedJob.value.id)
+      createMcqDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+    })
+    .catch(() => {
       stores.toast.createToast({
         type: 'error',
-        message: res.message
-      });
-      createMcqDialog.value = false;
+        message: 'Quiz not created'
+      })
+      createMcqDialog.value = false
       newMcq.value = {
         title: '',
         tempsParQuestionSecond: null,
         idJobAds: selectedJob.value?.id.toString()
-      };
-      return;
-    }
-    await useQuizStore().getQuizByJobId(selectedJob.value.id);
-    createMcqDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'mcq not created'
-    });
-    createMcqDialog.value = false;
-    newMcq.value = {
-      title: '',
-      tempsParQuestionSecond: null,
-      idJobAds: selectedJob.value?.id.toString()
-    };
-  });
-};
+      }
+    })
+  createMcqDialog.value = false
+}
 
 const addQuestionToQuiz = () => {
   if (newQuestion.value.answers[0].label === '' || newQuestion.value.answers[1].label === '') {
     stores.toast.createToast({
       type: 'error',
       message: 'you must fill at least two answers'
-    });
-    return;
+    })
+    return
   }
-  useQuizStore().addQuestionToQuiz(quiz.value._id, newQuestion.value).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'question added'
-    });
-    await useQuizStore().getQuizByJobId(selectedJob.value.id);
-    createMcqQuestionDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'question not added'
-    });
-  });
-};
+  useQuizStore()
+    .addQuestionToQuiz(quiz.value._id, newQuestion.value)
+    .then(async () => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'question added'
+      })
+      await useQuizStore().getQuizByJobId(selectedJob.value.id)
+      createMcqQuestionDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+    })
+    .catch(() => {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'question not added'
+      })
+    })
+}
 
 const updateJob = () => {
   let formattedJob = {
@@ -689,64 +539,119 @@ const updateJob = () => {
     city: jobEdit.value.city,
     country: jobEdit.value.country,
     contractType: jobEdit.value.contractType,
-    salary: jobEdit.value.salary,
-  };
-  useJobAdsStore().updateJobAd(selectedJob.value.id, formattedJob).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'job ad updated'
-    });
-    await useJobAdsStore().getMyJobs();
-    editJobDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'job ad not updated'
-    });
-  });
-};
+    salary: jobEdit.value.salary
+  }
+  useJobAdsStore()
+    .updateJobAd(selectedJob.value.id, formattedJob)
+    .then(async () => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'job ad updated'
+      })
+      await useJobAdsStore().getMyJobs()
+      editJobDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+    })
+    .catch(() => {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'job ad not updated'
+      })
+    })
+}
 
 const deleteJob = () => {
-  useJobAdsStore().deleteJobAd(selectedJob.value.id).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'job ad deleted'
-    });
-    await useJobAdsStore().getMyJobs();
-    deleteJobDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'job ad not deleted'
-    });
-  });
-};
+  useJobAdsStore()
+    .deleteJobAd(selectedJob.value.id)
+    .then(async () => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'job ad deleted'
+      })
+      await useJobAdsStore().getMyJobs()
+      deleteJobDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+    })
+    .catch(() => {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'job ad not deleted'
+      })
+    })
+}
 
 const updateQuiz = () => {
   let formattedQuiz = {
     title: mcqEdit.value.title,
-    tempsParQuestionSecond: mcqEdit.value.tempsParQuestionSecond,
-  };
-  useQuizStore().updateQuiz(quiz.value._id, formattedQuiz).then(async () => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'Quiz updated'
-    });
-    await useQuizStore().getQuizByJobId(selectedJob.value.id);
-    editMcqDialog.value = false;
-    selectedJob.value = myJobs.value[0];
-    jobEdit.value = {...selectedJob.value};
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'Quiz not updated'
-    });
-  });
-};
+    tempsParQuestionSecond: mcqEdit.value.tempsParQuestionSecond
+  }
+  useQuizStore()
+    .updateQuiz(quiz.value._id, formattedQuiz)
+    .then(async () => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'Quiz updated'
+      })
+      await useQuizStore().getQuizByJobId(selectedJob.value.id)
+      editMcqDialog.value = false
+      selectedJob.value = myJobs.value[0]
+      jobEdit.value = { ...selectedJob.value }
+    })
+    .catch(() => {
+      stores.toast.createToast({
+        type: 'error',
+        message: 'Quiz not updated'
+      })
+    })
+}
+
+const cancel = () => {
+  createMcqDialog.value = false
+  newMcq.value = {
+    title: '',
+    tempsParQuestionSecond: null,
+    idJobAds: selectedJob.value.id
+  }
+}
+
+const cancelCreateJob = () => {
+  createJobDialog.value = false
+  newJob.value = {
+    title: '',
+    description: '',
+    city: '',
+    country: '',
+    contractType: '',
+    salary: ''
+  }
+}
+
+const cancelQuestions = () => {
+  createMcqQuestionDialog.value = false
+  newQuestion.value = {
+    label: '',
+    answers: [
+      {
+        id: 1,
+        label: ''
+      },
+      {
+        id: 2,
+        label: ''
+      },
+      {
+        id: 3,
+        label: ''
+      },
+      {
+        id: 4,
+        label: ''
+      }
+    ]
+  }
+}
 </script>
 
 <style scoped>

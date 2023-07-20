@@ -20,15 +20,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(candidature, index) in me.candidatures"
-                :key="index"
-              >
+              <tr v-for="(candidature, index) in me.candidatures" :key="index">
                 <td class="px-4">{{ candidature.title }}</td>
                 <td class="px-4">{{ candidature.city }}</td>
                 <td class="px-4">{{ candidature.country }}</td>
                 <td class="px-4">{{ candidature.salary }}</td>
                 <td class="px-4 py-4">
-                  <v-btn color="blue-500" @click="warningDialog = true; selectedCandidature = candidature">Take the test</v-btn>
+                  <v-btn v-if="candidature.quizId" color="blue-500" @click="openDialogQuiz(candidature)">Take the test</v-btn>
+                  <p v-else>No quiz</p>
                 </td>
               </tr>
             </tbody>
@@ -50,7 +49,7 @@
         <v-card-subtitle> Once you accept this test, the timer will start ! </v-card-subtitle>
         <v-card-actions>
           <v-btn color="red-500" text @click="warningDialog = false">Cancel</v-btn>
-          <v-btn color="blue-800" text @click="router.push(`applied-list/${selectedCandidature.id}/test`); warningDialog = false">Start</v-btn>
+          <v-btn color="blue-800" text @click="startQuiz">Start</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -60,8 +59,8 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 await useUsersStore().getSelfUser()
 const { me } = storeToRefs(useUsersStore())
@@ -69,6 +68,16 @@ const router = useRouter()
 
 let warningDialog = ref(false)
 let selectedCandidature = ref(null)
+
+const startQuiz = () => {
+  router.push(`applied-list/${selectedCandidature.value.id}/test`)
+  warningDialog.value = false
+}
+
+const openDialogQuiz = (candidature) => {
+  warningDialog.value = true
+  selectedCandidature.value = candidature
+}
 </script>
 
 <style scoped></style>
