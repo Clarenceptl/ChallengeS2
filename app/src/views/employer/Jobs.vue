@@ -349,7 +349,7 @@ if (selectedJob.value?.quizId) {
 watch(
   () => selectedJob.value?.id,
   async () => {
-    if (selectedJob.value.quizId) {
+    if (selectedJob.value?.quizId) {
       await useQuizStore().getQuizByJobId(selectedJob.value?.id)
     }
   }
