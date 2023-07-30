@@ -61,8 +61,8 @@ export const useUsersStore = defineStore('usersStore', {
     },
     async loadData() {
       if (!this.me?.id) {
-        const test = await this.getSelfUser()
-        if (!test?.id) {
+        const user = await this.getSelfUser()
+        if (!user?.id) {
           this.logout()
         }
       }
