@@ -46,6 +46,7 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_USER })
+  @CleanResponseUser()
   public updateUser(@Payload(ValidationPipe) payload: any) {
     const { id, data, tokenUser } = payload;
     return this.usersService.updateUser(id, data, tokenUser);
@@ -58,6 +59,7 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER })
+  @CleanResponseUser()
   public updateTokenUser(@Payload(ValidationPipe) email: string) {
     return this.usersService.updateTokenUser(email);
   }
