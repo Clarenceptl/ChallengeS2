@@ -250,8 +250,7 @@ let isUserToUpdate = ref(true);
 
 const formatedBirthdate = computed(() => {
   if (me.value?.birthdate) {
-    const date = me.value?.birthdate.split('/');
-    return `${date[0]}`;
+    return me.value?.birthdate.split('/').reverse().join('-');
   }
   return '';
 });
