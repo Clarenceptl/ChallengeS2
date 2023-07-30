@@ -3,7 +3,6 @@ import { AuthService } from '@/services'
 import { UsersService } from '@/services/users.service'
 import { formatDateToApi, clearTokens } from '@/helpers'
 
-
 export const useUsersStore = defineStore('usersStore', {
   state: () => ({
     users: [],
@@ -36,7 +35,6 @@ export const useUsersStore = defineStore('usersStore', {
     async updateUser(id, data) {
       const res = await UsersService.updateUser(id, data)
       if (res?.success) {
-        this.me = res.data
         await UsersService.getSelfUser()
       }
       return res
@@ -63,7 +61,10 @@ export const useUsersStore = defineStore('usersStore', {
     },
     async loadData() {
       if (!this.me?.id) {
-        await this.getSelfUser()
+        const user = await this.getSelfUser()
+        if (!user?.id) {
+          this.logout()
+        }
       }
     }
   },

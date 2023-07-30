@@ -1,12 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   ParseUUIDPipe,
   Patch,
-  Post,
   Req
 } from '@nestjs/common';
 import {
@@ -68,5 +68,21 @@ export class UserController {
   ) {
     const tokenUser = req?.user ?? null;
     return this.userService.updateUser(uuid, payload, tokenUser);
+  }
+
+  @Delete(':uuid')
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    type: SuccessResponse,
+    description: 'Delete user data'
+  })
+  @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
+  public deleteUser(
+    @Param('uuid', ParseUUIDPipe) uuid: string,
+    @Req() req: any
+  ) {
+    const tokenUser = req?.user ?? null;
+    return this.userService.deleteUser(uuid, tokenUser);
   }
 }

@@ -149,7 +149,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         if (!(await isConnected())) {
           const userStore = storeToRefs(useUsersStore())
-          if (userStore.isAdmin.value) {
+          if (!userStore.isAdmin.value) {
             return next({ name: 'Home' })
           }
         }
@@ -189,7 +189,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         if (!(await isConnected())) {
           const userStore = storeToRefs(useUsersStore())
-          if (userStore.isEmployer.value) {
+          if (!userStore.isEmployer.value) {
             return next({ name: 'Home' })
           }
         }

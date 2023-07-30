@@ -8,6 +8,7 @@ export enum SERVICE_CMD {
   GET_MY_JOBS = 'get-my-jobs',
   GET_SELF_USER = 'get-self-user',
   GET_REFRESH_TOKEN = 'get-refresh-token',
+  DELETE_USER = 'delete-user',
   GET_COMPANY_SIZE_OPTIONS = 'get-company-size-options',
   GET_COMPANY_SIZE_OPTIONS_BY_ID = 'get-company-size-options-by-id',
   CREATE_COMPANY_SIZE_OPTIONS = 'create-company-size-options',

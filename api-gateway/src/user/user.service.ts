@@ -84,4 +84,20 @@ export class UserService {
     }
     return res;
   }
+
+  public async deleteUser(uuid: string, tokenUser: any) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.DELETE_USER },
+          { id: uuid, tokenUser }
+        )
+      );
+    } catch (error) {
+      console.log('error', error);
+      handleErrors(error);
+    }
+    return res;
+  }
 }
