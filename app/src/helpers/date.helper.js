@@ -26,3 +26,13 @@ export const checkDateForRefreshToken = (dateMs) => {
 
   return false
 }
+
+export const formatDateAppointment = (date) => {
+  const newDate = new Date(date)
+  const year = newDate.getFullYear()
+  const month = newDate.getMonth() + 1
+  const day = newDate.getDate()
+  const hours = newDate.getHours()
+  const minutes = newDate.getMinutes()
+  return `${day}/${month}/${year} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+}
