@@ -101,19 +101,11 @@
 </template>
 
 <script setup>
-// TODO : a peine commencé
 import { ref } from 'vue'
 import { useUsersStore, useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import { formatDateToInput, formatDateToApi } from '@/helpers'
 import { UsersService } from '@/services'
-
-//   id: number;
-//   candidate: User;
-//   employee: User;
-//   job: JobAds;
-//   time: Date;
-//   accepted: boolean;
 
 const userStore = useUsersStore()
 const toastStore = useToastStore()
@@ -147,14 +139,15 @@ const updateUser = async () => {
 }
 
 const deleteAppointment = async () => {
-//   const res = await UsersService.deleteUser(selectedUser.value.id)
-//   if (res.success) {
-//     showDialog.value = false
-//     selectedUser.value = null
-//     toastStore.createToast({ message: 'Delete user successfully', type: 'success' })
-//     return await userStore.getUsers()
-//   }
-//   toastStore.createToast({ message: 'An error occured', type: 'error' })
+  // de cote pour le moment
+  // const res = await UsersService.deleteUser(selectedUser.value.id)
+  // if (res.success) {
+  //   showDialog.value = false
+  //   selectedUser.value = null
+  //   toastStore.createToast({ message: 'Delete user successfully', type: 'success' })
+  //   return await userStore.getUsers()
+  // }
+  // toastStore.createToast({ message: 'An error occured', type: 'error' })
 }
 </script>
 
