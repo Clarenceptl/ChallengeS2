@@ -66,4 +66,27 @@ export class JobAdsController {
     const { id, tokenUser } = payload;
     return this.jobAdsService.cancelApplyJobAds(id, tokenUser);
   }
+
+  @MessagePattern({ cmd: SERVICE_CMD.UPDATE_QUIZ })
+  public updateQuiz(
+    @Payload(ValidationPipe)
+    payload: {
+      id: string;
+      quizId: string | null;
+    }
+  ) {
+    const { id, quizId } = payload;
+    return this.jobAdsService.updateQuiz(id, quizId);
+  }
+
+  @MessagePattern({ cmd: SERVICE_CMD.DELETE_QUIZ })
+  public deleteQuiz(
+    @Payload(ValidationPipe)
+    payload: {
+      quizId: string | null;
+    }
+  ) {
+    const { quizId } = payload;
+    return this.jobAdsService.deleteQuiz(quizId);
+  }
 }

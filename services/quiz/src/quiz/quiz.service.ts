@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
+import {Inject, Injectable } from '@nestjs/common';
+import { RpcException, ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import {
@@ -13,13 +13,16 @@ import {
   UpdateQuizDto,
   UserRole
 } from 'src/models';
+import { SERVICE_NAME, SERVICE_CMD } from '../enum';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class QuizService {
   constructor(
     @InjectModel(Quiz.name) private quizModel: Model<Quiz>,
-    @InjectModel(Question.name) private questionModel: Model<Question>
-  ) {}
+    @InjectModel(Question.name) private questionModel: Model<Question>,
+    @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
+  ) { }
 
   async getQuiz(payload: GetQuizDto) {
     const { id, tokenUser } = payload;
@@ -47,6 +50,15 @@ export class QuizService {
     const quiz = new this.quizModel(data);
     quiz.creator = tokenUser;
     await quiz.save();
+    let res;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.UPDATE_QUIZ }, {id: data.idJobAds, quizId: quiz._id.toString()})
+      );
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
     return {
       success: true,
       data: quiz
@@ -57,7 +69,6 @@ export class QuizService {
     const { id, tokenUser } = payload;
     const objectId = new Types.ObjectId(id);
     const quiz = await this.quizModel.findOne({ _id: objectId });
-
     if (!quiz) {
       throw new RpcException({
         statusCode: 404,
@@ -65,11 +76,21 @@ export class QuizService {
       });
     }
 
-    if (quiz.creator.id !== tokenUser.id) {
+    if (quiz.creator.id !== tokenUser.id && !tokenUser.roles.includes(UserRole.ROLE_ADMIN)) {
       throw new RpcException({
         statusCode: 401,
         message: 'Unauthorized'
       });
+    }
+
+    let res;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.DELETE_QUIZ }, {tokenUser, id: quiz._id.toString() })
+      );
+    } catch (error) {
+      console.log(error)
+      throw error
     }
 
     try {
@@ -80,6 +101,7 @@ export class QuizService {
         message: 'Internal server error'
       });
     }
+   
     return {
       success: true,
       data: quiz
