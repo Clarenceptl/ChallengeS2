@@ -25,7 +25,7 @@
                   <td class="px-4">{{ appointment.job.title }}</td>
                   <td class="px-4">{{ appointment.job.contractType }}</td>
                   <td class="px-4">{{ appointment.job.salary }}</td>
-                  <td class="px-4">{{ formatDate(appointment.time) }}</td>
+                  <td class="px-4">{{ formatDateAppointment(appointment.time) }}</td>
                   <td class="text-center">
                     <v-icon color="green" v-if="appointment.accepted === true">mdi-check</v-icon>
                     <v-icon color="red" v-else-if="appointment.accepted === false">mdi-close</v-icon>
@@ -95,6 +95,7 @@ import { ref } from 'vue'
 import { useAppointmentsStore } from '../stores/appointments.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
+import { formatDateAppointment } from '@/helpers'
 
 let selectedAppointmentId = ref(null)
 
@@ -134,13 +135,4 @@ const respondToAppointment = async (accepted) => {
   }
 }
 
-const formatDate = (date) => {
-  const newDate = new Date(date);
-  const year = newDate.getFullYear();
-  const month = newDate.getMonth() + 1;
-  const day = newDate.getDate();
-  const hours = newDate.getHours();
-  const minutes = newDate.getMinutes();
-  return `${day}-${month}-${year} ${hours}:${minutes}`;
-};
 </script>

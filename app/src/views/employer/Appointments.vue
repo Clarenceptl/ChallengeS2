@@ -28,7 +28,7 @@
                 <td class="px-4">{{ appointment.candidate.firstname }}</td>
                 <td class="px-4">{{ appointment.candidate.lastname }}</td>
                 <td class="px-4">{{ appointment.job.title }}</td>
-                <td class="px-4">{{ formatDate(appointment.time) }}</td>
+                <td class="px-4">{{ formatDateAppointment(appointment.time) }}</td>
                 <td class="text-center px-4 py-4">
                   <v-icon v-if="appointment.accepted === true" color="green">mdi-check</v-icon>
                   <v-icon v-else-if="appointment.accepted === false" color="red">mdi-close</v-icon>
@@ -83,6 +83,8 @@ import { computed, ref } from "vue";
 import { useAppointmentsStore } from "../../stores/appointments.store";
 import { storeToRefs } from "pinia";
 import { useToastStore } from '@/stores'
+import { formatDateAppointment } from '@/helpers'
+
 const stores = {
   toast: useToastStore()
 }
@@ -92,16 +94,6 @@ let appointmentId = ref(null);
 const appointmentsStore = useAppointmentsStore();
 await appointmentsStore.getAppointments();
 const { appointments } = storeToRefs(appointmentsStore);
-
-const formatDate = (date) => {
-  const newDate = new Date(date);
-  const year = newDate.getFullYear();
-  const month = newDate.getMonth() + 1;
-  const day = newDate.getDate();
-  const hours = newDate.getHours();
-  const minutes = newDate.getMinutes();
-  return `${day}-${month}-${year} ${hours}:${minutes}`;
-};
 
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`

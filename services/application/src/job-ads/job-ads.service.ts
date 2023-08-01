@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobAds } from './job-ads.entity';
 import { Repository } from 'typeorm';
-import { SuccessResponse } from 'src/global';
-import { RpcException } from '@nestjs/microservices';
+import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from 'src/global';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { CreateJobAdsRequest } from './job-ads.dto';
 import { User, UserRole } from 'src/users/users.entity';
 import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class JobAdsService {
@@ -14,7 +15,8 @@ export class JobAdsService {
     @InjectRepository(JobAds)
     private readonly jobAdsRepository: Repository<JobAds>,
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    @Inject(SERVICE_NAME.QUIZ) private readonly quizService: ClientProxy
   ) {}
 
   public async getJobAds(): Promise<SuccessResponse> {
@@ -144,23 +146,88 @@ export class JobAdsService {
     };
   }
 
-  public async deleteJobAds(id: string, user: User): Promise<SuccessResponse> {
+  public async updateQuiz(
+    id: string,
+    quizId: string | null
+  ): Promise<SuccessResponse> {
     let res: JobAds;
     try {
-      res = await this.jobAdsRepository.findOneBy({
+      const jobAdsToUpdate = await this.jobAdsRepository.findOneBy({
         id: parseInt(id)
       });
-      if (!res) {
+      if (!jobAdsToUpdate) {
         throw new RpcException({
           statusCode: 404,
           message: 'Job ad not found'
         });
       }
-      if (res.company.id !== user.company.id) {
+      jobAdsToUpdate.quizId = quizId;
+      res = await this.jobAdsRepository.save(jobAdsToUpdate);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async deleteQuiz(quizId: string | null): Promise<SuccessResponse> {
+    let res: JobAds;
+    try {
+      const jobAdsToUpdate = await this.jobAdsRepository.findOneBy({
+        quizId
+      });
+      if (!jobAdsToUpdate) {
         throw new RpcException({
-          statusCode: 403,
-          message: 'Forbidden'
+          statusCode: 404,
+          message: 'Job ad not found'
         });
+      }
+      jobAdsToUpdate.quizId = null;
+      res = await this.jobAdsRepository.save(jobAdsToUpdate);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      });
+    }
+    return {
+      success: true,
+      data: res
+    };
+  }
+
+  public async deleteJobAds(id: string, user: User): Promise<SuccessResponse> {
+    let res: JobAds = await this.jobAdsRepository.findOneBy({
+      id: parseInt(id)
+    });
+    if (!res) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Job ad not found'
+      });
+    }
+    if (
+      res.company.id !== user.company.id &&
+      !user.roles.includes(UserRole.ROLE_ADMIN)
+    ) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'Forbidden'
+      });
+    }
+    try {
+      if (res.quizId) {
+        await lastValueFrom(
+          this.quizService.send(
+            { cmd: SERVICE_CMD.DELETE_QUIZ },
+            { id: res.quizId, tokenUser: user }
+          )
+        );
       }
       res = await this.jobAdsRepository.remove(res);
     } catch (error) {

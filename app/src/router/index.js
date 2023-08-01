@@ -168,6 +168,11 @@ const router = createRouter({
           component: () => import('@/views/admin/UsersList.vue')
         },
         {
+          path: 'appointements/',
+          name: 'AppointementsList',
+          component: () => import('@/views/admin/AppointementsList.vue')
+        },
+        {
           path: 'company-information/',
           children: [
             {

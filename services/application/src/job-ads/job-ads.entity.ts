@@ -56,6 +56,13 @@ export class JobAds {
   })
   salary: number;
 
+  @Column({
+    type: 'varchar',
+    update: true,
+    default: null
+  })
+  quizId: string | null;
+
   @ManyToOne(() => Company, (company) => company, {
     onDelete: 'SET NULL',
     eager: true

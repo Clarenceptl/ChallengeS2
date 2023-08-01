@@ -20,8 +20,8 @@
                 <th class="px-4">Lastname</th>
                 <th class="px-4">Email</th>
                 <th class="px-4">Birthdate</th>
-                <th class="px-4">Score</th>
-                <th class="px-4">Attempts</th>
+                <th v-if="jobAd.quizId" class="px-4">Score</th>
+                <th v-if="jobAd.quizId" class="px-4">Attempts</th>
                 <th class="px-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -31,13 +31,18 @@
                 <td class="px-4">{{ candidate.lastname }}</td>
                 <td class="px-4">{{ candidate.email }}</td>
                 <td class="px-4">{{ candidate.birthdate }}</td>
-                <td class="px-4 text-center">{{ getQuizScore(candidate.id) }}</td>
-                <td class="px-4 text-center">{{ getQuizTentative(candidate.id) }}</td>
+                <td v-if="jobAd.quizId" class="px-4 text-center">
+                  {{ getQuizScore(candidate.id) }}
+                </td>
+                <td v-if="jobAd.quizId" class="px-4 text-center">
+                  {{ getQuizTentative(candidate.id) }}
+                </td>
                 <td class="px-4 py-4">
                   <v-btn
                     :disabled="
-                      getQuizScore(candidate.id) === 'Not taken' ||
-                      isCandidateInAppointments(candidate.id)
+                      jobAd.quizId &&
+                      (getQuizScore(candidate.id) === 'Not taken' ||
+                        isCandidateInAppointments(candidate.id))
                     "
                     color="blue-500"
                     @click="openDialog(candidate.id)"
@@ -45,8 +50,9 @@
                   >
                   <v-btn
                     :disabled="
-                      getQuizScore(candidate.id) === 'Not taken' ||
-                      isCandidateInAppointments(candidate.id)
+                      jobAd.quizId &&
+                      (getQuizScore(candidate.id) === 'Not taken' ||
+                        isCandidateInAppointments(candidate.id))
                     "
                     color="red-500 ml-2"
                     @click="appointmentDialog = true"
@@ -116,12 +122,12 @@ const stores = {
 }
 const route = useRoute()
 const router = useRouter()
-const { jobAd } = storeToRefs(useJobAdsStore())
-const { appointments } = storeToRefs(useAppointmentsStore())
-const { quiz } = storeToRefs(useQuizStore())
 await useJobAdsStore().getJobAd(route.params.id)
 await useQuizStore().getQuizByJobId(route.params.id)
 await useAppointmentsStore().getAppointments()
+const { jobAd } = storeToRefs(useJobAdsStore())
+const { appointments } = storeToRefs(useAppointmentsStore())
+const { quiz } = storeToRefs(useQuizStore())
 
 let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
@@ -197,7 +203,7 @@ const getQuizScore = (candidateId) => {
   const response = quiz.value?.reponses?.find((response) => {
     return response.userId === candidateId
   })
-  return response ? `${response.score}/${quiz.value.questions.length}`: 'Not taken'
+  return response ? `${response.score}/${quiz.value.questions.length}` : 'Not taken'
 }
 
 // method that returns the quiz tentative for a candidate, find response by candidate id
