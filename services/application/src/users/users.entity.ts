@@ -1,5 +1,5 @@
 import { Company } from 'src/company/company.entity';
-import { JobAds } from 'src/job-ads/job-ads.entity';
+import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
 import {
   Column,
   Entity,
@@ -7,8 +7,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   ManyToOne,
-  ManyToMany,
-  JoinTable
+  OneToMany
 } from 'typeorm';
 
 export enum UserRole {
@@ -109,12 +108,15 @@ export class User {
   })
   company: Company | null;
 
-  @ManyToMany(() => JobAds, (jobAds) => jobAds.candidates, {
-    onDelete: 'SET NULL',
-    eager: true
-  })
-  @JoinTable()
-  candidatures: JobAds[];
+  @OneToMany(
+    () => CandidatesJobAds,
+    (candidateJobAds) => candidateJobAds.candidate,
+    {
+      onDelete: 'SET NULL',
+      eager: true
+    }
+  )
+  candidatesJobAds: CandidatesJobAds[];
 
   @BeforeInsert()
   @BeforeUpdate()

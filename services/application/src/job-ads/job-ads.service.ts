@@ -6,6 +6,7 @@ import { SuccessResponse } from 'src/global';
 import { RpcException } from '@nestjs/microservices';
 import { CreateJobAdsRequest } from './job-ads.dto';
 import { User, UserRole } from 'src/users/users.entity';
+import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
 
 @Injectable()
 export class JobAdsService {
@@ -24,7 +25,7 @@ export class JobAdsService {
           id: 'ASC'
         },
         relations: {
-          candidates: true
+          candidatesJobAds: true
         }
       });
     } catch (error) {
@@ -47,15 +48,19 @@ export class JobAdsService {
           id: parseInt(id)
         },
         relations: {
-          candidates: true
+          candidatesJobAds: true
         },
         select: {
-          candidates: {
+          candidatesJobAds: {
             id: true,
-            email: true,
-            firstname: true,
-            lastname: true,
-            birthdate: true
+            status: true,
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            }
           }
         }
       });
@@ -82,12 +87,13 @@ export class JobAdsService {
     user: User
   ): Promise<SuccessResponse> {
     let res: JobAds;
+
+    const newJobAds = new JobAds();
+    Object.assign(newJobAds, data);
+    newJobAds.company = user.company;
+    newJobAds.created_at = new Date();
+    newJobAds.updated_at = new Date();
     try {
-      const newJobAds = new JobAds();
-      Object.assign(newJobAds, data);
-      newJobAds.company = user.company;
-      newJobAds.created_at = new Date();
-      newJobAds.updated_at = new Date();
       res = await this.jobAdsRepository.save(newJobAds);
     } catch (error) {
       throw new RpcException({
@@ -184,7 +190,7 @@ export class JobAdsService {
           id: parseInt(id)
         },
         relations: {
-          candidates: true
+          candidatesJobAds: true
         }
       });
       const currentUser = await this.userRepository.findOneBy({
@@ -197,15 +203,19 @@ export class JobAdsService {
         });
       }
       if (
-        jobAdsToUpdate.candidates?.length &&
-        jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
+        jobAdsToUpdate.candidatesJobAds.length &&
+        jobAdsToUpdate.candidatesJobAds.find(
+          (candidatesJobAds) => candidatesJobAds.candidate.id === user.id
+        )
       ) {
         throw new RpcException({
           statusCode: 401,
           message: 'You already applied for this job'
         });
       }
-      jobAdsToUpdate.candidates.push(currentUser);
+      const newCandidature = new CandidatesJobAds();
+      newCandidature.candidate = currentUser;
+      jobAdsToUpdate.candidatesJobAds.push(newCandidature);
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
       throw new RpcException({
@@ -235,15 +245,17 @@ export class JobAdsService {
         });
       }
       if (
-        !jobAdsToUpdate.candidates.find((candidate) => candidate.id === user.id)
+        !jobAdsToUpdate.candidatesJobAds.find(
+          (candidate) => candidate.candidate.id === user.id
+        )
       ) {
         throw new RpcException({
           statusCode: 409,
           message: 'You did not apply for this job'
         });
       }
-      jobAdsToUpdate.candidates = jobAdsToUpdate.candidates.filter(
-        (candidate) => candidate.id !== user.id
+      jobAdsToUpdate.candidatesJobAds = jobAdsToUpdate.candidatesJobAds.filter(
+        (candidatesJobAds) => candidatesJobAds.candidate.id !== user.id
       );
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {

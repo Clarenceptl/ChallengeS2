@@ -2,17 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
 import { Company } from '../company/company.entity';
-import { User } from '../users/users.entity';
 import { Appointment } from '../appointment/appointment.entity';
+import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
 
 @Entity()
 export class JobAds {
@@ -65,11 +62,15 @@ export class JobAds {
   })
   company: Company;
 
-  @ManyToMany(() => User, (user) => user.candidatures, {
-    onDelete: 'SET NULL',
-    cascade: true
-  })
-  candidates: User[];
+  @OneToMany(
+    () => CandidatesJobAds,
+    (candidatesJobAds) => candidatesJobAds.jobAds,
+    {
+      onDelete: 'SET NULL',
+      cascade: true
+    }
+  )
+  candidatesJobAds: CandidatesJobAds[];
 
   @OneToMany(() => Appointment, (appointment) => appointment)
   appointments: Appointment[];

@@ -2,7 +2,7 @@
   <div class="pa-5">
     <h1 class="text-center my-10">Your applications list</h1>
     <div class="d-flex justify-center mb-2">
-      <v-card class="mx-auto" v-if="me?.candidatures?.length">
+      <v-card class="mx-auto" v-if="me?.candidatesJobAds?.length">
         <v-toolbar color="appgrey">
           <v-toolbar-title></v-toolbar-title>
           <v-spacer></v-spacer>
@@ -20,13 +20,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(candidature, index) in me.candidatures"
+              <tr v-for="(candidature, index) in me.candidatesJobAds"
                 :key="index"
               >
-                <td class="px-4">{{ candidature.title }}</td>
-                <td class="px-4">{{ candidature.city }}</td>
-                <td class="px-4">{{ candidature.country }}</td>
-                <td class="px-4">{{ candidature.salary }}</td>
+                <td class="px-4">{{ candidature.jobAds.title }}</td>
+                <td class="px-4">{{ candidature.jobAds.city }}</td>
+                <td class="px-4">{{ candidature.jobAds.country }}</td>
+                <td class="px-4">{{ candidature.jobAds.salary }}</td>
                 <td class="px-4 py-4">
                   <v-btn color="blue-500" @click="warningDialog = true; selectedCandidature = candidature">Take the test</v-btn>
                 </td>
@@ -69,6 +69,7 @@ const router = useRouter()
 
 let warningDialog = ref(false)
 let selectedCandidature = ref(null)
+console.log(me.value)
 </script>
 
 <style scoped></style>
