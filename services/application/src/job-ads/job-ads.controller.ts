@@ -3,6 +3,7 @@ import { JobAdsService } from './job-ads.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Roles, SERVICE_CMD } from 'src/global';
 import { UserRole } from 'src/users/users.entity';
+import { CleanResponseJobAds } from './decorator/job-ads.decorator';
 
 @Controller('job-ads')
 export class JobAdsController {
@@ -13,6 +14,7 @@ export class JobAdsController {
     return this.jobAdsService.getJobAds();
   }
 
+  @CleanResponseJobAds()
   @MessagePattern({ cmd: SERVICE_CMD.GET_JOB_ADS_BY_ID })
   public getJobAdsById(@Payload(ValidationPipe) id: string) {
     return this.jobAdsService.getJobAdsById(id);

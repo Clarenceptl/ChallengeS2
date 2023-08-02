@@ -2,7 +2,7 @@
   <div class="pa-5">
     <h1 class="text-center my-10">Your applications list</h1>
     <div class="d-flex justify-center mb-2">
-      <v-card class="mx-auto" v-if="me?.candidatesJobAds?.length">
+      <v-card class="mx-auto" v-if="me?.candidatesJobAds?.length > 0">
         <v-toolbar color="appgrey">
           <v-toolbar-title></v-toolbar-title>
           <v-spacer></v-spacer>
@@ -20,15 +20,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(candidature, index) in me.candidatesJobAds"
-                :key="index"
-              >
+              <tr v-for="(candidature, index) in me.candidatesJobAds" :key="index">
                 <td class="px-4">{{ candidature.jobAds.title }}</td>
                 <td class="px-4">{{ candidature.jobAds.city }}</td>
                 <td class="px-4">{{ candidature.jobAds.country }}</td>
                 <td class="px-4">{{ candidature.jobAds.salary }}</td>
                 <td class="px-4 py-4">
-                  <v-btn v-if="candidature.quizId" color="blue-500" @click="openDialogQuiz(candidature)">Take the test</v-btn>
+                  <v-btn
+                    v-if="candidature.quizId"
+                    color="blue-500"
+                    @click="openDialogQuiz(candidature)"
+                    >Take the test</v-btn
+                  >
                   <p v-else>No quiz</p>
                 </td>
               </tr>

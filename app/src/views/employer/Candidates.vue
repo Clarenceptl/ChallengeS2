@@ -6,7 +6,7 @@
       taken the test yet.
     </div>
     <div class="d-flex justify-center mb-2">
-      <v-card class="mx-auto" v-if="jobAd?.candidates?.length">
+      <v-card class="mx-auto" v-if="jobAd?.candidatesJobAds?.length">
         <v-toolbar color="appgrey">
           <v-toolbar-title></v-toolbar-title>
           <v-spacer></v-spacer>
@@ -26,33 +26,33 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="candidate in jobAd.candidates" :key="candidate.id" class="mb-4">
-                <td class="px-4">{{ candidate.firstname }}</td>
-                <td class="px-4">{{ candidate.lastname }}</td>
-                <td class="px-4">{{ candidate.email }}</td>
-                <td class="px-4">{{ candidate.birthdate }}</td>
+              <tr v-for="candidatesJobAds in jobAd.candidatesJobAds" :key="candidatesJobAds.id" class="mb-4">
+                <td class="px-4">{{ candidatesJobAds.candidate.firstname }}</td>
+                <td class="px-4">{{ candidatesJobAds.candidate.lastname }}</td>
+                <td class="px-4">{{ candidatesJobAds.candidate.email }}</td>
+                <td class="px-4">{{ candidatesJobAds.candidate.birthdate }}</td>
                 <td v-if="jobAd.quizId" class="px-4 text-center">
-                  {{ getQuizScore(candidate.id) }}
+                  {{ getQuizScore(candidatesJobAds.candidate.id) }}
                 </td>
                 <td v-if="jobAd.quizId" class="px-4 text-center">
-                  {{ getQuizTentative(candidate.id) }}
+                  {{ getQuizTentative(candidatesJobAds.candidate.id) }}
                 </td>
                 <td class="px-4 py-4">
                   <v-btn
                     :disabled="
                       jobAd.quizId &&
                       (getQuizScore(candidate.id) === 'Not taken' ||
-                        isCandidateInAppointments(candidate.id))
+                        isCandidateInAppointments(candidatesJobAds.candidate.id))
                     "
                     color="blue-500"
-                    @click="openDialog(candidate.id)"
+                    @click="openDialog(candidatesJobAds.candidate.id)"
                     >Set appointment</v-btn
                   >
                   <v-btn
                     :disabled="
                       jobAd.quizId &&
-                      (getQuizScore(candidate.id) === 'Not taken' ||
-                        isCandidateInAppointments(candidate.id))
+                      (getQuizScore(candidatesJobAds.candidate.id) === 'Not taken' ||
+                        isCandidateInAppointments(candidatesJobAds.candidate.id))
                     "
                     color="red-500 ml-2"
                     @click="appointmentDialog = true"
@@ -133,7 +133,7 @@ let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
 let time = ref('')
 let date = ref('')
-
+console.log(jobAd.value)
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`
 })

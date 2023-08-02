@@ -26,9 +26,7 @@ export class JobAdsService {
         order: {
           id: 'ASC'
         },
-        relations: {
-          candidatesJobAds: true
-        }
+        relations: ['candidatesJobAds']
       });
     } catch (error) {
       throw new RpcException({
@@ -49,22 +47,7 @@ export class JobAdsService {
         where: {
           id: parseInt(id)
         },
-        relations: {
-          candidatesJobAds: true
-        },
-        select: {
-          candidatesJobAds: {
-            id: true,
-            status: true,
-            candidate: {
-              id: true,
-              email: true,
-              firstname: true,
-              lastname: true,
-              birthdate: true
-            }
-          }
-        }
+        relations: ['candidatesJobAds', 'candidatesJobAds.candidate']
       });
       if (!res) {
         throw new RpcException({
@@ -283,6 +266,7 @@ export class JobAdsService {
       const newCandidature = new CandidatesJobAds();
       newCandidature.candidate = currentUser;
       jobAdsToUpdate.candidatesJobAds.push(newCandidature);
+      console.log(jobAdsToUpdate);
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
       throw new RpcException({
