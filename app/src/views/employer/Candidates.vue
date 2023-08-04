@@ -41,7 +41,7 @@
                   <v-btn
                     :disabled="
                       jobAd.quizId &&
-                      (getQuizScore(candidate.id) === 'Not taken' ||
+                      (getQuizScore(candidatesJobAds.candidate.id) === 'Not taken' ||
                         isCandidateInAppointments(candidatesJobAds.candidate.id))
                     "
                     color="blue-500"
@@ -133,7 +133,7 @@ let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
 let time = ref('')
 let date = ref('')
-console.log(jobAd.value)
+
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`
 })

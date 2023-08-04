@@ -27,7 +27,7 @@
                 <td class="px-4">{{ candidature.jobAds.salary }}</td>
                 <td class="px-4 py-4">
                   <v-btn
-                    v-if="candidature.quizId"
+                    v-if="candidature.jobAds.quizId"
                     color="blue-500"
                     @click="openDialogQuiz(candidature)"
                     >Take the test</v-btn

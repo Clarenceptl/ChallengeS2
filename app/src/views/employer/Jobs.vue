@@ -94,7 +94,7 @@
             <v-card-text>
               <v-list-item class="mb-4" v-for="(question, index) in quiz?.questions" :key="index">
                 <v-list-item-title
-                  >Questtion: {{ index + 1 }} {{ question?.label }}</v-list-item-title
+                  >Question: {{ index + 1 }} {{ question?.label }}</v-list-item-title
                 >
                 <v-list-item-subtitle>
                   <v-chip
