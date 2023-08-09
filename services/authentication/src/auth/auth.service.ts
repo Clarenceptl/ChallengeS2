@@ -32,7 +32,7 @@ export class AuthService {
         id: user.id
       },
       {
-        expiresIn: '30m'
+        expiresIn: '1h'
       }
     );
     const res = {
@@ -74,7 +74,7 @@ export class AuthService {
         id: user.id
       },
       {
-        expiresIn: '30m'
+        expiresIn: '1h'
       }
     );
 
