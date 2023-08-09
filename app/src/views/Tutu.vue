@@ -1,23 +1,41 @@
 <template>
-  <h3>Draggable 1</h3>
-  <draggable group="test" v-model="list1" item-key="id">
-    <template #item="{ element }">
-      <div class="card">{{ element.name }}</div>
-    </template>
-    <template #footer>
-      <button @click="addPeople">Add</button>
-    </template>
-  </draggable>
-  {{ list1 }}
-
-  <h3>Draggable 2</h3>
-  <draggable group="test" v-model="list2" item-key="id">
-    <template #item="{ element }">
-      <div class="card">{{ element.name }}</div>
-    </template>
-  </draggable>
-
-  {{ list2 }}
+  <v-container class="h-100">
+    <v-row>
+      <v-col class="bg-grey-100 rounded">
+        <h2 class="mb-4">Candidats</h2>
+        <draggable
+          @start="test"
+          @end="test"
+          group="test"
+          v-model="list1"
+          item-key="id"
+        >
+          <template #item="{ element }">
+            <v-card :title="element.name" subtitle="Subtitle" text="..." class="mb-3">
+              <v-card-actions>
+                <v-btn>Click me</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+          <template #footer>
+            <button @click="addPeople">Add</button>
+          </template>
+        </draggable>
+      </v-col>
+      <v-col class="ml-2 bg-grey-100 rounded">
+        <h2 class="mb-4">En attente</h2>
+        <draggable group="test" v-model="list2" item-key="id">
+          <template #item="{ element }">
+            <v-card :title="element.name" subtitle="Subtitle" text="...">
+              <v-card-actions>
+                <v-btn>Click me</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </draggable>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
@@ -34,6 +52,9 @@ const list1 = ref([
 const list2 = ref([{ name: 'Johnd', id: 1 }])
 const addPeople = () => {
   list1.value.push({ name: 'New', id: Math.random() })
+}
+const test = (val) => {
+  console.log(val)
 }
 </script>
 
