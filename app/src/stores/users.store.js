@@ -30,7 +30,7 @@ export const useUsersStore = defineStore('usersStore', {
         this.me = res.data
         return res.data
       }
-      return res.data
+      return res
     },
     async updateUser(id, data) {
       const res = await UsersService.updateUser(id, data)
