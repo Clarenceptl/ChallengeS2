@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../users/users.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export enum STATUS {
   INIT = 'INIT',
@@ -11,8 +12,8 @@ export enum STATUS {
 
 @Entity()
 export class CandidatesJobAds {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({
     type: 'varchar',
@@ -35,9 +36,14 @@ export class CandidatesJobAds {
 }
 
 export class UpdateStatusDTO {
+  @IsNotEmpty()
   tokenUser: User;
-  data: {
-    status: STATUS;
-    idJobAds: string;
-  };
+
+  @IsNotEmpty()
+  @IsString()
+  status: STATUS;
+
+  @IsNotEmpty()
+  @IsString()
+  id: string;
 }

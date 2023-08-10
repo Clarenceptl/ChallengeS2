@@ -20,17 +20,33 @@
                 <th class="px-4">Lastname</th>
                 <th class="px-4">Email</th>
                 <th class="px-4">Birthdate</th>
+                <th class="px-4">Status</th>
                 <th v-if="jobAd.quizId" class="px-4">Score</th>
                 <th v-if="jobAd.quizId" class="px-4">Attempts</th>
                 <th class="px-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="candidatesJobAds in jobAd.candidatesJobAds" :key="candidatesJobAds.id" class="mb-4">
+              <tr
+                v-for="candidatesJobAds in jobAd.candidatesJobAds"
+                :key="candidatesJobAds.id"
+                class="mb-4"
+              >
                 <td class="px-4">{{ candidatesJobAds.candidate.firstname }}</td>
                 <td class="px-4">{{ candidatesJobAds.candidate.lastname }}</td>
                 <td class="px-4">{{ candidatesJobAds.candidate.email }}</td>
                 <td class="px-4">{{ candidatesJobAds.candidate.birthdate }}</td>
+                <td class="px-4">
+                  <!-- 4 etat (init, pending, ok, refused) -->
+                  <!-- TODO : code couleur + label -->
+                  <v-chip
+                    :color="candidatesJobAds.status === 'accepted' ? 'green' : 'red'"
+                    text-color="white"
+                    class="text-capitalize"
+                  >
+                    {{ candidatesJobAds.status }}
+                  </v-chip>
+                </td>
                 <td v-if="jobAd.quizId" class="px-4 text-center">
                   {{ getQuizScore(candidatesJobAds.candidate.id) }}
                 </td>
@@ -106,6 +122,7 @@
       </v-card>
     </v-dialog>
   </div>
+  <v-btn @click="test">Test update status</v-btn>
 </template>
 
 <script setup>
@@ -116,19 +133,22 @@ import { useAppointmentsStore } from '../../stores/appointments.store'
 import { useQuizStore } from '../../stores/quiz.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
+import { JobAdsService } from '@/services'
 
 const stores = {
   toast: useToastStore()
 }
 const route = useRoute()
 const router = useRouter()
+
 await useJobAdsStore().getJobAd(route.params.id)
 await useQuizStore().getQuizByJobId(route.params.id)
 await useAppointmentsStore().getAppointments()
+
 const { jobAd } = storeToRefs(useJobAdsStore())
 const { appointments } = storeToRefs(useAppointmentsStore())
 const { quiz } = storeToRefs(useQuizStore())
-
+console.log(jobAd.value.candidatesJobAds[0]?.id)
 let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
 let time = ref('')
@@ -189,6 +209,10 @@ const createAppointment = () => {
 const openDialog = (id) => {
   appointmentDialog.value = true
   selectedId.value = id
+}
+
+const test = async () => {
+  await JobAdsService.updateStatusCandidate(jobAd.value.candidatesJobAds[0].id, 'accepted')
 }
 
 // computed that returns appointments for this job
