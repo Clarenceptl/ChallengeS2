@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Company } from '../company/company.entity';
 import { Appointment } from '../appointment/appointment.entity';
-import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
+import { CandidatesJobAds } from 'src/candidate-job-ads/candidates-job-ads.entity';
 
 @Entity()
 export class JobAds {

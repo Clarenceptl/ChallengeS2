@@ -1,5 +1,5 @@
 import { Company } from 'src/company/company.entity';
-import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
+import { CandidatesJobAds } from 'src/candidate-job-ads/candidates-job-ads.entity';
 import {
   Column,
   Entity,

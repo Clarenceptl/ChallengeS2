@@ -7,7 +7,7 @@ import {
 import { Observable, map } from 'rxjs';
 import { removeDataSensibleUser } from '../../helpers';
 import { SuccessResponse } from '../../global';
-import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
+import { CandidatesJobAds } from 'src/candidate-job-ads/candidates-job-ads.entity';
 
 @Injectable()
 export class CleanResponseJobAdsInterceptor implements NestInterceptor {

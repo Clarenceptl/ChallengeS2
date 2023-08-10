@@ -32,17 +32,12 @@ export class CandidatesJobAds {
     eager: true
   })
   jobAds: JobAds;
+}
 
-  //   @CreateDateColumn({
-  //     type: 'timestamp',
-  //     default: () => 'CURRENT_TIMESTAMP(6)'
-  //   })
-  //   public created_at: Date;
-
-  //   @UpdateDateColumn({
-  //     type: 'timestamp',
-  //     default: () => 'CURRENT_TIMESTAMP(6)',
-  //     onUpdate: 'CURRENT_TIMESTAMP(6)'
-  //   })
-  //   public updated_at: Date;
+export class UpdateStatusDTO {
+  tokenUser: User;
+  data: {
+    status: STATUS;
+    idJobAds: string;
+  };
 }

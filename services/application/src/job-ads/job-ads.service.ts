@@ -6,7 +6,7 @@ import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from 'src/global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { CreateJobAdsRequest } from './job-ads.dto';
 import { User, UserRole } from 'src/users/users.entity';
-import { CandidatesJobAds } from 'src/entities/candidates-job-ads.entity';
+import { CandidatesJobAds } from 'src/candidate-job-ads/candidates-job-ads.entity';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
