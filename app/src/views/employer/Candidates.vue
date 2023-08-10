@@ -71,6 +71,50 @@
         <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
       </v-card>
     </div>
+    <div class="col-3">
+      <h3>Draggable 1</h3>
+      <draggable
+        class="list-group"
+        :list="list1"
+        group="people"
+        @change="log"
+        itemKey="name"
+      >
+        <template #item="{ element, index }">
+          <div class="list-group-item">{{ element.name }} {{ index }}</div>
+        </template>
+      </draggable>
+    </div>
+
+    <div class="col-3">
+      <h3>Draggable 2</h3>
+      <draggable
+        class="list-group"
+        :list="list2"
+        group="people"
+        @change="log"
+        itemKey="name"
+      >
+        <template #item="{ element, index }">
+          <div class="list-group-item">{{ element.name }} {{ index }}</div>
+        </template>
+      </draggable>
+    </div>
+
+    <div class="col-3">
+      <h3>Draggable 3</h3>
+      <draggable
+        class="list-group"
+        :list="list3"
+        group="people"
+        @change="log"
+        itemKey="name"
+      >
+        <template #item="{ element, index }">
+          <div class="list-group-item">{{ element.name }} {{ index }}</div>
+        </template>
+      </draggable>
+    </div>
     <v-dialog v-model="appointmentDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
@@ -116,6 +160,31 @@ import { useAppointmentsStore } from '../../stores/appointments.store'
 import { useQuizStore } from '../../stores/quiz.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
+import draggable from 'vuedraggable'
+
+const list1 = [
+  { name: "John", id: 1 },
+  { name: "Joao", id: 2 },
+  { name: "Jean", id: 3 },
+  { name: "Gerard", id: 4 }
+]
+
+const list2 = [
+  { name: "John", id: 5 },
+  { name: "Joao", id: 6 },
+  { name: "Jean", id: 7 },
+  { name: "Gerard", id: 8 }
+]
+
+const list3 = [
+  { name: "John", id: 9 },
+  { name: "Joao", id: 10 },
+  { name: "Jean", id: 11 },
+  { name: "Gerard", id: 12 }
+]
+const log = (evt) => {
+  console.log(evt)
+}
 
 const stores = {
   toast: useToastStore()
