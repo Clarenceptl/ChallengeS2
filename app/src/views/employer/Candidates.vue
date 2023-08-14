@@ -1,120 +1,84 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your candidates list</h1>
-    <div class="text-center">
-      Buttons are disabled if the candidate already has an appointment, or if the candidate has not
-      taken the test yet.
-    </div>
-    <div class="d-flex justify-center mb-2">
-      <v-card class="mx-auto" v-if="jobAd?.candidates?.length">
-        <v-toolbar color="appgrey">
-          <v-toolbar-title></v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-
-        <v-table dense>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="px-4">Firstname</th>
-                <th class="px-4">Lastname</th>
-                <th class="px-4">Email</th>
-                <th class="px-4">Birthdate</th>
-                <th v-if="jobAd.quizId" class="px-4">Score</th>
-                <th v-if="jobAd.quizId" class="px-4">Attempts</th>
-                <th class="px-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="candidate in jobAd.candidates" :key="candidate.id" class="mb-4">
-                <td class="px-4">{{ candidate.firstname }}</td>
-                <td class="px-4">{{ candidate.lastname }}</td>
-                <td class="px-4">{{ candidate.email }}</td>
-                <td class="px-4">{{ candidate.birthdate }}</td>
-                <td v-if="jobAd.quizId" class="px-4 text-center">
-                  {{ getQuizScore(candidate.id) }}
-                </td>
-                <td v-if="jobAd.quizId" class="px-4 text-center">
-                  {{ getQuizTentative(candidate.id) }}
-                </td>
-                <td class="px-4 py-4">
-                  <v-btn
-                    :disabled="
-                      jobAd.quizId &&
-                      (getQuizScore(candidate.id) === 'Not taken' ||
-                        isCandidateInAppointments(candidate.id))
-                    "
-                    color="blue-500"
-                    @click="openDialog(candidate.id)"
-                    >Set appointment</v-btn
-                  >
-                  <v-btn
-                    :disabled="
-                      jobAd.quizId &&
-                      (getQuizScore(candidate.id) === 'Not taken' ||
-                        isCandidateInAppointments(candidate.id))
-                    "
-                    color="red-500 ml-2"
-                    @click="appointmentDialog = true"
-                    >Decline</v-btn
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </template>
-        </v-table>
-      </v-card>
-      <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+    <v-container class="h-100" v-if="jobAd?.candidates">
+      <v-row>
+        <v-col class="bg-grey-100 rounded">
+          <h2 class="mb-4">Candidats</h2>
+          <draggable
+            @start="test"
+            @end="test"
+            group="test"
+            v-model="jobAd.candidates"
+            item-key="id"
+          >
+            <template #item="{ element }">
+              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+                <v-card-actions>
+                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                  <v-btn class="bg-green" @click="openDialog(element.id)">Set appointment</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </draggable>
+        </v-col>
+        <v-col class="ml-2 bg-grey-100 rounded">
+          <h2 class="mb-4">En attente</h2>
+          <draggable group="test" v-model="pendingList" item-key="id">
+            <template #item="{ element }">
+              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+                <v-card-actions>
+                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </draggable>
+        </v-col>
+        <v-col class="ml-2 bg-grey-100 rounded">
+          <h2 class="mb-4">Acceptés</h2>
+          <draggable group="test" v-model="acceptedList" item-key="id">
+            <template #item="{ element }">
+              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+                <v-card-actions>
+                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </draggable>
+        </v-col>
+        <v-col class="ml-2 bg-grey-100 rounded">
+          <h2 class="mb-4">Refusés</h2>
+          <draggable group="test" v-model="deniedList" item-key="id">
+            <template #item="{ element }">
+              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+                <v-card-actions>
+                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </draggable>
+        </v-col>
+      </v-row>
+    </v-container>
+    <div v-else class="d-flex justify-center mb-2">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
           <h2>No candidates</h2>
         </v-card-title>
         <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
       </v-card>
     </div>
-    <div class="col-3">
-      <h3>Draggable 1</h3>
-      <draggable
-        class="list-group"
-        :list="list1"
-        group="people"
-        @change="log"
-        itemKey="name"
-      >
-        <template #item="{ element, index }">
-          <div class="list-group-item">{{ element.name }} {{ index }}</div>
-        </template>
-      </draggable>
-    </div>
-
-    <div class="col-3">
-      <h3>Draggable 2</h3>
-      <draggable
-        class="list-group"
-        :list="list2"
-        group="people"
-        @change="log"
-        itemKey="name"
-      >
-        <template #item="{ element, index }">
-          <div class="list-group-item">{{ element.name }} {{ index }}</div>
-        </template>
-      </draggable>
-    </div>
-
-    <div class="col-3">
-      <h3>Draggable 3</h3>
-      <draggable
-        class="list-group"
-        :list="list3"
-        group="people"
-        @change="log"
-        itemKey="name"
-      >
-        <template #item="{ element, index }">
-          <div class="list-group-item">{{ element.name }} {{ index }}</div>
-        </template>
-      </draggable>
-    </div>
+    <!-- <v-card v-else class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>No candidates</h2>
+        </v-card-title>
+        <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
+      </v-card>
+    <div class="text-center">
+      Buttons are disabled if the candidate already has an appointment, or if the candidate has not
+      taken the test yet.
+    </div> -->
+    
     <v-dialog v-model="appointmentDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
@@ -149,6 +113,28 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="infoDialog" max-width="600">
+      <v-card class="pa-5 bg-green-300" variant="outlined">
+        <v-card-title>
+          <h2>Details</h2>
+        </v-card-title>
+        <v-card-text>
+          <v-form>
+            <label>Firstname</label>
+            <v-text-field disabled type="text" v-model="selectedUser.firstname" />
+            <label>Lastname</label>
+            <v-text-field disabled type="text" v-model="selectedUser.lastname" />
+            <label>Email</label>
+            <v-text-field disabled type="email" v-model="selectedUser.email" />
+            <label>Birthdate</label>
+            <v-text-field disabled type="date" v-model="selectedUser.birthdate" />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="blue-800" text @click="infoDialog = false"> Ok </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -161,30 +147,6 @@ import { useQuizStore } from '../../stores/quiz.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import draggable from 'vuedraggable'
-
-const list1 = [
-  { name: "John", id: 1 },
-  { name: "Joao", id: 2 },
-  { name: "Jean", id: 3 },
-  { name: "Gerard", id: 4 }
-]
-
-const list2 = [
-  { name: "John", id: 5 },
-  { name: "Joao", id: 6 },
-  { name: "Jean", id: 7 },
-  { name: "Gerard", id: 8 }
-]
-
-const list3 = [
-  { name: "John", id: 9 },
-  { name: "Joao", id: 10 },
-  { name: "Jean", id: 11 },
-  { name: "Gerard", id: 12 }
-]
-const log = (evt) => {
-  console.log(evt)
-}
 
 const stores = {
   toast: useToastStore()
@@ -200,8 +162,10 @@ const { quiz } = storeToRefs(useQuizStore())
 
 let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
+let infoDialog = ref(false)
 let time = ref('')
 let date = ref('')
+let selectedUserInfoId = ref(null)
 
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`
@@ -213,6 +177,8 @@ const reinitilize = () => {
   time.value = ''
   date.value = ''
   selectedId.value = null
+  selectedUserInfoId.value = null
+  infoDialog.value = false
 }
 
 let selectedId = ref(null)
@@ -289,6 +255,35 @@ const isCandidateInAppointments = (candidateId) => {
     return appointment.candidate.id === candidateId
   })
 }
+
+// computed that return user based on selected user info id
+const selectedUser = computed(() => {
+  return jobAd.value?.candidates?.find((userInfo) => {
+    return userInfo.id === selectedUserInfoId.value
+  })
+})
+
+const list1 = ref([
+  { name: 'John', id: 1 },
+  { name: 'Joao', id: 2 },
+  { name: 'Jean', id: 3 },
+  { name: 'Gerard', id: 4 }
+])
+
+const pendingList = ref([])
+const acceptedList = ref([])
+const deniedList = ref([])
+
+const test = (val) => {
+  console.log(val)
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.card {
+  border: 1px solid black;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f0f0f0;
+}
+</style>

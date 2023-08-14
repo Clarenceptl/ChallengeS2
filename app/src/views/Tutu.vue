@@ -34,6 +34,30 @@
           </template>
         </draggable>
       </v-col>
+      <v-col class="ml-2 bg-grey-100 rounded">
+        <h2 class="mb-4">Acceptés</h2>
+        <draggable group="test" v-model="list3" item-key="id">
+          <template #item="{ element }">
+            <v-card :title="element.name" subtitle="Subtitle" text="...">
+              <v-card-actions>
+                <v-btn>Click me</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </draggable>
+      </v-col>
+      <v-col class="ml-2 bg-grey-100 rounded">
+        <h2 class="mb-4">Refusés</h2>
+        <draggable group="test" v-model="list4" item-key="id">
+          <template #item="{ element }">
+            <v-card :title="element.name" subtitle="Subtitle" text="...">
+              <v-card-actions>
+                <v-btn>Click me</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </draggable>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -50,6 +74,8 @@ const list1 = ref([
 ])
 
 const list2 = ref([{ name: 'Johnd', id: 1 }])
+const list3 = ref([])
+const list4 = ref([])
 const addPeople = () => {
   list1.value.push({ name: 'New', id: Math.random() })
 }
