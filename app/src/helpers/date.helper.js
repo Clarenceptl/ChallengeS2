@@ -17,10 +17,10 @@ export const formatDateToInput = (date, separator = '/') => {
 
 export const checkDateForRefreshToken = (dateMs) => {
   const nowMs = now.unix()
-  const tenMinutesBeforeExp = dayjs.unix(dateMs).subtract(10, 'm').unix()
+  const twentyMinutesBeforeExp = dayjs.unix(dateMs).subtract(20, 'm').unix()
 
   if (!dateMs) return false
-  if (nowMs >= tenMinutesBeforeExp && nowMs < dateMs) {
+  if (nowMs >= twentyMinutesBeforeExp && nowMs < dateMs) {
     return true
   }
 

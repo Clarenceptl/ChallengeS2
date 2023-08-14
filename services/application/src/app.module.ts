@@ -8,6 +8,7 @@ import { CompanySectorOptionsModule } from './company-sector-options/company-sec
 import { CompanySizeOptionsModule } from './company-size-options/company-size-options.module';
 import { JobAdsModule } from './job-ads/job-ads.module';
 import { SeedModule } from './seed/seed.module';
+import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { SeedModule } from './seed/seed.module';
     CompanySectorOptionsModule,
     CompanySizeOptionsModule,
     JobAdsModule,
-    SeedModule
+    SeedModule,
+    CandidateJobAdsModule
   ],
   controllers: [],
   providers: []

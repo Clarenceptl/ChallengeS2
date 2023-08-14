@@ -170,7 +170,7 @@ const router = createRouter({
         {
           path: 'appointements/',
           name: 'AppointementsList',
-          component: () => import('@/views/admin/AppointementsList.vue')
+          component: () => import('@/views/admin/AppointmentsList.vue')
         },
         {
           path: 'company-information/',

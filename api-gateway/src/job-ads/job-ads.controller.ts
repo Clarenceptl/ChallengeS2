@@ -12,11 +12,13 @@ import {
 } from '@nestjs/common';
 import { JobAdsService } from './job-ads.service';
 import { CreateJobAdsRequest, UpdateJobAdsRequest } from './job-ads.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'job-ads',
   version: '1'
 })
+@ApiTags('Job Ads')
 export class JobAdsController {
   constructor(private readonly jobAdsService: JobAdsService) {}
 
@@ -65,6 +67,21 @@ export class JobAdsController {
   public applyJobAds(@Param('id') id: string, @Req() req: any) {
     const tokenUser = req?.user ?? null;
     return this.jobAdsService.applyJobAds(id, tokenUser);
+  }
+
+  @Post('candidate/change-status/:id')
+  @HttpCode(200)
+  public changeStatusCandidate(
+    @Param('id') idJobAdCandidate: string,
+    @Req() req: any,
+    @Body() data: { status: string }
+  ) {
+    const tokenUser = req?.user ?? null;
+    return this.jobAdsService.updateStatusCandidate(
+      idJobAdCandidate,
+      tokenUser,
+      data
+    );
   }
 
   @Post('apply/:id/cancel')

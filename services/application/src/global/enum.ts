@@ -47,7 +47,8 @@ export enum SERVICE_CMD {
   RESET_PASSWORD = 'reset-password',
   UPDATE_QUIZ = 'update-quiz',
   REMOVE_QUIZ = 'remove-quiz',
-  DELETE_QUIZ = 'delete-quiz'
+  DELETE_QUIZ = 'delete-quiz',
+  UPDATE_STATUS_CANDIDATE = 'update-status-candidate'
 }
 
 export enum SERVICE_NAME {

@@ -10,15 +10,14 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
-import {
-  AcceptAppointmentRequest,
-  CreateAppointmentRequest
-} from './appointment.dto';
+import { CreateAppointmentRequest } from './appointment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'appointments',
   version: '1'
 })
+@ApiTags('Appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 

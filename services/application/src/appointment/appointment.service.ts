@@ -9,7 +9,7 @@ import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
 import { User, UserRole } from 'src/users/users.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
-import e from 'express';
+import { STATUS } from 'src/candidate-job-ads/candidates-job-ads.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -172,19 +172,70 @@ export class AppointmentService {
     tokenUser: User
   ): Promise<SuccessResponse> {
     let res: Appointment;
-    try {
-      const newAppointment = new Appointment();
-      const candidate = await this.userRepository.findOneBy({
-        id: appointment.candidateId
-      });
-      const jobAd = await this.jobAdsRepository.findOneBy({
-        id: parseInt(appointment.jobAdId)
-      });
-      newAppointment.employee = tokenUser;
-      newAppointment.candidate = candidate;
-      newAppointment.job = jobAd;
-      newAppointment.time = appointment.time;
 
+    const candidate = await this.userRepository.findOneBy({
+      id: appointment.candidateId
+    });
+
+    const checkAlreadyAppointment = await this.appointmentRepository.findOneBy({
+      candidate: {
+        id: appointment.candidateId
+      },
+      job: {
+        id: parseInt(appointment.jobAdId)
+      }
+    });
+    console.log(checkAlreadyAppointment);
+
+    if (checkAlreadyAppointment) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Appointment already exist'
+      });
+    }
+
+    const newAppointment = new Appointment();
+
+    const jobAd = await this.jobAdsRepository.findOneBy({
+      id: parseInt(appointment.jobAdId)
+    });
+    if (!tokenUser.roles.includes(UserRole.ROLE_EMPLOYEUR)) {
+      throw new RpcException({
+        statusCode: 403,
+        message: 'Forbidden'
+      });
+    }
+
+    if (!candidate) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Candidate not found'
+      });
+    }
+
+    if (!jobAd) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Job ad not found'
+      });
+    }
+
+    const checkCandidature = candidate.candidatesJobAds.find(
+      (candidateJobAd) => candidateJobAd.jobAds.id === jobAd.id
+    );
+
+    if (!checkCandidature || checkCandidature.status !== STATUS.ACCEPTED) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Candidate has not been accepted'
+      });
+    }
+
+    newAppointment.employee = tokenUser;
+    newAppointment.candidate = candidate;
+    newAppointment.job = jobAd;
+    newAppointment.time = appointment.time;
+    try {
       res = await this.appointmentRepository.save(newAppointment);
     } catch (error) {
       throw new RpcException({
