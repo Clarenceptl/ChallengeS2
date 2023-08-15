@@ -99,14 +99,16 @@ export class UsersService {
       const userCompany = tokenUser?.company?.id;
       const jobAds = await this.jobAdsRepository.find({
         where: { company: userCompany },
-        relations: ['candidates'],
+        relations: ['candidatesJobAds'],
         select: {
-          candidates: {
-            id: true,
-            email: true,
-            firstname: true,
-            lastname: true,
-            birthdate: true
+          candidatesJobAds: {
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            }
           }
         },
         order: { created_at: 'DESC' }
@@ -165,7 +167,7 @@ export class UsersService {
       updatedUser.password = encryptPassword(updatedUser.password);
     }
     userToUpdate = Object.assign(userToUpdate, updatedUser);
-    const { candidatures, ...data } = userToUpdate;
+    const { candidatesJobAds, ...data } = userToUpdate;
 
     try {
       await this.userRepository.update({ id: userToUpdate.id }, data);

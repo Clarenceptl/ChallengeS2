@@ -136,6 +136,7 @@
       </v-card>
     </v-dialog>
   </div>
+  <v-btn @click="test">Test update status</v-btn>
 </template>
 
 <script setup>
@@ -147,19 +148,22 @@ import { useQuizStore } from '../../stores/quiz.store'
 import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import draggable from 'vuedraggable'
+import { JobAdsService } from '@/services'
 
 const stores = {
   toast: useToastStore()
 }
 const route = useRoute()
 const router = useRouter()
+
 await useJobAdsStore().getJobAd(route.params.id)
 await useQuizStore().getQuizByJobId(route.params.id)
 await useAppointmentsStore().getAppointments()
+
 const { jobAd } = storeToRefs(useJobAdsStore())
 const { appointments } = storeToRefs(useAppointmentsStore())
 const { quiz } = storeToRefs(useQuizStore())
-
+console.log(jobAd.value.candidatesJobAds[0]?.id)
 let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
 let infoDialog = ref(false)
@@ -224,6 +228,10 @@ const createAppointment = () => {
 const openDialog = (id) => {
   appointmentDialog.value = true
   selectedId.value = id
+}
+
+const test = async () => {
+  await JobAdsService.updateStatusCandidate(jobAd.value.candidatesJobAds[0].id, 'accepted')
 }
 
 // computed that returns appointments for this job

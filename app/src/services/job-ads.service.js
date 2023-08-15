@@ -119,4 +119,23 @@ export class JobAdsService {
       return error.response
     }
   }
+
+  static async updateStatusCandidate(id, status) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/job-ads/candidate/change-status/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
+        },
+        body: JSON.stringify({
+          status
+        })
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
 }

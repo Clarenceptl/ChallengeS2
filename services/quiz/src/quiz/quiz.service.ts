@@ -1,4 +1,4 @@
-import {Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { RpcException, ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -22,7 +22,7 @@ export class QuizService {
     @InjectModel(Quiz.name) private quizModel: Model<Quiz>,
     @InjectModel(Question.name) private questionModel: Model<Question>,
     @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
-  ) { }
+  ) {}
 
   async getQuiz(payload: GetQuizDto) {
     const { id, tokenUser } = payload;
@@ -53,11 +53,14 @@ export class QuizService {
     let res;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.UPDATE_QUIZ }, {id: data.idJobAds, quizId: quiz._id.toString()})
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_QUIZ },
+          { id: data.idJobAds, quizId: quiz._id.toString() }
+        )
       );
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
     return {
       success: true,
@@ -76,7 +79,10 @@ export class QuizService {
       });
     }
 
-    if (quiz.creator.id !== tokenUser.id && !tokenUser.roles.includes(UserRole.ROLE_ADMIN)) {
+    if (
+      quiz.creator.id !== tokenUser.id &&
+      !tokenUser.roles.includes(UserRole.ROLE_ADMIN)
+    ) {
       throw new RpcException({
         statusCode: 401,
         message: 'Unauthorized'
@@ -86,11 +92,14 @@ export class QuizService {
     let res;
     try {
       res = await lastValueFrom(
-        this.client.send({ cmd: SERVICE_CMD.DELETE_QUIZ }, {tokenUser, id: quiz._id.toString() })
+        this.client.send(
+          { cmd: SERVICE_CMD.DELETE_QUIZ },
+          { tokenUser, id: quiz._id.toString() }
+        )
       );
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
 
     try {
@@ -101,7 +110,7 @@ export class QuizService {
         message: 'Internal server error'
       });
     }
-   
+
     return {
       success: true,
       data: quiz

@@ -19,8 +19,10 @@ import {
   UpdateQuizDto,
   UserAnswersDto
 } from './quiz.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({ path: 'quiz', version: '1' })
+@ApiTags('Quiz')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
   @Get(':id')
