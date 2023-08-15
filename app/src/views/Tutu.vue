@@ -4,7 +4,7 @@
       <v-col class="bg-grey-100 rounded">
         <h2 class="mb-4">Candidats</h2>
         <draggable
-          @start="test"
+          id="candidat"
           @end="test"
           group="test"
           v-model="list1"
@@ -24,7 +24,7 @@
       </v-col>
       <v-col class="ml-2 bg-grey-100 rounded">
         <h2 class="mb-4">En attente</h2>
-        <draggable group="test" v-model="list2" item-key="id">
+        <draggable id="en-attente" group="test" v-model="list2" item-key="id">
           <template #item="{ element }">
             <v-card :title="element.name" subtitle="Subtitle" text="...">
               <v-card-actions>
@@ -36,7 +36,7 @@
       </v-col>
       <v-col class="ml-2 bg-grey-100 rounded">
         <h2 class="mb-4">Acceptés</h2>
-        <draggable group="test" v-model="list3" item-key="id">
+        <draggable id="accepted" group="test" v-model="list3" item-key="id">
           <template #item="{ element }">
             <v-card :title="element.name" subtitle="Subtitle" text="...">
               <v-card-actions>
@@ -48,7 +48,7 @@
       </v-col>
       <v-col class="ml-2 bg-grey-100 rounded">
         <h2 class="mb-4">Refusés</h2>
-        <draggable group="test" v-model="list4" item-key="id">
+        <draggable id="refused" group="test" v-model="list4" item-key="id">
           <template #item="{ element }">
             <v-card :title="element.name" subtitle="Subtitle" text="...">
               <v-card-actions>
