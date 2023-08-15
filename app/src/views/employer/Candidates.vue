@@ -1,58 +1,98 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your candidates list</h1>
-    <v-container class="h-100" v-if="jobAd?.candidates">
+    <v-container class="h-100" v-if="jobAd?.candidatesJobAds?.length">
       <v-row>
         <v-col class="bg-grey-100 rounded">
-          <h2 class="mb-4">Candidats</h2>
+          <h2 class="mb-4">{{ statusFrontEmployeur.INIT }}</h2>
           <draggable
-            @start="test"
-            @end="test"
+            :id="statusFrontEmployeur.INIT"
+            @end="updateStatus"
             group="test"
-            v-model="jobAd.candidates"
+            v-model="newCandidates"
             item-key="id"
           >
             <template #item="{ element }">
-              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+              <v-card
+                :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
+                :subtitle="element.candidate.email"
+              >
                 <v-card-actions>
-                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
-                  <v-btn class="bg-green" @click="openDialog(element.id)">Set appointment</v-btn>
+                  <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
+                    >More info</v-btn
+                  >
+                  <v-btn class="bg-green" @click="openDialog(element.candidate.id)"
+                    >Set appointment</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </template>
           </draggable>
         </v-col>
         <v-col class="ml-2 bg-grey-100 rounded">
-          <h2 class="mb-4">En attente</h2>
-          <draggable group="test" v-model="pendingList" item-key="id">
+          <h2 class="mb-4">{{ statusFrontEmployeur.PENDING }}</h2>
+          <draggable
+            :id="statusFrontEmployeur.PENDING"
+            @end="updateStatus"
+            group="test"
+            v-model="pendingCandidates"
+            item-key="id"
+          >
             <template #item="{ element }">
-              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+              <v-card
+                :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
+                :subtitle="element.candidate.email"
+              >
                 <v-card-actions>
-                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                  <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
+                    >More info</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </template>
           </draggable>
         </v-col>
         <v-col class="ml-2 bg-grey-100 rounded">
-          <h2 class="mb-4">Acceptés</h2>
-          <draggable group="test" v-model="acceptedList" item-key="id">
+          <h2 class="mb-4">{{ statusFrontEmployeur.ACCEPTED }}</h2>
+          <draggable
+            :id="statusFrontEmployeur.ACCEPTED"
+            @end="updateStatus"
+            group="test"
+            v-model="acceptedCandidates"
+            item-key="id"
+          >
             <template #item="{ element }">
-              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+              <v-card
+                :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
+                :subtitle="element.candidate.email"
+              >
                 <v-card-actions>
-                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                  <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
+                    >More info</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </template>
           </draggable>
         </v-col>
         <v-col class="ml-2 bg-grey-100 rounded">
-          <h2 class="mb-4">Refusés</h2>
-          <draggable group="test" v-model="deniedList" item-key="id">
+          <h2 class="mb-4">{{ statusFrontEmployeur.REJECTED }}</h2>
+          <draggable
+            :id="statusFrontEmployeur.REJECTED"
+            @end="updateStatus"
+            group="test"
+            v-model="rejectedCandidates"
+            item-key="id"
+          >
             <template #item="{ element }">
-              <v-card :title="`${element.firstname} ${element.lastname}`" :subtitle="element.email">
+              <v-card
+                :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
+                :subtitle="element.candidate.email"
+              >
                 <v-card-actions>
-                  <v-btn class="bg-blue" @click="infoDialog = true; selectedUserInfoId = element.id">More info</v-btn>
+                  <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
+                    >More info</v-btn
+                  >
                 </v-card-actions>
               </v-card>
             </template>
@@ -68,17 +108,7 @@
         <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
       </v-card>
     </div>
-    <!-- <v-card v-else class="pa-5 bg-green-300" variant="outlined">
-        <v-card-title>
-          <h2>No candidates</h2>
-        </v-card-title>
-        <v-card-subtitle> No candidates has applied to this job yet </v-card-subtitle>
-      </v-card>
-    <div class="text-center">
-      Buttons are disabled if the candidate already has an appointment, or if the candidate has not
-      taken the test yet.
-    </div> -->
-    
+
     <v-dialog v-model="appointmentDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
@@ -121,26 +151,25 @@
         <v-card-text>
           <v-form>
             <label>Firstname</label>
-            <v-text-field disabled type="text" v-model="selectedUser.firstname" />
+            <v-text-field disabled type="text" v-model="selectedUserInfo.firstname" />
             <label>Lastname</label>
-            <v-text-field disabled type="text" v-model="selectedUser.lastname" />
+            <v-text-field disabled type="text" v-model="selectedUserInfo.lastname" />
             <label>Email</label>
-            <v-text-field disabled type="email" v-model="selectedUser.email" />
+            <v-text-field disabled type="email" v-model="selectedUserInfo.email" />
             <label>Birthdate</label>
-            <v-text-field disabled type="date" v-model="selectedUser.birthdate" />
+            <v-text-field disabled type="date" v-model="selectedUserInfo.birthdate" />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="blue-800" text @click="infoDialog = false"> Ok </v-btn>
+          <v-btn color="blue-800" text @click="infoDialog = false"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
-  <v-btn @click="test">Test update status</v-btn>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useJobAdsStore } from '../../stores/job-ads.store'
 import { useAppointmentsStore } from '../../stores/appointments.store'
@@ -149,31 +178,41 @@ import { useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
 import draggable from 'vuedraggable'
 import { JobAdsService } from '@/services'
+import { statusFrontEmployeur } from '@/enums'
+import { getKeyByValue } from '@/helpers'
 
+//#region Stores / Router
 const stores = {
   toast: useToastStore()
 }
 const route = useRoute()
 const router = useRouter()
 
-await useJobAdsStore().getJobAd(route.params.id)
-await useQuizStore().getQuizByJobId(route.params.id)
-await useAppointmentsStore().getAppointments()
-
 const { jobAd } = storeToRefs(useJobAdsStore())
 const { appointments } = storeToRefs(useAppointmentsStore())
 const { quiz } = storeToRefs(useQuizStore())
-console.log(jobAd.value.candidatesJobAds[0]?.id)
-let appointmentDialog = ref(false)
-let deleteDialog = ref(false)
-let infoDialog = ref(false)
-let time = ref('')
-let date = ref('')
-let selectedUserInfoId = ref(null)
+//#endregion
 
-const formattedDatetime = computed(() => {
-  return `${date.value}T${time.value}:00Z`
-})
+//#region props
+const newCandidates = ref([])
+const pendingCandidates = ref([])
+const acceptedCandidates = ref([])
+const rejectedCandidates = ref([])
+
+const appointmentDialog = ref(false)
+const deleteDialog = ref(false)
+const infoDialog = ref(false)
+const time = ref('')
+const date = ref('')
+const selectedUserInfo = ref(null)
+const selectedId = ref(null)
+//#endregion
+
+//#region Methods
+const setCandidatesByStatus = (status) => {
+  const statusKey = getKeyByValue(statusFrontEmployeur, status)
+  return jobAd.value.candidatesJobAds.filter((candidate) => candidate.status === statusKey)
+}
 
 const reinitilize = () => {
   appointmentDialog.value = false
@@ -181,11 +220,9 @@ const reinitilize = () => {
   time.value = ''
   date.value = ''
   selectedId.value = null
-  selectedUserInfoId.value = null
+  selectedUserInfo.value = null
   infoDialog.value = false
 }
-
-let selectedId = ref(null)
 
 const createAppointment = () => {
   if (!date.value || !time.value) {
@@ -230,10 +267,23 @@ const openDialog = (id) => {
   selectedId.value = id
 }
 
-const test = async () => {
-  await JobAdsService.updateStatusCandidate(jobAd.value.candidatesJobAds[0].id, 'accepted')
+const openInfoDialog = (candidate) => {
+  infoDialog.value = true
+  selectedUserInfo.value = candidate
 }
 
+const updateStatus = async (val) => {
+  await JobAdsService.updateStatusCandidate(
+    val.item.__draggable_context.element.id,
+    getKeyByValue(statusFrontEmployeur, val.to.id)
+  )
+}
+//#endregion
+
+//#region computed
+const formattedDatetime = computed(() => {
+  return `${date.value}T${time.value}:00Z`
+})
 // computed that returns appointments for this job
 const jobAppointments = computed(() => {
   return appointments.value.filter((appointment) => {
@@ -265,26 +315,28 @@ const isCandidateInAppointments = (candidateId) => {
 }
 
 // computed that return user based on selected user info id
-const selectedUser = computed(() => {
-  return jobAd.value?.candidates?.find((userInfo) => {
-    return userInfo.id === selectedUserInfoId.value
-  })
-})
+// const selectedUser = computed(() => {
+//   return jobAd.value?.candidates?.find((userInfo) => {
+//     return userInfo.id === selectedUserInfoId.value
+//   })
+// })
 
-const list1 = ref([
-  { name: 'John', id: 1 },
-  { name: 'Joao', id: 2 },
-  { name: 'Jean', id: 3 },
-  { name: 'Gerard', id: 4 }
-])
+//#endregion
 
-const pendingList = ref([])
-const acceptedList = ref([])
-const deniedList = ref([])
-
-const test = (val) => {
-  console.log(val)
+//#region life cycle hooks
+await useJobAdsStore().getJobAd(route.params.id)
+if (jobAd.value.quizId) {
+  await useQuizStore().getQuizByJobId(route.params.id)
 }
+
+await useAppointmentsStore().getAppointments()
+onMounted(() => {
+  newCandidates.value = setCandidatesByStatus(statusFrontEmployeur.INIT)
+  pendingCandidates.value = setCandidatesByStatus(statusFrontEmployeur.PENDING)
+  acceptedCandidates.value = setCandidatesByStatus(statusFrontEmployeur.ACCEPTED)
+  rejectedCandidates.value = setCandidatesByStatus(statusFrontEmployeur.REJECTED)
+})
+//#endregion
 </script>
 
 <style scoped>
