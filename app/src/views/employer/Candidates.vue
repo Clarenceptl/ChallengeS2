@@ -149,17 +149,27 @@
           <h2>Details</h2>
         </v-card-title>
         <v-card-text>
-          <v-form>
-            <label>Firstname</label>
-            <v-text-field disabled type="text" v-model="selectedUserInfo.firstname" />
-            <label>Lastname</label>
-            <v-text-field disabled type="text" v-model="selectedUserInfo.lastname" />
-            <label>Email</label>
-            <v-text-field disabled type="email" v-model="selectedUserInfo.email" />
-            <label>Birthdate</label>
-            <v-text-field disabled type="date" v-model="selectedUserInfo.birthdate" />
-          </v-form>
+          <div class="d-flex">
+            <p>Firstname :</p>
+            <p class="ml-2">{{ selectedUserInfo.firstname }}</p>
+          </div>
+
+          <div class="d-flex">
+            <p>Lastname :</p>
+            <p class="ml-2">{{ selectedUserInfo.lastname }}</p>
+          </div>
+
+          <div class="d-flex">
+            <p>Email :</p>
+            <p class="ml-2">{{ selectedUserInfo.email }}</p>
+          </div>
+
+          <div class="d-flex">
+            <p>Birthdate :</p>
+            <p class="ml-2">{{ selectedUserInfo.birthdate }}</p>
+          </div>
         </v-card-text>
+
         <v-card-actions>
           <v-btn color="blue-800" text @click="infoDialog = false"> Close </v-btn>
         </v-card-actions>
@@ -224,7 +234,7 @@ const reinitilize = () => {
   infoDialog.value = false
 }
 
-const createAppointment = () => {
+const createAppointment = async () => {
   if (!date.value || !time.value) {
     stores.toast.createToast({
       type: 'error',
@@ -239,27 +249,24 @@ const createAppointment = () => {
     })
     return
   }
-  useAppointmentsStore()
-    .createAppointment({
-      candidateId: selectedId.value,
-      jobAdId: jobAd.value.id.toString(),
-      time: formattedDatetime.value
+  const res = await useAppointmentsStore().createAppointment({
+    candidateId: selectedId.value,
+    jobAdId: jobAd.value.id.toString(),
+    time: formattedDatetime.value
+  })
+
+  if (res.success) {
+    appointmentDialog.value = false
+    stores.toast.createToast({
+      type: 'success',
+      message: 'Appointment created'
     })
-    .then(() => {
-      appointmentDialog.value = false
-      stores.toast.createToast({
-        type: 'success',
-        message: 'Appointment created'
-      })
-      router.push('/employer/appointments')
-    })
-    .catch((error) => {
-      console.log(error)
-      stores.toast.createToast({
-        type: 'error',
-        message: 'Something went wrong'
-      })
-    })
+    return router.push('/employer/appointments')
+  }
+  stores.toast.createToast({
+    type: 'error',
+    message: res.message ?? 'Something went wrong'
+  })
 }
 
 const openDialog = (id) => {
@@ -273,10 +280,16 @@ const openInfoDialog = (candidate) => {
 }
 
 const updateStatus = async (val) => {
-  await JobAdsService.updateStatusCandidate(
+  const res = await JobAdsService.updateStatusCandidate(
     val.item.__draggable_context.element.id,
     getKeyByValue(statusFrontEmployeur, val.to.id)
   )
+  if (!res.success) {
+    stores.toast.createToast({
+      type: 'error',
+      message: res.message ?? 'Something went wrong'
+    })
+  }
 }
 //#endregion
 
