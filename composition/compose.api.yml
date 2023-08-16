@@ -5,6 +5,7 @@ services:
     build:
       context: ../api-gateway
       dockerfile: Dockerfile
+      target: development
     container_name: challenges2_api-gateway
     env_file:
       - ../.env
