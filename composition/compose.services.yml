@@ -5,6 +5,7 @@ services:
     build:
       context: ../services/application
       dockerfile: Dockerfile
+      target: development
     container_name: challenges2_app-service
     env_file:
       - ../.env
@@ -16,6 +17,7 @@ services:
     build:
       context: ../services/authentication
       dockerfile: Dockerfile
+      target: development
     container_name: challenges2_auth-service
     env_file:
       - ../.env
@@ -27,6 +29,7 @@ services:
     build:
       context: ../services/quiz
       dockerfile: Dockerfile
+      target: development
     container_name: challenges2_quiz-service
     env_file:
       - ../.env
@@ -38,6 +41,7 @@ services:
     build:
       context: ../services/mailing
       dockerfile: Dockerfile
+      target: development
     container_name: challenges2_mailing-service
     env_file:
       - ../.env
