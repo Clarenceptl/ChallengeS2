@@ -1,6 +1,6 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
 
-export class UserService {
+export class UsersService {
   static async getUser(id) {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/users/${id.toString()}`, {
@@ -36,6 +36,39 @@ export class UserService {
     try {
       const response = await fetch(`${API_GATEWAY_URL}/users/getSelf`, {
         method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('bearer-token')}`
+        }
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
+
+  static async updateUser(id, data) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/users/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('bearer-token')}`
+        },
+        body: JSON.stringify(data)
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
+      return error.response
+    }
+  }
+
+  static async deleteUser(id) {
+    try {
+      const response = await fetch(`${API_GATEWAY_URL}/users/${id}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem('bearer-token')}`

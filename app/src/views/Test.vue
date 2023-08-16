@@ -1,9 +1,9 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center">{{ quiz.title }}</h1>
-    <h2 class="text-center">{{ quiz.tempsParQuestionSecond * quiz.questions.length }} seconds</h2>
+    <h2 class="text-center">{{ timer }} seconds</h2>
     <v-window v-model="selected" name="question">
-      <v-card v-for="(question, index) in quiz.questions" :key="index" flat>
+      <v-card v-for="(question, index) in shuffledAnswers" :key="index" flat>
         <v-card-title>
           <h2>{{ question.label }}</h2>
         </v-card-title>
@@ -27,17 +27,33 @@
 import { useRoute, useRouter } from 'vue-router';
 import { useQuizStore } from '../stores/quiz.store';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useToastStore } from '@/stores'
-
-const stores = {
-  toast: useToastStore()
-}
 
 const route = useRoute();
 const router = useRouter();
 await useQuizStore().getQuizByJobId(route.params.id);
 const { quiz } = storeToRefs(useQuizStore());
+
+let timer = ref(quiz.tempsParQuestionSecond * quiz.questions?.length);
+
+watch(() => quiz.value, (quiz) => {
+  if (quiz) {
+    timer.value = quiz.tempsParQuestionSecond * quiz.questions?.length;
+    const interval = setInterval(() => {
+      timer.value--;
+      if (timer.value === 0) {
+        sendUserAnswers();
+        clearInterval(interval);
+      }
+    }, 1000);
+  }
+}, { immediate: true });
+
+const stores = {
+  toast: useToastStore()
+}
+
 
 const selected = ref([]);
 
@@ -67,6 +83,15 @@ const sendUserAnswers = async () => {
     });
   });
 };
+
+const shuffledAnswers = computed(() => {
+  return quiz.value.questions?.map((question) => {
+    return {
+      ...question,
+      answers: question.answers.sort(() => Math.random() - 0.5),
+    };
+  });
+});
 
 </script>
 

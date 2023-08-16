@@ -1,8 +1,9 @@
 import { Controller, ValidationPipe } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { SERVICE_CMD } from '../global';
+import { Roles, SERVICE_CMD } from '../global';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateCompanyRequest } from './company.dto';
+import { UpdateCompanyDto } from './company.dto';
+import { UserRole } from 'src/users/users.entity';
 
 @Controller()
 export class CompanyController {
@@ -27,5 +28,13 @@ export class CompanyController {
   public async createCompany(@Payload(ValidationPipe) payload) {
     const { data, user } = payload;
     return await this.companyService.createCompany(data, user);
+  }
+
+  @Roles(UserRole.ROLE_EMPLOYEUR)
+  @MessagePattern({ cmd: SERVICE_CMD.UPDATE_COMPANY })
+  public async updateCompany(
+    @Payload(ValidationPipe) payload: UpdateCompanyDto
+  ) {
+    return await this.companyService.updateCompany(payload);
   }
 }

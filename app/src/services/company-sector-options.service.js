@@ -1,5 +1,4 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
-const authToken = localStorage.getItem('bearer-token') ?? ''
 export class CompanySectorOptionsService {
   static async getCompanySectorOptions() {
     try {
@@ -7,7 +6,7 @@ export class CompanySectorOptionsService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         }
       })
       return await response.json()
@@ -22,7 +21,7 @@ export class CompanySectorOptionsService {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({
           sector: sector
@@ -40,7 +39,7 @@ export class CompanySectorOptionsService {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         }
       })
       return await response.json()
@@ -55,7 +54,7 @@ export class CompanySectorOptionsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({
           sector: sector

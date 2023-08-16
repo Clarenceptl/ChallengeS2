@@ -20,7 +20,7 @@
     </v-card>
     <div v-else-if="filteredJobAds.length">
       <v-row>
-        <v-col cols="4" class="column-scrollable">
+        <v-col cols="12" md="4" class="column-scrollable">
           <v-card
             variant="outlined"
             class="mb-2 bg-green-200"
@@ -31,10 +31,8 @@
             <v-card-title>{{ job?.title }}</v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                <v-list-item-content>
-                  <v-list-item-title>{{ job.company?.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ job.company?.address }}</v-list-item-subtitle>
-                </v-list-item-content>
+                <v-list-item-title>{{ job.company?.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ job.company?.address }}</v-list-item-subtitle>
               </v-list-item>
               <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
@@ -56,10 +54,8 @@
             </v-card-title>
             <v-card-text>
               <v-list-item class="mb-4">
-                <v-list-item-content>
-                  <v-list-item-title>{{ selectedJob?.company?.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ selectedJob?.company?.address }}</v-list-item-subtitle>
-                </v-list-item-content>
+                <v-list-item-title>{{ selectedJob?.company?.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ selectedJob?.company?.address }}</v-list-item-subtitle>
               </v-list-item>
               <v-chip class="mb-4 ml-1" v-for="(option, index) in companyOptions" :key="index">
                 {{ option }}
@@ -108,24 +104,17 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useJobAdsStore } from '../stores/job-ads.store'
 import { useToastStore } from '@/stores'
-import { useUserStore } from '@/stores'
 
-let search = ref('');
+let search = ref('')
 
-const userStore = useUserStore()
-onMounted(() => {
-  userStore.loadContextUser()
-})
 const stores = {
   toast: useToastStore()
 }
-const { jobAds } = storeToRefs(useJobAdsStore())
 await useJobAdsStore().getJobAds()
-
-
+const { jobAds } = storeToRefs(useJobAdsStore())
 
 const filteredJobAds = computed(() => {
   return jobAds.value.filter((job) => {
@@ -152,25 +141,28 @@ const jobDetails = computed(() => {
 let applyDialog = ref(false)
 
 const apply = () => {
-  useJobAdsStore().applyJobAd(selectedJob.value.id).then((val) => {
-    if (val.success) {
-      stores.toast.createToast({
-        type: 'success',
-        message: 'you successfully applied to this job'
-      });
-    } else {
+  useJobAdsStore()
+    .applyJobAd(selectedJob.value.id)
+    .then((val) => {
+      if (val.success) {
+        stores.toast.createToast({
+          type: 'success',
+          message: 'you successfully applied to this job'
+        })
+      } else {
+        stores.toast.createToast({
+          type: 'error',
+          message: 'you cannot apply to this job'
+        })
+      }
+      applyDialog.value = false
+    })
+    .catch(() => {
       stores.toast.createToast({
         type: 'error',
-        message: 'you cannot apply to this job'
-      });
-    }
-    applyDialog.value = false
-  }).catch(() => {
-    stores.toast.createToast({
-      type: 'error',
-      message: 'you already applied to this job'
-    });
-  })
+        message: 'you already applied to this job'
+      })
+    })
 }
 </script>
 

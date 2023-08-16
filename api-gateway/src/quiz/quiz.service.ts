@@ -30,7 +30,6 @@ export class QuizService {
           { tokenUser: { id: user.id, roles: user.roles }, ...data }
         )
       );
-      // TODO add quiz id to job add
     } catch (error) {
       handleErrors(error);
     }
@@ -127,7 +126,6 @@ export class QuizService {
       res = await lastValueFrom(
         this.client.send({ cmd: SERVICE_CMD.DELETE_QUIZ }, { tokenUser, id })
       );
-      // TODO delete quiz id to job add
     } catch (error) {
       handleErrors(error);
     }

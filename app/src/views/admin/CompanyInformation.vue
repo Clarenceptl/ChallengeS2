@@ -11,7 +11,7 @@
       </v-btn>
     </div>
     <v-row class="pa-5">
-      <v-col cols="4" class="text-center scrollable">
+      <v-col cols="12" md="4" class="text-center scrollable">
         <div class=" justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">
@@ -58,7 +58,7 @@
         </div>
       </v-col>
 
-      <v-col cols="4" class="text-center scrollable">
+      <v-col cols="12" md="4" class="text-center scrollable">
         <div class=" justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">
@@ -105,7 +105,7 @@
         </div>
       </v-col>
 
-      <v-col cols="4" class="text-center scrollable">
+      <v-col cols="12" md="4" class="text-center scrollable">
         <div class=" justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">

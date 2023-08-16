@@ -4,9 +4,11 @@ export enum SERVICE_CMD {
   VERIFY_ACCOUNT = 'auth_verify_account',
   GET_USER = 'get-user',
   GET_USERS = 'get-users',
+  UPDATE_USER = 'update-user',
   GET_MY_JOBS = 'get-my-jobs',
   GET_SELF_USER = 'get-self-user',
   GET_REFRESH_TOKEN = 'get-refresh-token',
+  DELETE_USER = 'delete-user',
   GET_COMPANY_SIZE_OPTIONS = 'get-company-size-options',
   GET_COMPANY_SIZE_OPTIONS_BY_ID = 'get-company-size-options-by-id',
   CREATE_COMPANY_SIZE_OPTIONS = 'create-company-size-options',
@@ -25,6 +27,7 @@ export enum SERVICE_CMD {
   GET_COMPANIES = 'get-companies',
   GET_COMPANY = 'get-company',
   CREATE_COMPANY = 'create-company',
+  UPDATE_COMPANY = 'update-company',
   GET_JOB_ADS = 'get-job-ads',
   GET_JOB_ADS_BY_ID = 'get-job-ads-by-id',
   CREATE_JOB_ADS = 'create-job-ads',
@@ -42,7 +45,10 @@ export enum SERVICE_CMD {
   ADD_QUESTIONS_ANSWERS = 'add-questions-answers',
   DELETE_QUESTION = 'delete-questions',
   ADD_USER_ANSWERS = 'add-user-answers',
-  GET_QUIZ = 'get-quiz'
+  GET_QUIZ = 'get-quiz',
+  SEND_EMAIL_RESET_PASSWORD = 'send-email-reset-password',
+  RESET_PASSWORD = 'reset-password',
+  UPDATE_STATUS_CANDIDATE = 'update-status-candidate'
 }
 
 export enum SERVICE_NAME {

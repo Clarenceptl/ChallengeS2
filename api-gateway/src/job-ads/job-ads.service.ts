@@ -109,4 +109,23 @@ export class JobAdsService {
     }
     return res;
   }
+
+  public async updateStatusCandidate(
+    id: string,
+    tokenUser: any,
+    data: { status: string }
+  ) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_STATUS_CANDIDATE },
+          { tokenUser, status: data.status, id }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
 }

@@ -9,14 +9,30 @@ export const formatDateToApi = (date, separator = '-') => {
   return `${day}/${month}/${year}`
 }
 
+export const formatDateToInput = (date, separator = '/') => {
+  if (!date) return null
+  const [year, month, day] = date.split(separator)
+  return `${day}-${month}-${year}`
+}
+
 export const checkDateForRefreshToken = (dateMs) => {
   const nowMs = now.unix()
-  const tenMinutesBeforeExp = dayjs.unix(dateMs).subtract(10, 'm').unix()
+  const twentyMinutesBeforeExp = dayjs.unix(dateMs).subtract(20, 'm').unix()
 
   if (!dateMs) return false
-  if (nowMs >= tenMinutesBeforeExp && nowMs < dateMs) {
+  if (nowMs >= twentyMinutesBeforeExp && nowMs < dateMs) {
     return true
   }
 
   return false
+}
+
+export const formatDateAppointment = (date) => {
+  const newDate = new Date(date)
+  const year = newDate.getFullYear()
+  const month = newDate.getMonth() + 1
+  const day = newDate.getDate()
+  const hours = newDate.getHours()
+  const minutes = newDate.getMinutes()
+  return `${day}/${month}/${year} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
 }

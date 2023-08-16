@@ -17,12 +17,6 @@ export class Quiz {
   title: string;
 
   @Prop({
-    type: Number,
-    default: 0
-  })
-  nbQuestions: number;
-
-  @Prop({
     type: String,
     required: true
   })

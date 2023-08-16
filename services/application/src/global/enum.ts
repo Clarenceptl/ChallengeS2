@@ -42,11 +42,18 @@ export enum SERVICE_CMD {
   APPLY_JOB_ADS = 'apply-job-ads',
   CANCEL_APPLY_JOB_ADS = 'cancel-apply-job-ads',
   GET_APPOINTMENTS = 'get-appointments',
-  VERIFY_ACCOUNT = 'auth_verify_account'
+  VERIFY_ACCOUNT = 'auth_verify_account',
+  UPDATE_TOKEN_USER = 'update-token-user',
+  RESET_PASSWORD = 'reset-password',
+  UPDATE_QUIZ = 'update-quiz',
+  REMOVE_QUIZ = 'remove-quiz',
+  DELETE_QUIZ = 'delete-quiz',
+  UPDATE_STATUS_CANDIDATE = 'update-status-candidate'
 }
 
 export enum SERVICE_NAME {
   AUTH = 'AUTH_SERVICE',
   APP = 'APPLICATION_SERVICE',
-  MAILING = 'MAILING_SERVICE'
+  MAILING = 'MAILING_SERVICE',
+  QUIZ = 'QUIZ_SERVICE'
 }

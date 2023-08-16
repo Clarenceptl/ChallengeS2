@@ -20,8 +20,8 @@ export const useAppointmentsStore = defineStore('appointmentsStore', {
       }
       return res
     },
-    async acceptAppointment(appointmentId, boolean) {
-      const res = await AppointmentsService.acceptAppointment(appointmentId, boolean)
+    async acceptAppointment(appointmentId, appointment) {
+      const res = await AppointmentsService.acceptAppointment(appointmentId, appointment)
       if (res?.success) {
         await this.getAppointments();
       }

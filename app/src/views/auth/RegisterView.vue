@@ -1,9 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="6" class="text-center justify-content-center d-none d-md-flex">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
+    <v-col cols="12" md="6">
       <h1 class="mt-16">Create Your Account</h1>
       <div class="mb-10">
         Already have an account ? <router-link to="/login">Login</router-link>
@@ -84,11 +84,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
-import { useUserStore, useToastStore } from '@/stores'
+import { useToastStore } from '@/stores'
+import { useUsersStore } from '../../stores/users.store'
 import { registerSchema } from '@/models'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const stores = {
-  user: useUserStore(),
   toast: useToastStore()
 }
 
@@ -119,13 +121,14 @@ const user = {
 }
 
 const submit = handleSubmit(async (values) => {
-  const res = await stores.user.register(values)
+  const res = await useUsersStore().register(values)
   if (res.success) {
     resetForm()
-    return stores.toast.createToast({
+    stores.toast.createToast({
       type: 'success',
       message: res.message,
     })
+    router.push('/login')
   } else {
     return stores.toast.createToast({
       type: 'error',
@@ -146,14 +149,5 @@ const submit = handleSubmit(async (values) => {
   background-position: center;
   width: 100%;
   height: 100vh;
-}
-
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
-  }
 }
 </style>

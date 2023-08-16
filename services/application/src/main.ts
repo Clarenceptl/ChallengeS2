@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import { RolesAndOwnerGlobalGuard } from './global';
+import { ExceptionFilter } from './global/rcp-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -10,8 +11,8 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: 'app-service',
-        port: 3021
+        host: process.env.APP_SERVICE_HOST ?? 'app-service',
+        port: parseInt(process.env.APP_SERVICE_PORT) ?? 3021
       }
     }
   );
@@ -20,6 +21,7 @@ async function bootstrap() {
       whitelist: true
     })
   );
+  app.useGlobalFilters(new ExceptionFilter());
   app.useGlobalGuards(new RolesAndOwnerGlobalGuard(new Reflector()));
   await app.listen();
 }

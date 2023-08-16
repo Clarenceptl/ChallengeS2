@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCompanyRequest {
   @IsString()
@@ -6,9 +6,11 @@ export class CreateCompanyRequest {
   name: string;
 
   @IsNotEmpty()
+  @IsString()
   creationDate: Date;
 
   @IsString()
+  @IsNotEmpty()
   address: string;
 
   @IsString()
@@ -19,6 +21,7 @@ export class CreateCompanyRequest {
   description: string;
 
   @IsNotEmpty()
+  @IsString()
   founder: string;
 
   @IsString()
@@ -32,5 +35,44 @@ export class CreateCompanyRequest {
   revenue: any;
 
   @IsNotEmpty()
+  sector: any;
+}
+
+export class UpdateCompanyRequest {
+  @IsString()
+  @IsOptional()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  creationDate: Date;
+
+  @IsString()
+  @IsOptional()
+  address: string;
+
+  @IsString()
+  @IsOptional()
+  website: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  founder: string;
+
+  @IsString()
+  @IsOptional()
+  siret: string;
+
+  @IsOptional()
+  size: any;
+
+  @IsOptional()
+  revenue: any;
+
+  @IsOptional()
   sector: any;
 }

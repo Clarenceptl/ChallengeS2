@@ -1,5 +1,4 @@
 const API_GATEWAY_URL = import.meta.env.VITE_API_GATEWAY_URL
-const authToken = localStorage.getItem('bearer-token') ?? ''
 export class QuizService {
   static async getQuizByJobId(id) {
     try {
@@ -7,7 +6,7 @@ export class QuizService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         }
       })
       return await response.json()
@@ -24,7 +23,7 @@ export class QuizService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({
           ...quiz,
@@ -45,7 +44,7 @@ export class QuizService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({
           ...question,
@@ -69,7 +68,7 @@ export class QuizService {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify({
           ...quiz,
@@ -90,7 +89,7 @@ export class QuizService {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${localStorage.getItem('bearer-token')}`
         },
         body: JSON.stringify(answers)
       })

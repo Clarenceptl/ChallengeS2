@@ -1,9 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="6" class="text-center justify-content-center">
+    <v-col cols="6" class="text-center justify-content-center d-none d-md-flex">
       <img src="@/assets/bulle.svg" alt="bulle" class="logo" />
     </v-col>
-    <v-col cols="6">
+    <v-col cols="12" md="6">
       <h1 class="mt-16">Login</h1>
       <div class="mb-10">
         Don't have an account ? <router-link to="/register">Create new account</router-link>
@@ -62,7 +62,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="red-500" text @click="forgotPassword = false">Cancel</v-btn>
-          <v-btn color="blue-800" text>Send</v-btn>
+          <v-btn color="blue-800" text @click="sendEmail">Send</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -71,14 +71,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useToastStore, useUserStore } from '@/stores'
+import { useToastStore } from '@/stores'
 import { useForm, useField } from 'vee-validate'
 import { loginSchema } from '@/models'
 import { useRouter } from 'vue-router'
+import { useUsersStore } from '../../stores/users.store'
+import { AuthService } from '@/services'
 
 const router = useRouter()
 const stores = {
-  user: useUserStore(),
   toast: useToastStore()
 }
 
@@ -98,8 +99,24 @@ const user = {
   password: useField('password')
 }
 
+const sendEmail = async () => {
+  const res = await AuthService.sendEmailResetPassword(user.email.value.value)
+  if (res.success) {
+    stores.toast.createToast({
+      message: res.data.message,
+      type: 'success'
+    })
+    forgotPassword.value = false
+  } else {
+    stores.toast.createToast({
+      message: res.message,
+      type: 'error'
+    })
+  }
+}
+
 const submit = handleSubmit(async (values) => {
-  const res = await stores.user.login(values)
+  const res = await useUsersStore().login(values)
   if (res.success) {
     resetForm()
     router.push({ name: 'Home' })
@@ -126,12 +143,9 @@ const submit = handleSubmit(async (values) => {
   height: 100vh;
 }
 
-@media (max-width: 768px) {
-  .logo {
-    width: 100%;
-  }
-  .form-width {
-    max-width: 200px;
+@media (max-width: 425px) {
+  .col-bg-image {
+    background-image: none;
   }
 }
 </style>

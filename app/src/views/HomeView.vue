@@ -1,13 +1,9 @@
 <template>
   <div class="div-background">
     <v-row>
-      <v-col cols="5">
+      <v-col cols="12" md="5">
         <div class="catch-phrase">Find a job that matches your passion</div>
-        <!-- <div class="small-text mb-16">
-          Hand-picked opportunities to work from home, remotely, freelance, full-time, part-time,
-          contract and internships.
-        </div> -->
-        <div class="smaller-text mt-16">
+        <div class="smaller-text">
           Supercharge your career with our job search website! Connect with top companies and access
           exclusive opportunities tailored just for you. From entry-level to executive positions,
           our platform offers personalized job recommendations and expert resources. Join our
@@ -18,15 +14,7 @@
   </div>
 </template>
 
-<script setup>
-import { onMounted } from 'vue'
-import { useUserStore } from '@/stores'
-
-const userStore = useUserStore()
-onMounted(async () => {
-  await userStore.loadContextUser()
-})
-</script>
+<script setup></script>
 
 <style scoped>
 .div-background {
@@ -39,6 +27,19 @@ onMounted(async () => {
 }
 
 @media (min-width: 768px) {
+  .catch-phrase {
+    font-size: 3rem;
+    font-weight: 500;
+    max-width: 500px;
+  }
+  .smaller-text {
+    font-size: 1rem;
+    font-weight: 400;
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 1024px) {
   .div-background {
     padding-top: 90px;
     padding-left: 90px;
@@ -57,18 +58,16 @@ onMounted(async () => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 425px) {
   .div-background {
     background-size: contain;
-    height: 30vh;
-    padding-left: 20px;
   }
   .catch-phrase {
     font-size: 1rem;
     font-weight: 700;
   }
-  .small-text {
-    font-size: 0.5rem;
+  .smaller-text {
+    font-size: 0.8rem;
     font-weight: 400;
   }
 }

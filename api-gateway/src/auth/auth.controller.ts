@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   HttpCode,
+  Patch,
   Post,
   Put,
   Req,
@@ -11,6 +12,8 @@ import { AuthService } from './auth.service';
 import {
   CreatedUserRequest,
   LoginRequest,
+  ResetPassword,
+  SendEmailResetPassword,
   VerifyAccountRequest
 } from './auth.dto';
 import { ErrorModel, isPublic, SuccessResponse } from '../global';
@@ -63,6 +66,35 @@ export class AuthController {
   @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
   public verifyAccount(@Body(ValidationPipe) data: VerifyAccountRequest) {
     return this.authService.verifyAccount(data?.token);
+  }
+
+  @Post('send-email-reset-password')
+  @isPublic()
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    type: SuccessResponse,
+    description: 'The email has been send.'
+  })
+  @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
+  public emailResetPassword(
+    @Body(ValidationPipe) data: SendEmailResetPassword
+  ) {
+    const { email } = data;
+    return this.authService.emailResetPassword(email);
+  }
+
+  @Patch('reset-password')
+  @isPublic()
+  @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    type: SuccessResponse,
+    description: 'The password has been reset.'
+  })
+  @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
+  public resetPassword(@Body(ValidationPipe) data: ResetPassword) {
+    return this.authService.resetPassword(data);
   }
 
   @ApiBearerAuth()

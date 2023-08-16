@@ -4,15 +4,17 @@ import { SERVICE_NAME, SERVICE_CMD } from '../enum';
 import { lastValueFrom } from 'rxjs';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginRequest, CreatedUserRequest } from './auth.dto';
+import { LoginRequest, CreatedUserRequest, ResetPassword } from './auth.dto';
 import { checkDate, formatDate } from 'src/helpers';
 import { User } from './auth.dto';
+import { SuccessResponse } from 'src/global';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy
+    @Inject(SERVICE_NAME.APP) private readonly client: ClientProxy,
+    @Inject(SERVICE_NAME.MAIL) private readonly clientMail: ClientProxy
   ) {}
 
   public getRefreshToken(data: { user: User; refreshToken: string }) {
@@ -30,7 +32,7 @@ export class AuthService {
         id: user.id
       },
       {
-        expiresIn: '30m'
+        expiresIn: '1h'
       }
     );
     const res = {
@@ -72,7 +74,7 @@ export class AuthService {
         id: user.id
       },
       {
-        expiresIn: '30m'
+        expiresIn: '1h'
       }
     );
 
@@ -87,7 +89,17 @@ export class AuthService {
 
     const response = {
       refreshToken,
-      token
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        birthdate: user.birthdate,
+        roles: user.roles,
+        company: user.company,
+        candidatures: user.candidatures
+      }
     };
 
     return { success: true, data: response };
@@ -126,5 +138,60 @@ export class AuthService {
     }
 
     return res;
+  }
+
+  public async sendMailResetPassword(emailSend: string) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER }, emailSend)
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
+
+    if (!res.success) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Email not found'
+      });
+    }
+
+    const { token, email, firstname } = res.data;
+
+    const data = { token, email, firstname };
+    this.clientMail.emit(SERVICE_CMD.SEND_EMAIL_RESET_PASSWORD, data);
+    return {
+      success: true,
+      data: {
+        message: 'Email sent'
+      }
+    };
+  }
+
+  async resetPassword(data: ResetPassword): Promise<SuccessResponse> {
+    const { token, password, confirmPassword } = data;
+    if (password !== confirmPassword) {
+      throw new RpcException({
+        statusCode: 400,
+        message: 'Password and confirm password must be equal'
+      });
+    }
+    try {
+      await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.RESET_PASSWORD },
+          { token, password }
+        )
+      );
+    } catch (error) {
+      throw new RpcException(error);
+    }
+    return {
+      success: true,
+      data: {
+        message: 'Password updated'
+      }
+    };
   }
 }

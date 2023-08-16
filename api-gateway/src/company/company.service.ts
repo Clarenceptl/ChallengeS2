@@ -7,7 +7,7 @@ import {
   SuccessResponse,
   handleErrors
 } from 'src/global';
-import { CreateCompanyRequest } from './company.dto';
+import { CreateCompanyRequest, UpdateCompanyRequest } from './company.dto';
 
 @Injectable()
 export class CompanyService {
@@ -46,6 +46,25 @@ export class CompanyService {
           {
             data,
             user
+          }
+        )
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+    return res;
+  }
+
+  public async updateCompany(data: UpdateCompanyRequest, user, id: string) {
+    let res: SuccessResponse;
+    try {
+      res = await lastValueFrom(
+        this.client.send(
+          { cmd: SERVICE_CMD.UPDATE_COMPANY },
+          {
+            company: data,
+            tokenUser: user,
+            id
           }
         )
       );

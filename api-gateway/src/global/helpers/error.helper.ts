@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import type { ErrorModel } from '../../global';
 
 export const handleErrors = (err: ErrorModel) => {
+  console.log(err);
   if (err.statusCode) {
     throw new HttpException(err?.message, err.statusCode);
   } else {

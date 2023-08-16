@@ -5,22 +5,20 @@ import { User, UserRole } from './users.entity';
 import {
   CreatedUserRequest,
   UpdatedUserRequest,
-  SendEmailRequest
+  SendEmailRequest,
+  UpdatePassword
 } from './users.dto';
 import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { createRandToken, encryptPassword } from '../helpers';
 import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
-import { Company } from 'src/company/company.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
 
 @Injectable()
 export class UsersService {
   public constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Company)
-    private readonly companyRepository: Repository<Company>,
     @InjectRepository(JobAds)
     private readonly jobAdsRepository: Repository<JobAds>,
     @Inject(SERVICE_NAME.MAILING) private readonly mailingService: ClientProxy
@@ -55,6 +53,22 @@ export class UsersService {
     return { success: true, message: 'User created' };
   }
 
+  public async updateTokenUser(email: string) {
+    // generate token
+    const token = createRandToken();
+    const user = await this.userRepository.findOneBy({ email });
+    if (!user) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    user.token = token;
+    await this.userRepository.save(user);
+
+    return { success: true, data: user };
+  }
+
   public async verifyUser(token: string) {
     const user = await this.userRepository.findOneBy({ token });
     if (!user) {
@@ -71,8 +85,12 @@ export class UsersService {
     return { success: true, message: 'User verified' };
   }
 
-  public async getUsers(): Promise<User[]> {
-    return await this.userRepository.find();
+  public async getUsers(): Promise<SuccessResponse> {
+    const users = await this.userRepository.find();
+    return {
+      success: true,
+      data: users
+    };
   }
 
   public async getMyJobs(tokenUser: any) {
@@ -81,7 +99,18 @@ export class UsersService {
       const userCompany = tokenUser?.company?.id;
       const jobAds = await this.jobAdsRepository.find({
         where: { company: userCompany },
-        relations: ['candidates'],
+        relations: ['candidatesJobAds'],
+        select: {
+          candidatesJobAds: {
+            candidate: {
+              id: true,
+              email: true,
+              firstname: true,
+              lastname: true,
+              birthdate: true
+            }
+          }
+        },
         order: { created_at: 'DESC' }
       });
       res = jobAds;
@@ -114,8 +143,64 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email });
   }
 
-  public async updateUser(id: string, updatedUser: UpdatedUserRequest) {
-    return await this.userRepository.update({ id }, updatedUser);
+  public async updateUser(
+    id: string,
+    updatedUser: UpdatedUserRequest,
+    tokenUser: any
+  ) {
+    let userToUpdate: User = await this.userRepository.findOneBy({ id });
+    if (!userToUpdate) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+
+    if (tokenUser.id !== id && !tokenUser.roles.includes(UserRole.ROLE_ADMIN)) {
+      throw new RpcException({
+        statusCode: 401,
+        message: 'Unauthorized'
+      } as ErrorModel);
+    }
+
+    if (updatedUser.password) {
+      updatedUser.password = encryptPassword(updatedUser.password);
+    }
+    userToUpdate = Object.assign(userToUpdate, updatedUser);
+    const { candidatesJobAds, ...data } = userToUpdate;
+
+    try {
+      await this.userRepository.update({ id: userToUpdate.id }, data);
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 500,
+        message: error.message
+      } as ErrorModel);
+    }
+    return { success: true, data: userToUpdate };
+  }
+
+  public async updateUserByToken(data: UpdatePassword) {
+    const { token, ...updatedUser } = data;
+    let res;
+    try {
+      res = await this.userRepository.update(
+        { token },
+        { ...updatedUser, isVerified: true }
+      );
+    } catch (error) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    if (res.affected === 0) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found'
+      } as ErrorModel);
+    }
+    return res;
   }
 
   public async deleteUser(id: string) {

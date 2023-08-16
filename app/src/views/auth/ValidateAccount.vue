@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-center">
     <v-progress-circular v-if="loading" color="appgrey" indeterminate size="80" width="7" />
     <h1 v-else>{{ verifMessage }}</h1>
   </div>
@@ -8,13 +8,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores'
+import { useUsersStore } from '../../stores/users.store'
 
 const route = useRoute()
 const loading = ref(true)
 const token = route.params.token
 const verifMessage = ref('')
-const userStore = useUserStore()
 
 onMounted(async () => {
   if (!token) {
@@ -22,7 +21,7 @@ onMounted(async () => {
     loading.value = false
   }
 
-  const res = await userStore.verifyEmail(token)
+  const res = await useUsersStore().verifyEmail(token)
   if (res.success) {
     verifMessage.value = 'Votre compte a bien été vérifié.'
     loading.value = false
