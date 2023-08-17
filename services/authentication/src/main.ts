@@ -1,8 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
+import { ErrorsInterceptor } from './global/error.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3022);
+  console.log(parseInt(process.env.AUTH_SERVICE_PORT) ?? 3022);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        host: process.env.AUTH_SERVICE_HOST ?? 'auth-service',
+        port: parseInt(process.env.AUTH_SERVICE_PORT) ?? 3022
+      }
+    }
+  );
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true
+    })
+  );
+  app.useGlobalInterceptors(new ErrorsInterceptor());
+  await app.listen();
 }
 bootstrap();

@@ -16,7 +16,7 @@ services:
       file: ./composition/compose.databases.yml
       service: adminer
 
-  api:
+  api-gateway:
     extends:
       file: ./composition/compose.api.yml
       service: api
@@ -26,11 +26,11 @@ services:
       file: ./composition/compose.frontend.yml
       service: node
 
-  analytics-service:
+  quiz-service:
     extends:
       file: ./composition/compose.services.yml
-      service: analytics-service
-  
+      service: quiz-service
+
   app-service:
     extends:
       file: ./composition/compose.services.yml
@@ -40,13 +40,13 @@ services:
     extends:
       file: ./composition/compose.services.yml
       service: auth-service
-  
+
   mailing-service:
     extends:
       file: ./composition/compose.services.yml
       service: mailing-service
-  
-  bo-analytics:
+
+  mailcatcher:
     extends:
-      file: ./composition/compose.bo-analytics.yml
-      service: bo-analytics
+      file: ./composition/compose.services.yml
+      service: mailcatcher
