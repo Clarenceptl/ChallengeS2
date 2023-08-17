@@ -14,6 +14,7 @@ import { CompanyModule } from './company/company.module';
 import { JobAdsModule } from './job-ads/job-ads.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { QuizModule } from './quiz/quiz.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { QuizModule } from './quiz/quiz.module';
     CompanyModule,
     JobAdsModule,
     AppointmentModule,
-    QuizModule
+    QuizModule,
+    HealthModule
   ],
 
   controllers: [],

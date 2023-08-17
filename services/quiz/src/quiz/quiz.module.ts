@@ -9,7 +9,9 @@ import { SERVICE_NAME } from '../enum';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Quiz.name, schema: QuizSchema }]),
-    MongooseModule.forFeature([{ name: Question.name, schema: QuestionSchema }]),
+    MongooseModule.forFeature([
+      { name: Question.name, schema: QuestionSchema }
+    ]),
     ClientsModule.register([
       {
         name: SERVICE_NAME.APP,
