@@ -13,6 +13,15 @@ import { isPublic } from 'src/global';
 @Controller('health')
 @ApiTags('health')
 export class HealthController {
+  private mailingServiceHost: string =
+    process.env.MAILING_SERVICE_HOST ?? 'mailing-service';
+  private authServiceHost: string =
+    process.env.AUTH_SERVICE_HOST ?? 'auth-service';
+  private appServiceHost: string =
+    process.env.APP_SERVICE_HOST ?? 'app-service';
+  private quizServiceHost: string =
+    process.env.QUIZ_SERVICE_HOST ?? 'quiz-service';
+
   constructor(
     private health: HealthCheckService,
     private microservice: MicroserviceHealthIndicator,
@@ -20,81 +29,65 @@ export class HealthController {
     private mongoose: MongooseHealthIndicator
   ) {}
 
-  @Get(process.env.APP_SERVICE_HOST)
+  @Get('app-service')
   @isPublic()
   @HealthCheck()
   checkAppService() {
     return this.health.check([
       async () =>
-        this.microservice.pingCheck(process.env.APP_SERVICE_HOST, {
+        this.microservice.pingCheck(this.appServiceHost, {
           transport: Transport.TCP,
           options: {
-            host: process.env.APP_SERVICE_HOST,
-            port: process.env.APP_SERVICE_PORT
+            host: this.appServiceHost,
+            port: parseInt(process.env.APP_SERVICE_PORT) ?? 3021
           }
         })
     ]);
   }
 
-  @Get(process.env.AUTH_SERVICE_HOST)
+  @Get('auth-service')
   @isPublic()
   @HealthCheck()
   checkAuth() {
     return this.health.check([
       async () =>
-        this.microservice.pingCheck(process.env.AUTH_SERVICE_HOST, {
+        this.microservice.pingCheck(this.authServiceHost, {
           transport: Transport.TCP,
           options: {
-            host: process.env.AUTH_SERVICE_HOST,
-            port: process.env.AUTH_SERVICE_PORT
+            host: this.authServiceHost,
+            port: parseInt(process.env.AUTH_SERVICE_PORT) ?? 3022
           }
         })
     ]);
   }
 
-  @Get(process.env.MAILING_SERVICE_HOST)
+  @Get('mailing-service')
   @isPublic()
   @HealthCheck()
   checkMail() {
     return this.health.check([
       async () =>
-        this.microservice.pingCheck(process.env.MAILING_SERVICE_HOST, {
+        this.microservice.pingCheck(this.mailingServiceHost, {
           transport: Transport.TCP,
           options: {
-            host: process.env.MAILING_SERVICE_HOST,
-            port: process.env.MAILING_SERVICE_PORT
+            host: this.mailingServiceHost,
+            port: parseInt(process.env.MAILING_SERVICE_PORT) ?? 3024
           }
         })
     ]);
   }
 
-  @Get(process.env.QUIZ_SERVICE_HOST)
+  @Get('quiz-service')
   @isPublic()
   @HealthCheck()
   checkQuiz() {
     return this.health.check([
       async () =>
-        this.microservice.pingCheck(process.env.QUIZ_SERVICE_HOST, {
+        this.microservice.pingCheck(this.quizServiceHost, {
           transport: Transport.TCP,
           options: {
-            host: process.env.QUIZ_SERVICE_HOST,
-            port: process.env.QUIZ_SERVICE_PORT
-          }
-        })
-    ]);
-  }
-
-  @Get(process.env.QUIZ_SERVICE_HOST)
-  @isPublic()
-  @HealthCheck()
-  checkPostgresDb() {
-    return this.health.check([
-      async () =>
-        this.microservice.pingCheck(process.env.QUIZ_SERVICE_HOST, {
-          transport: Transport.TCP,
-          options: {
-            host: process.env.QUIZ_SERVICE_HOST,
-            port: process.env.QUIZ_SERVICE_PORT
+            host: this.quizServiceHost,
+            port: parseInt(process.env.QUIZ_SERVICE_PORT) ?? 3028
           }
         })
     ]);
