@@ -13,7 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       port: 5432,
       username: process.env.DATABASE_POSTGRES_USER,
       password: process.env.DATABASE_POSTGRES_PASSWORD,
-      database: process.env.DATABASE_POSTGRES_NAME,
+      database: process.env.DATABASE_POSTGRES_DB,
       synchronize: false,
       autoLoadEntities: true
     }),
