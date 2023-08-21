@@ -16,6 +16,6 @@ spec:
         service: api-gateway-service
     spec:
       containers:
-        - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-app-service:latest
+        - name: challenges2-authentication
+          image: docking2000/challenges2-auth-service:latest
 

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-analytics
+  name: challenges2-quiz
   namespace: challenges2
 spec:
   replicas: 1
@@ -16,5 +16,5 @@ spec:
         service: api-gateway-service
     spec:
       containers:
-        - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-analytics-service:latest
+        - name: challenges2-quiz
+          image: docking2000/challenges2-quiz-service:latest

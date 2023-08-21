@@ -16,8 +16,8 @@ spec:
         service: api-gateway-service
     spec:
       containers:
-        - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-mailing-service:latest
+        - name: challenges2-mailing
+          image: docking2000/challenges2-mailing-service:latest
           ports:
             - containerPort: 3023
 

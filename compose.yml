@@ -1,52 +1,123 @@
 version: '3.8'
 
 services:
-  mongodb:
-    extends:
-      file: ./composition/compose.databases.yml
-      service: mongodb
-
-  postgresdb:
-    extends:
-      file: ./composition/compose.databases.yml
-      service: postgres
-
-  adminer:
-    extends:
-      file: ./composition/compose.databases.yml
-      service: adminer
-
-  api-gateway:
-    extends:
-      file: ./composition/compose.api.yml
-      service: api
-
-  app-front:
-    extends:
-      file: ./composition/compose.frontend.yml
-      service: node
-
-  quiz-service:
-    extends:
-      file: ./composition/compose.services.yml
-      service: quiz-service
-
   app-service:
-    extends:
-      file: ./composition/compose.services.yml
-      service: app-service
+    build:
+      context: ./services/application
+      dockerfile: Dockerfile
+      target: development
+    container_name: challenges2_app-service
+    env_file:
+      - .env
+    volumes:
+      - ./services/application:/app
+      - /app/node_modules
 
   auth-service:
-    extends:
-      file: ./composition/compose.services.yml
-      service: auth-service
+    build:
+      context: ./services/authentication
+      dockerfile: Dockerfile
+      target: development
+    container_name: challenges2_auth-service
+    env_file:
+      - .env
+    volumes:
+      - ./services/authentication:/auth-service
+      - /auth-service/node_modules
+
+  quiz-service:
+    build:
+      context: ./services/quiz
+      dockerfile: Dockerfile
+      target: development
+    container_name: challenges2_quiz-service
+    env_file:
+      - .env
+    volumes:
+      - ./services/quiz:/quiz-service
+      - /quiz-service/node_modules
 
   mailing-service:
-    extends:
-      file: ./composition/compose.services.yml
-      service: mailing-service
+    build:
+      context: ./services/mailing
+      dockerfile: Dockerfile
+      target: development
+    container_name: challenges2_mailing-service
+    env_file:
+      - .env
+    volumes:
+      - ./services/mailing:/mailing-service
+      - /mailing-service/node_modules
+    ports:
+      - "3023:3023"
 
   mailcatcher:
-    extends:
-      file: ./composition/compose.services.yml
-      service: mailcatcher
+    image: schickling/mailcatcher
+    container_name: challenges2_mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+  node:
+    container_name: challenges2_frontend
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+
+  api:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+      target: development
+    container_name: challenges2_api-gateway
+    env_file:
+      - .env
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    ports:
+      - '3080:3080'
+
+  postgresdb:
+    image: postgres:15.2-alpine
+    container_name: challengeS2_postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DATABASE_POSTGRES_DB}
+      POSTGRES_USER: ${DATABASE_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DATABASE_POSTGRES_PASSWORD}
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: challenges2_adminer
+    restart: unless-stopped
+    ports:
+      - "8089:8080"
+
+  mongodb:
+    image: mongo
+    container_name: challenges2_mongodb
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DATABASE_MONGO_NAME}
+    volumes:
+      - /data/db
+    ports:
+      - "27017:27017"
