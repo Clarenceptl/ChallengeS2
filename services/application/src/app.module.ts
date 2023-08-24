@@ -18,7 +18,7 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
       port: 5432,
       username: process.env.DATABASE_POSTGRES_USER,
       password: process.env.DATABASE_POSTGRES_PASSWORD,
-      database: process.env.DATABASE_POSTGRES_NAME,
+      database: process.env.DATABASE_POSTGRES_DB,
       synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true
     }),
