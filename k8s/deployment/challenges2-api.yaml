@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: deployment
+kind: Deployment
 metadata:
   name: api-gateway-service
   namespace: challenges2
@@ -16,22 +16,106 @@ spec:
         app: api-gateway-app
     spec:
       containers:
-      - name: api-gateway-service
-        image: docking2000/challenges-api:latest
-        ports:
-          - containerPort: 3081
-        env:
-          - name: MONGODB_HOST
-            value: mongodb
-          - name: MONGODB_PORT
-            value: "27017"
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            value: password
-          - name: MONGO_INITDB_ROOT_USERNAME
-            value: challengeS2-mongo
-          - name: MONGO_INITDB_DATABASE
-            value: challengeS2-mongo
-
+        - name: api-gateway-service
+          image: docking2000/challenges-api:latest
+          ports:
+            - containerPort: 3081
+          env:
+            - name: DATABASE_POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_POSTGRES_DB
+            - name: DATABASE_POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_POSTGRES_PASSWORD
+            - name: DATABASE_POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_POSTGRES_USER
+            - name: DATABASE_POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_POSTGRES_HOST
+            - name: DATABASE_MONGO_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_USERNAME
+            - name: DATABASE_MONGO_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_PASSWORD
+            - name: DATABASE_MONGO_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_NAME
+            - name: DATABASE_MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_URL
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: FRONTEND_URL
+            - name: VITE_API_GATEWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: VITE_API_GATEWAY_URL
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
+            - name: AUTH_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_HOST
+            - name: AUTH_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_PORT
+            - name: JSON_WEB_TOKEN_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: JSON_WEB_TOKEN_SECRET
+            - name: MAILING_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_HOST
+            - name: MAILING_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_PORT
+            - name: QUIZ_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: QUIZ_SERVICE_HOST
+            - name: QUIZ_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: QUIZ_SERVICE_PORT
 ---
 
 apiVersion: v1

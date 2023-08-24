@@ -19,15 +19,38 @@ spec:
         - name: challenges2-application
           image: docking2000/challenges2-app-service:latest
           env:
-            - name: MONGODB_HOST
-              value: mongodb
-            - name: MONGODB_PORT
-              value: "27017"
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: password
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: challengeS2-mongo
-            - name: MONGO_INITDB_DATABASE
-              value: challengeS2-mongo
-
-
+          - name: DATABASE_POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_DB
+          - name: DATABASE_POSTGRES_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_PASSWORD
+          - name: DATABASE_POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_USER
+          - name: DATABASE_POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_HOST
+          - name: APP_SERVICE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: APP_SERVICE_HOST
+          - name: APP_SERVICE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: APP_SERVICE_PORT
+          - name: JSON_WEB_TOKEN_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: JSON_WEB_TOKEN_SECRET

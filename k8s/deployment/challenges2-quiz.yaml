@@ -19,14 +19,39 @@ spec:
         - name: challenges2-quiz
           image: docking2000/challenges2-quiz-service:latest
           env:
-            - name: MONGODB_HOST
-              value: mongodb
-            - name: MONGODB_PORT
-              value: "27017"
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: password
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: challengeS2-mongo
-            - name: MONGO_INITDB_DATABASE
-              value: challengeS2-mongo
+            - name: DATABASE_MONGO_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_USERNAME
+            - name: DATABASE_MONGO_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_PASSWORD
+            - name: DATABASE_MONGO_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_NAME
+            - name: DATABASE_MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: DATABASE_MONGO_URL
+            - name: QUIZ_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: QUIZ_SERVICE_HOST
+            - name: QUIZ_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: QUIZ_SERVICE_PORT
+            - name: JSON_WEB_TOKEN_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: JSON_WEB_TOKEN_SECRET
 
