@@ -1,27 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo-deployment
+  name: mongodb
+  namespace: challenges2
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: mongo
+      app: mongodb
   template:
     metadata:
       labels:
-        app: mongo
+        app: mongodb
     spec:
       containers:
-        - name: mongo
+        - name: mongodb
           image: mongo
-          env:
-            - name: MONGO_URL
-              valueFrom:
-
-                configMapKeyRef:
-                  name: secrets
-                  key: MONGO_URL
           ports:
             - containerPort: 27017
           volumeMounts:
@@ -38,7 +32,7 @@ metadata:
   name: mongo-service
 spec:
   selector:
-    app: mongo
+    app: mongodb
   ports:
     - protocol: TCP
       port: 27017

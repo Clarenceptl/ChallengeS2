@@ -18,4 +18,16 @@ spec:
       containers:
         - name: challenges2-application
           image: docking2000/challenges2-app-service:latest
+          env:
+            - name: MONGODB_HOST
+              value: mongodb
+            - name: MONGODB_PORT
+              value: "27017"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: password
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: challengeS2-mongo
+            - name: MONGO_INITDB_DATABASE
+              value: challengeS2-mongo
+
 

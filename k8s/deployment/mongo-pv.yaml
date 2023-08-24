@@ -1,0 +1,15 @@
+# mongodb-pv.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+spec:
+  capacity:
+    storage: 5Gi  # Adjust the storage size as needed
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: mongodbstorageclass
+  hostPath:
+        path: /data/mongodb
+        type: DirectoryOrCreate

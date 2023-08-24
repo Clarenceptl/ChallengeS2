@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: deployment
 metadata:
   name: api-gateway-service
   namespace: challenges2
@@ -20,6 +20,17 @@ spec:
         image: docking2000/challenges-api:latest
         ports:
           - containerPort: 3081
+        env:
+          - name: MONGODB_HOST
+            value: mongodb
+          - name: MONGODB_PORT
+            value: "27017"
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: password
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: challengeS2-mongo
+          - name: MONGO_INITDB_DATABASE
+            value: challengeS2-mongo
 
 ---
 
