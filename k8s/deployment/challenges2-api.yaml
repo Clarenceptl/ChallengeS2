@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway-service
+  name: api-gateway-app
   namespace: challenges2
   labels:
-    app: api-gateway-service
+    app: api-gateway-app
 spec:
   replicas: 1
   selector:
@@ -121,7 +121,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-gateway-service
+  name: api-gateway-app
   namespace: challenges2
 spec:
   type: ClusterIP

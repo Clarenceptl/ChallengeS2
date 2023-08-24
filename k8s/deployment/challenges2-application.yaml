@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-application
+  name: app-service
   namespace: challenges2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
-      service: api-gateway-service
+      app: app-service
   template:
     metadata:
       labels:
-        app: api-gateway-app
-        service: api-gateway-service
+        app: app-service
     spec:
       containers:
         - name: challenges2-application
+          ports:
+            - containerPort: 3021
           image: docking2000/challenges2-app-service:latest
           env:
           - name: DATABASE_POSTGRES_DB
@@ -54,3 +54,18 @@ spec:
               configMapKeyRef:
                 name: my-app-config
                 key: JSON_WEB_TOKEN_SECRET
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: app-service
+  ports:
+    - protocol: TCP
+      port: 3021
+      targetPort: 3021

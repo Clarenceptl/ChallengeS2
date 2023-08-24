@@ -1,19 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-quiz
+  name: quiz-service
   namespace: challenges2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
-      service: api-gateway-service
+      app: quiz-service
   template:
     metadata:
       labels:
-        app: api-gateway-app
-        service: api-gateway-service
+        app: quiz-service
     spec:
       containers:
         - name: challenges2-quiz
@@ -55,3 +53,18 @@ spec:
                   name: my-app-config
                   key: JSON_WEB_TOKEN_SECRET
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-service
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: quiz-service
+  ports:
+    - protocol: TCP
+      port: 3028
+      targetPort: 3028

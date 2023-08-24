@@ -1,19 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-authentication
+  name: auth-service
   namespace: challenges2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
-      service: api-gateway-service
+      app: auth-service
   template:
     metadata:
       labels:
-        app: api-gateway-app
-        service: api-gateway-service
+        app: auth-service
     spec:
       containers:
         - name: challenges2-authentication
@@ -34,3 +32,18 @@ spec:
                 configMapKeyRef:
                   name: my-app-config
                   key: JSON_WEB_TOKEN_SECRET
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: challenges2
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-service
+  ports:
+    - protocol: TCP
+      port: 3022
+      targetPort: 3022
