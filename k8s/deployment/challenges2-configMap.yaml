@@ -23,4 +23,4 @@ data:
   MAILING_SERVICE_PORT: "3024"
   QUIZ_SERVICE_HOST: "quiz-service"
   QUIZ_SERVICE_PORT: "3028"
-
+  MAIL_URL_SMTP: "smtps://killeurboy95@gmail.com:JEZpaw6nIMcdWF1D@smtp-relay.brevo.com"
