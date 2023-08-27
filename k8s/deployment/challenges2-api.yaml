@@ -6,7 +6,7 @@ metadata:
   labels:
     app: api-gateway-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: api-gateway-app
@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
         - name: api-gateway-service
-          image: docking2000/challenges-api:latest
+          image: docking2000/challenges2-api:latest
           ports:
-            - containerPort: 3081
+            - containerPort: 3080
           env:
             - name: DATABASE_POSTGRES_DB
               valueFrom:
@@ -121,13 +121,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-gateway-app
+  name: api-gateway-app-load-balancer
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  ports:
+    - name: api
+      protocol: TCP
+      port: 80
+      targetPort: 3080
   selector:
     app: api-gateway-app
-  ports:
-    - protocol: TCP
-      port: 3081
-      targetPort: 3081
+
