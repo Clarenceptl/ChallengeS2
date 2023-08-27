@@ -39,6 +39,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({ type: ErrorModel, description: 'Bad request' })
   public register(@Body(ValidationPipe) data: CreatedUserRequest) {
+    console.log('begin register gateway');
     return this.authService.register(data);
   }
 

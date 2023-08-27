@@ -22,6 +22,7 @@ export class AuthService {
         this.client.send({ cmd: SERVICE_CMD.REGISTER_USER }, data)
       );
     } catch (error) {
+      console.log('register gateway error', error);
       handleErrors(error);
     }
     return res;

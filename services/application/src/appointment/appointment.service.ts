@@ -39,12 +39,12 @@ export class AppointmentService {
       };
 
       console.log('envoi email');
-      const res = await lastValueFrom(
-        this.mailingService.emit<SendEmailRequest>(
-          SERVICE_CMD.GET_REGISTER_MAIL,
-          resultAppointmailEmail
-        )
+
+      this.mailingService.emit<SendEmailRequest>(
+        SERVICE_CMD.GET_REGISTER_MAIL,
+        resultAppointmailEmail
       );
+
       return this.appointmentRepository.delete(id);
     } catch (error) {
       throw new RpcException('Appointment not found');
