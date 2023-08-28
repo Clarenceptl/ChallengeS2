@@ -31,7 +31,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-quiz-service:latest
 
-
       - name: Build and push application
         id: docker_build_application_service
         uses: docker/build-push-action@v2
@@ -47,7 +46,6 @@ jobs:
           context: ./services/mailing
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-mailing-service:latest
-
 
       - name: Build and push authentication
         id: docker_build_authentication_service
