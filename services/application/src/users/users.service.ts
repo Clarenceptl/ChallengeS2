@@ -27,9 +27,8 @@ export class UsersService {
     // generate token
     const token = createRandToken();
     const userWithToken = { ...user, token };
-    console.log('register user app service - create token');
+
     try {
-      console.log('register user app service - before insert');
       await this.userRepository.insert(userWithToken);
     } catch (error) {
       throw new RpcException({
@@ -37,18 +36,17 @@ export class UsersService {
         message: 'Email already exist'
       });
     }
-    console.log('register user app service - after insert');
+
     const dataEmail: SendEmailRequest = {
       email: user.email,
       token,
       firstname: user.firstname
     };
-    console.log('register user app service - before send email');
+
     this.mailingService.emit<SendEmailRequest>(
       SERVICE_CMD.GET_REGISTER_MAIL,
       dataEmail
     );
-    console.log('register user app service - after send email');
     return { success: true, message: 'User created' };
   }
 

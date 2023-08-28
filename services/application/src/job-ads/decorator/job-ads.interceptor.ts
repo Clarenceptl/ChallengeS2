@@ -14,7 +14,6 @@ export class CleanResponseJobAdsInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((res: SuccessResponse) => {
-        // console.log(res.data.candidatesJobAds);
         const { data } = res;
         let newData: CandidatesJobAds[];
         if (data.candidatesJobAds && data.candidatesJobAds.length > 0) {

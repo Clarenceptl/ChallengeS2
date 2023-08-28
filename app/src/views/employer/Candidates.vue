@@ -148,7 +148,7 @@ await useAppointmentsStore().getAppointments()
 const { jobAd } = storeToRefs(useJobAdsStore())
 const { appointments } = storeToRefs(useAppointmentsStore())
 const { quiz } = storeToRefs(useQuizStore())
-console.log(jobAd.value.candidatesJobAds[0]?.id)
+
 let appointmentDialog = ref(false)
 let deleteDialog = ref(false)
 let time = ref('')

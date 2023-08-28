@@ -185,7 +185,6 @@ export class AppointmentService {
         id: parseInt(appointment.jobAdId)
       }
     });
-    console.log(checkAlreadyAppointment);
 
     if (checkAlreadyAppointment) {
       throw new RpcException({

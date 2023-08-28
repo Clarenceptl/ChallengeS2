@@ -13,7 +13,6 @@ export class UsersController {
   @MessagePattern({ cmd: SERVICE_CMD.CREATE_USER })
   @HashPassword()
   public async createUser(@Payload(ValidationPipe) user: CreatedUserRequest) {
-    console.log('register user app service');
     return this.usersService.createUser(user);
   }
 

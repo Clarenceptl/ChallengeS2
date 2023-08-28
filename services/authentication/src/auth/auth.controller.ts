@@ -13,7 +13,6 @@ export class AuthController {
   public register(
     @Payload(ValidationPipe) registerRequest: CreatedUserRequest
   ) {
-    console.log('register auth service');
     return this.authService.register(registerRequest);
   }
 
