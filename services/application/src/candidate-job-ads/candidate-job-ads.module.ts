@@ -7,6 +7,7 @@ import { CandidatesJobAds } from './candidates-job-ads.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([CandidatesJobAds])],
   controllers: [CandidateJobAdsController],
-  providers: [CandidateJobAdsService]
+  providers: [CandidateJobAdsService],
+  exports: [CandidateJobAdsService]
 })
 export class CandidateJobAdsModule {}
