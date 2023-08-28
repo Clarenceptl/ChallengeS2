@@ -222,10 +222,6 @@ const router = createRouter({
       ]
     },
     {
-      path: '/tutu',
-      component: () => import('@/views/Tutu.vue')
-    },
-    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/views/404NotFound.vue')
