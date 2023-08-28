@@ -11,7 +11,6 @@ import {
 import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { createRandToken, encryptPassword } from '../helpers';
-import { lastValueFrom } from 'rxjs';
 import type { ErrorModel } from '../global';
 import { JobAds } from 'src/job-ads/job-ads.entity';
 
@@ -37,19 +36,17 @@ export class UsersService {
         message: 'Email already exist'
       });
     }
+
     const dataEmail: SendEmailRequest = {
       email: user.email,
       token,
       firstname: user.firstname
     };
 
-    await lastValueFrom(
-      this.mailingService.emit<SendEmailRequest>(
-        SERVICE_CMD.GET_REGISTER_MAIL,
-        dataEmail
-      )
+    this.mailingService.emit<SendEmailRequest>(
+      SERVICE_CMD.GET_REGISTER_MAIL,
+      dataEmail
     );
-
     return { success: true, message: 'User created' };
   }
 

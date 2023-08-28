@@ -52,8 +52,8 @@ export enum SERVICE_CMD {
 }
 
 export enum SERVICE_NAME {
-  AUTH = 'AUTH_SERVICE',
-  APP = 'APPLICATION_SERVICE',
-  MAILING = 'MAILING_SERVICE',
-  QUIZ = 'QUIZ_SERVICE'
+  AUTH = 'auth_service',
+  APP = 'application_service',
+  MAILING = 'mailing_service',
+  QUIZ = 'quiz_service'
 }
