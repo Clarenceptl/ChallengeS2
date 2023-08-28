@@ -229,8 +229,7 @@ export class AppointmentService {
     );
 
     const checkStatusArray = [STATUS.INIT, STATUS.PENDING];
-    console.log('checkCandidature', checkCandidature.status);
-    console.log('checkStatusArray', checkStatusArray);
+
     if (
       !checkCandidature ||
       !checkStatusArray.includes(checkCandidature.status)

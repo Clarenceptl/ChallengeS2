@@ -266,7 +266,7 @@ export class JobAdsService {
       const newCandidature = new CandidatesJobAds();
       newCandidature.candidate = currentUser;
       jobAdsToUpdate.candidatesJobAds.push(newCandidature);
-      console.log(jobAdsToUpdate);
+
       res = await this.jobAdsRepository.save(jobAdsToUpdate);
     } catch (error) {
       throw new RpcException({
