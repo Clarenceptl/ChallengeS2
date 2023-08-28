@@ -32,9 +32,9 @@ import TheAppBar from './components/TheAppBar.vue'
 <style scoped>
 .loading {
   height: 100vh;
-  .progress-bar {
-    width: 100%;
-    max-width: 500px;
-  }
+}
+.loading .progress-bar {
+  width: 100%;
+  max-width: 400px;
 }
 </style>

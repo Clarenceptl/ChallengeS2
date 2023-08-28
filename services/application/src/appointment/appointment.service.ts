@@ -9,7 +9,11 @@ import { SendEmailRequest } from '../users/users.dto';
 import { lastValueFrom } from 'rxjs';
 import { User, UserRole } from 'src/users/users.entity';
 import { JobAds } from 'src/job-ads/job-ads.entity';
-import { STATUS } from 'src/candidate-job-ads/candidates-job-ads.entity';
+import {
+  STATUS,
+  UpdateStatusDTO
+} from '../candidate-job-ads/candidates-job-ads.entity';
+import { CandidateJobAdsService } from '../candidate-job-ads/candidate-job-ads.service';
 
 @Injectable()
 export class AppointmentService {
@@ -21,7 +25,8 @@ export class AppointmentService {
     @InjectRepository(JobAds)
     private readonly jobAdsRepository: Repository<JobAds>,
     @Inject(SERVICE_NAME.MAILING)
-    private readonly mailingService: ClientProxy
+    private readonly mailingService: ClientProxy,
+    private readonly candidateJobAdsService: CandidateJobAdsService
   ) {}
 
   //TODO where do we add the body related to the email?
@@ -185,7 +190,6 @@ export class AppointmentService {
         id: parseInt(appointment.jobAdId)
       }
     });
-    console.log(checkAlreadyAppointment);
 
     if (checkAlreadyAppointment) {
       throw new RpcException({
@@ -224,10 +228,15 @@ export class AppointmentService {
       (candidateJobAd) => candidateJobAd.jobAds.id === jobAd.id
     );
 
-    if (!checkCandidature || checkCandidature.status !== STATUS.ACCEPTED) {
+    const checkStatusArray = [STATUS.INIT, STATUS.PENDING];
+
+    if (
+      !checkCandidature ||
+      !checkStatusArray.includes(checkCandidature.status)
+    ) {
       throw new RpcException({
         statusCode: 400,
-        message: 'Candidate has not been accepted'
+        message: 'Candidate status is not valid'
       });
     }
 
@@ -235,8 +244,19 @@ export class AppointmentService {
     newAppointment.candidate = candidate;
     newAppointment.job = jobAd;
     newAppointment.time = appointment.time;
+
+    const payloadChangeStatus: UpdateStatusDTO = {
+      tokenUser,
+      id: checkCandidature.id,
+      status: STATUS.PENDING
+    };
     try {
       res = await this.appointmentRepository.save(newAppointment);
+      if (checkCandidature.status === STATUS.INIT) {
+        await this.candidateJobAdsService.updateStatusCandidate(
+          payloadChangeStatus
+        );
+      }
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
