@@ -52,7 +52,16 @@ spec:
                 configMapKeyRef:
                   name: my-app-config
                   key: JSON_WEB_TOKEN_SECRET
-
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
 ---
 
 apiVersion: v1
@@ -61,10 +70,10 @@ metadata:
   name: quiz-service
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: quiz-service
   ports:
     - protocol: TCP
       port: 3028
-      targetPort: 3028
+      nodePort: 30028

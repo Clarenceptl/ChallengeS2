@@ -27,11 +27,37 @@ spec:
                 configMapKeyRef:
                   name: my-app-config
                   key: AUTH_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
             - name: JSON_WEB_TOKEN_SECRET
               valueFrom:
                 configMapKeyRef:
                   name: my-app-config
                   key: JSON_WEB_TOKEN_SECRET
+            - name: MAILING_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_HOST
+            - name: MAILING_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_PORT
+            - name: MAIL_URL_SMTP
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAIL_URL_SMTP
+
 ---
 
 apiVersion: v1
@@ -40,10 +66,10 @@ metadata:
   name: auth-service
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: auth-service
   ports:
     - protocol: TCP
       port: 3022
-      targetPort: 3022
+      nodePort: 30022

@@ -54,6 +54,27 @@ spec:
               configMapKeyRef:
                 name: my-app-config
                 key: JSON_WEB_TOKEN_SECRET
+          - name: MAILING_SERVICE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAILING_SERVICE_HOST
+          - name: MAILING_SERVICE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAILING_SERVICE_PORT
+          - name: MAIL_URL_SMTP
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAIL_URL_SMTP
+          - name: FRONTEND_URL
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: FRONTEND_URL
+
 ---
 
 apiVersion: v1
@@ -62,10 +83,10 @@ metadata:
   name: app-service
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: app-service
   ports:
     - protocol: TCP
       port: 3021
-      targetPort: 3021
+      nodePort: 30021

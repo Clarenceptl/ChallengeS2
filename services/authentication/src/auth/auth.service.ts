@@ -120,12 +120,12 @@ export class AuthService {
       throw new RpcException({ statusCode: 400, message: 'Birthdate invalid' });
     }
 
-    console.log('register auth service - checks ok');
-
+    console.log('register auth service - checks ok!!!!!!!!!!!!!!!!!');
     const res = await lastValueFrom(
       this.client.send({ cmd: SERVICE_CMD.CREATE_USER }, data)
     );
 
+    console.log('register auth service - after send email');
     return res;
   }
 

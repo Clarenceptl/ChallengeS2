@@ -37,6 +37,26 @@ spec:
                 configMapKeyRef:
                   name: my-app-config
                   key: MAIL_URL_SMTP
+            - name: AUTH_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_PORT
+            - name: AUTH_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
 
 ---
 
@@ -46,10 +66,10 @@ metadata:
   name: mailing-service
   namespace: challenges2
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: mailing-service
   ports:
     - protocol: TCP
       port: 3024
-      targetPort: 3024
+      nodePort: 30024

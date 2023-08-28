@@ -51,13 +51,6 @@ services:
     ports:
       - "3023:3023"
 
-  mailcatcher:
-    image: schickling/mailcatcher
-    container_name: challenges2_mailcatcher
-    ports:
-      - "1080:1080"
-      - "1025:1025"
-
   node:
     container_name: challenges2_frontend
     build:
