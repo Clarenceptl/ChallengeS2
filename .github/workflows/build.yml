@@ -1,4 +1,5 @@
 name: Continuous Integration
+
 on:
   push:
     branches: ci/cd
@@ -16,13 +17,28 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push quiz
+        id: docker_build_quiz_service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/quiz
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-quiz-service:latest
+
+
       - name: Build and push application
         id: docker_build_application_service
         uses: docker/build-push-action@v2
         with:
           context: ./services/application
           push: true
-          tags: docking2000/challenges2-app-service:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-app-service:latest
 
       - name: Build and push mailing
         id: docker_build_mailing_service
@@ -30,7 +46,8 @@ jobs:
         with:
           context: ./services/mailing
           push: true
-          tags: docking2000/challenges2-mailing-service:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-mailing-service:latest
+
 
       - name: Build and push authentication
         id: docker_build_authentication_service
@@ -38,7 +55,7 @@ jobs:
         with:
           context: ./services/authentication
           push: true
-          tags: docking2000/challenges2-auth-service:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-auth-service:latest
 
       - name: Build and push api
         id: docker_build_api
@@ -46,7 +63,7 @@ jobs:
         with:
           context: ./api
           push: true
-          tags: docking2000/challenges2-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api:latest
 
 
       - name: Image digest
