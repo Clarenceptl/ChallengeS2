@@ -20,8 +20,7 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
       password: process.env.DATABASE_POSTGRES_PASSWORD,
       database: process.env.DATABASE_POSTGRES_DB,
       synchronize: true, // TODO: Remove this in production
-      autoLoadEntities: true,
-      ssl: true
+      autoLoadEntities: true
     }),
     CompanyModule,
     UsersModule,
