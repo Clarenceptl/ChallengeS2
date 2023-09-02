@@ -1,21 +1,75 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: challenges2-authentication
+  name: auth-service
   namespace: challenges2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-app
-      service: api-gateway-service
+      app: auth-service
   template:
     metadata:
       labels:
-        app: api-gateway-app
-        service: api-gateway-service
+        app: auth-service
     spec:
       containers:
-        - name: challenges2-api-gateway
-          image: challenges2acr.azurecr.io/challenges2-app-service:latest
+        - name: challenges2-authentication
+          image: docking2000/challenges2-auth-service:latest
+          env:
+            - name: AUTH_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_PORT
+            - name: AUTH_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
+            - name: JSON_WEB_TOKEN_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: JSON_WEB_TOKEN_SECRET
+            - name: MAILING_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_HOST
+            - name: MAILING_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_PORT
+            - name: MAIL_URL_SMTP
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAIL_URL_SMTP
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: challenges2
+spec:
+  type: NodePort
+  selector:
+    app: auth-service
+  ports:
+    - protocol: TCP
+      port: 3022
+      nodePort: 30022

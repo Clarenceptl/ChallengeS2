@@ -4,4 +4,4 @@ export interface RegisterMailRequest {
   firstname: string;
 }
 
-export interface ResetPasswordMailRequest extends RegisterMailRequest { }
+export type ResetPasswordMailRequest = RegisterMailRequest;

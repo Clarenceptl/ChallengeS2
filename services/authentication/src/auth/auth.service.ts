@@ -113,7 +113,6 @@ export class AuthService {
       });
     }
     delete data.confirmPassword;
-
     data.birthdate = formatDate(data.birthdate);
     const check = checkDate(data.birthdate);
     if (!check) {

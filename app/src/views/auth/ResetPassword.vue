@@ -73,7 +73,7 @@ const submit = handleSubmit(async () => {
     confirmPassword: user.confirmPassword.value.value,
     token: router.currentRoute.value.params.token
   })
-  console.log(res)
+
   if (res?.success) {
     resetForm()
     stores.toast.createToast({
