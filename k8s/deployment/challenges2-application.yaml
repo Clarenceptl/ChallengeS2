@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-service
+  namespace: challenges2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-service
+  template:
+    metadata:
+      labels:
+        app: app-service
+    spec:
+      containers:
+        - name: challenges2-application
+          ports:
+            - containerPort: 3021
+          image: docking2000/challenges2-app-service:latest
+          env:
+          - name: DATABASE_POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_DB
+          - name: DATABASE_POSTGRES_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_PASSWORD
+          - name: DATABASE_POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_USER
+          - name: DATABASE_POSTGRES_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: DATABASE_POSTGRES_HOST
+          - name: APP_SERVICE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: APP_SERVICE_HOST
+          - name: APP_SERVICE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: APP_SERVICE_PORT
+          - name: JSON_WEB_TOKEN_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: JSON_WEB_TOKEN_SECRET
+          - name: MAILING_SERVICE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAILING_SERVICE_HOST
+          - name: MAILING_SERVICE_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAILING_SERVICE_PORT
+          - name: MAIL_URL_SMTP
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: MAIL_URL_SMTP
+          - name: FRONTEND_URL
+            valueFrom:
+              configMapKeyRef:
+                name: my-app-config
+                key: FRONTEND_URL
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: challenges2
+spec:
+  type: NodePort
+  selector:
+    app: app-service
+  ports:
+    - protocol: TCP
+      port: 3021
+      nodePort: 30021

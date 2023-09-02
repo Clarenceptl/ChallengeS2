@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailing-service
+  namespace: challenges2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailing-service
+  template:
+    metadata:
+      labels:
+        app: mailing-service
+    spec:
+      containers:
+        - name: challenges2-mailing-service
+          image: docking2000/challenges2-mailing-service:latest
+          env:
+            - name: MAILING_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_HOST
+            - name: MAILING_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAILING_SERVICE_PORT
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: FRONTEND_URL
+            - name: MAIL_URL_SMTP
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: MAIL_URL_SMTP
+            - name: AUTH_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_PORT
+            - name: AUTH_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: AUTH_SERVICE_HOST
+            - name: APP_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_PORT
+            - name: APP_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: APP_SERVICE_HOST
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailing-service
+  namespace: challenges2
+spec:
+  type: NodePort
+  selector:
+    app: mailing-service
+  ports:
+    - protocol: TCP
+      port: 3024
+      nodePort: 30024
