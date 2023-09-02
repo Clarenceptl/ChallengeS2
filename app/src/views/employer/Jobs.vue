@@ -37,7 +37,7 @@
               {{ selectedJob?.title }}
               <div>
                 <v-btn
-                  v-if="Object.keys(quiz).length === 0"
+                  v-if="selectedJob?.quizId === null"
                   color="green-500"
                   @click="createMcqDialog = true"
                   >Create Quiz</v-btn
