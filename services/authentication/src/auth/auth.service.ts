@@ -156,8 +156,6 @@ export class AuthService {
       });
     }
 
-    console.log(res);
-
     const { token, email, firstname } = res.data;
 
     const data = { token, email, firstname };
