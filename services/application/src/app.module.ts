@@ -21,7 +21,7 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
       database: process.env.DATABASE_POSTGRES_DB,
       synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true,
-      ssl: true
+      ssl: process.env.NODE_ENV === 'production'
     }),
     CompanyModule,
     UsersModule,
