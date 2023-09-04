@@ -188,7 +188,7 @@ const createCompany = async (e) => {
     const val = await useCompaniesStore().createCompany(companyData.value)
     if (val.success) {
       stores.toast.createToast({
-        message: 'Company created, please login',
+        message: 'Company created',
         type: 'success'
       })
       useUsersStore().getSelfUser()
