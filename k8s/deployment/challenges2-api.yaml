@@ -21,11 +21,11 @@ spec:
           ports:
             - containerPort: 3080
           env:
-            - name: NODE_ENV
+            - name: CHALLENGE_ENV
               valueFrom:
                 configMapKeyRef:
                   name: my-app-config
-                  key: NODE_ENV
+                  key: CHALLENGE_ENV
             - name: DATABASE_POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
