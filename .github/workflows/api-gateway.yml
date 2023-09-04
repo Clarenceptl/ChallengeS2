@@ -1,4 +1,4 @@
-name: Api gateway branch
+name: Api-gateway branch
 
 on:
   push:
