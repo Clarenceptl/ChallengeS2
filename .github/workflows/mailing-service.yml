@@ -1,4 +1,4 @@
-name: Mailing service
+name: Mailing service branch
 
 on:
   push:
