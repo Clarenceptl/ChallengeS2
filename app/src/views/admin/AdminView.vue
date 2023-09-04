@@ -34,12 +34,12 @@ const dashboardItems = [
     title: 'Companies Informations',
     icon: 'mdi-domain',
     route: { name: 'CompanyInformationsList' }
-  },
-  {
-    title: 'Jobs',
-    icon: 'mdi-account-tie',
-    route: { name: 'Jobs' }
   }
+  // {
+  //   title: 'Jobs',
+  //   icon: 'mdi-account-tie',
+  //   route: { name: 'Jobs' }
+  // }
   // {
   //   title: 'Appointments',
   //   icon: 'mdi-calendar',
@@ -47,5 +47,3 @@ const dashboardItems = [
   // }
 ]
 </script>
-
-<style scoped></style>
