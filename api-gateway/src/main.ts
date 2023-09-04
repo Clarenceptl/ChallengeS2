@@ -32,16 +32,13 @@ async function bootstrap() {
     })
   });
 
-  const corsOrigin =
-    process.env.CHALLENGE_ENV === 'production' ? process.env.FRONTEND_URL : '*';
-
   app.use(helmet());
   app.use(compression());
   app.enableVersioning({
     type: VersioningType.URI
   });
   app.enableCors({
-    origin: corsOrigin
+    origin: '*'
   });
 
   if (process.env.CHALLENGE_ENV === 'development') {
