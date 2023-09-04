@@ -59,7 +59,6 @@ export class UsersController {
   }
 
   @MessagePattern({ cmd: SERVICE_CMD.UPDATE_TOKEN_USER })
-  @CleanResponseUser()
   public updateTokenUser(@Payload(ValidationPipe) email: string) {
     return this.usersService.updateTokenUser(email);
   }

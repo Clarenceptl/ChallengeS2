@@ -12,7 +12,7 @@
     </div>
     <v-row class="pa-5">
       <v-col cols="12" md="4" class="text-center scrollable">
-        <div class=" justify-center mb-2">
+        <div class="justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">
               <v-toolbar color="appgrey">
@@ -30,12 +30,9 @@
                   </thead>
                   <tbody>
                     <tr v-for="revenue in companyRevenueOptions" :key="revenue.id">
-                      <td class="py-4 px-4">{{revenue.revenue}}</td>
+                      <td class="py-4 px-4">{{ revenue.revenue }}</td>
                       <td>
-                        <v-icon color="blue" @click="
-                          updateRevenueDialog = true;
-                          selectedRevenueId = revenue.id
-                        ">
+                        <v-icon color="blue" @click="handleRevenueDialog(false, revenue.id)">
                           mdi-pencil
                         </v-icon>
                       </td>
@@ -43,9 +40,8 @@
                         <v-icon
                           class="mr-4"
                           color="red"
-                          @click="deleteRevenueDialog = true;
-                          selectedRevenueId = revenue.id
-                        ">
+                          @click="handleRevenueDialog(true, revenue.id)"
+                        >
                           mdi-delete
                         </v-icon>
                       </td>
@@ -59,7 +55,7 @@
       </v-col>
 
       <v-col cols="12" md="4" class="text-center scrollable">
-        <div class=" justify-center mb-2">
+        <div class="justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">
               <v-toolbar color="appgrey">
@@ -77,12 +73,9 @@
                   </thead>
                   <tbody>
                     <tr v-for="sector in companySectorOptions" :key="sector.id">
-                      <td class="py-4 px-4">{{sector.sector}}</td>
+                      <td class="py-4 px-4">{{ sector.sector }}</td>
                       <td>
-                        <v-icon color="blue" @click="
-                          updateSectorDialog = true;
-                          selectedSectorId = sector.id
-                        ">
+                        <v-icon color="blue" @click="handleSectorDialog(false, sector.id)">
                           mdi-pencil
                         </v-icon>
                       </td>
@@ -90,9 +83,8 @@
                         <v-icon
                           class="mr-4"
                           color="red"
-                          @click="deleteSectorDialog = true;
-                          selectedSectorId = sector.id
-                        ">
+                          @click="handleSectorDialog(true, sector.id)"
+                        >
                           mdi-delete
                         </v-icon>
                       </td>
@@ -106,7 +98,7 @@
       </v-col>
 
       <v-col cols="12" md="4" class="text-center scrollable">
-        <div class=" justify-center mb-2">
+        <div class="justify-center mb-2">
           <div class="container">
             <v-card class="mx-auto">
               <v-toolbar color="appgrey">
@@ -124,23 +116,14 @@
                   </thead>
                   <tbody>
                     <tr v-for="size in companySizeOptions" :key="size.id">
-                      <td class="py-4 px-4">{{size.size}}</td>
+                      <td class="py-4 px-4">{{ size.size }}</td>
                       <td>
-                        <v-icon
-                          color="blue"
-                          @click="updateSizeDialog = true;
-                          selectedSizeId = size.id
-                        ">
+                        <v-icon color="blue" @click="handleSizeDialog(false, size.id)">
                           mdi-pencil
                         </v-icon>
                       </td>
                       <td>
-                        <v-icon
-                          class="mr-4"
-                          color="red"
-                          @click="deleteSizeDialog = true;
-                          selectedSizeId = size.id
-                        ">
+                        <v-icon class="mr-4" color="red" @click="handleSizeDialog(true, size.id)">
                           mdi-delete
                         </v-icon>
                       </td>
@@ -159,29 +142,14 @@
         <v-card-title>
           <h2>Update revenue</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Change the revenue of the selected revenue
-        </v-card-subtitle>
+        <v-card-subtitle> Change the revenue of the selected revenue </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <v-text-field
-              v-model="updatedRevenue"
-              label="Revenue"
-              required
-            />
+            <v-text-field v-model="updatedRevenue" label="Revenue" required />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              updateRevenueDialog = false;
-              selectedRevenueId = null;
-              updatedRevenue = ''
-            ">
-              Cancel
-            </v-btn>
+          <v-btn color="red-500" text @click="resetUpdateDialog"> Cancel </v-btn>
           <v-btn color="blue-800" text @click="updateRevenue">Send</v-btn>
         </v-card-actions>
       </v-card>
@@ -192,29 +160,14 @@
         <v-card-title>
           <h2>Update sector</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Change the sector of the selected sector
-        </v-card-subtitle>
+        <v-card-subtitle> Change the sector of the selected sector </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <v-text-field
-              v-model="updatedSector"
-              label="Revenue"
-              required
-            />
+            <v-text-field v-model="updatedSector" label="Revenue" required />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              updateSectorDialog = false;
-              selectedSectorId = null;
-              updatedSector = ''
-            ">
-              Cancel
-            </v-btn>
+          <v-btn color="red-500" text @click="resetUpdateDialog"> Cancel </v-btn>
           <v-btn color="blue-800" text @click="updateSector">Send</v-btn>
         </v-card-actions>
       </v-card>
@@ -225,29 +178,14 @@
         <v-card-title>
           <h2>Update size</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Change the size of the selected size
-        </v-card-subtitle>
+        <v-card-subtitle> Change the size of the selected size </v-card-subtitle>
         <v-card-text>
           <v-form>
-            <v-text-field
-              v-model="updatedSize"
-              label="Revenue"
-              required
-            />
+            <v-text-field v-model="updatedSize" label="Revenue" required />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              updateSizeDialog = false;
-              selectedSizeId = null;
-              updatedSize = ''
-            ">
-              Cancel
-            </v-btn>
+          <v-btn color="red-500" text @click="resetUpdateDialog"> Cancel </v-btn>
           <v-btn color="blue-800" text @click="updateSize">Send</v-btn>
         </v-card-actions>
       </v-card>
@@ -258,28 +196,11 @@
         <v-card-title>
           <h2>Delete revenue</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to delete the selected revenue?
-        </v-card-subtitle>
-        <v-card-text>
-        </v-card-text>
+        <v-card-subtitle> Are you sure you want to delete the selected revenue? </v-card-subtitle>
+        <v-card-text> </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              deleteRevenueDialog = false;
-              selectedRevenueId = null
-            ">
-              Cancel
-            </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="deleteRevenue"
-          >
-            Delete
-          </v-btn>
+          <v-btn color="red-500" text @click="resetDeleteDialog"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="deleteRevenue"> Delete </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -289,28 +210,11 @@
         <v-card-title>
           <h2>Delete sector</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to delete the selected sector?
-        </v-card-subtitle>
-        <v-card-text>
-        </v-card-text>
+        <v-card-subtitle> Are you sure you want to delete the selected sector? </v-card-subtitle>
+        <v-card-text> </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="red-500"
-            text
-            @click="
-              deleteSectorDialog = false;
-              selectedSectorId = null
-            ">
-              Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="deleteSector"
-          >
-            Delete
-          </v-btn>
+          <v-btn color="red-500" text @click="resetDeleteDialog"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="deleteSector"> Delete </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -320,28 +224,11 @@
         <v-card-title>
           <h2>Delete size</h2>
         </v-card-title>
-        <v-card-subtitle>
-          Are you sure you want to delete the selected size?
-        </v-card-subtitle>
-        <v-card-text>
-        </v-card-text>
+        <v-card-subtitle> Are you sure you want to delete the selected size? </v-card-subtitle>
+        <v-card-text> </v-card-text>
         <v-card-actions>
-          <v-btn 
-          color="red-500" 
-          text 
-          @click="
-            deleteSizeDialog = false; 
-            selectedSizeId = null
-          ">
-            Cancel
-          </v-btn>
-          <v-btn
-            color="blue-800"
-            text
-            @click="deleteSize"
-          >
-            Delete
-          </v-btn>
+          <v-btn color="red-500" text @click="resetDeleteDialog"> Cancel </v-btn>
+          <v-btn color="blue-800" text @click="deleteSize"> Delete </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -349,78 +236,153 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useCompanySizeOptionsStore } from '@/stores/company-size-options';
-import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options';
-import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
-import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useCompanySizeOptionsStore } from '@/stores/company-size-options'
+import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options'
+import { useCompanySectorOptionsStore } from '@/stores/company-sector-options'
+import { useToastStore } from '@/stores'
+import { ref } from 'vue'
 
-let updateRevenueDialog = ref(false);
-let updateSectorDialog = ref(false);
-let updateSizeDialog = ref(false);
+const updateRevenueDialog = ref(false)
+const updateSectorDialog = ref(false)
+const updateSizeDialog = ref(false)
 
-let updatedRevenue = ref('');
-let updatedSector = ref('');
-let updatedSize = ref('');
+const updatedRevenue = ref('')
+const updatedSector = ref('')
+const updatedSize = ref('')
 
+const selectedRevenueId = ref(null)
+const selectedSectorId = ref(null)
+const selectedSizeId = ref(null)
 
-let selectedRevenueId = ref(null);
-let selectedSectorId = ref(null);
-let selectedSizeId = ref(null);
+const deleteRevenueDialog = ref(false)
+const deleteSectorDialog = ref(false)
+const deleteSizeDialog = ref(false)
 
-let deleteRevenueDialog = ref(false);
-let deleteSectorDialog = ref(false);
-let deleteSizeDialog = ref(false);
+const toastStore = useToastStore()
+const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore())
+const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore())
+const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore())
 
-const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore());
-const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore());
-const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore());
+useCompanySizeOptionsStore().getCompanySizeOptions()
+useCompanyRevenueOptionsStore().getCompanyRevenueOptions()
+useCompanySectorOptionsStore().getCompanySectorOptions()
 
-useCompanySizeOptionsStore().getCompanySizeOptions();
-useCompanyRevenueOptionsStore().getCompanyRevenueOptions();
-useCompanySectorOptionsStore().getCompanySectorOptions();
+const router = useRouter()
 
-const router = useRouter();
+const handleAnswers = (serviceAnwers) => {
+  if (serviceAnwers.success) {
+    toastStore.createToast({
+      message: 'Success',
+      type: 'success'
+    })
+  } else {
+    toastStore.createToast({
+      message: serviceAnwers,
+      type: 'error'
+    })
+  }
+}
 
-const updateRevenue = () => {
-  useCompanyRevenueOptionsStore().updateCompanyRevenueOptions(selectedRevenueId.value, updatedRevenue.value);
-  updateRevenueDialog.value = false;
-  selectedRevenueId.value = null;
-  updatedRevenue.value = '';
-};
+const handleRevenueDialog = (isDeleting, id) => {
+  isDeleting ? (deleteRevenueDialog.value = true) : (updateRevenueDialog.value = true)
+  selectedRevenueId.value = id
+}
 
-const updateSector = () => {
-  useCompanySectorOptionsStore().updateCompanySectorOptions(selectedSectorId.value, updatedSector.value);
-  updateSectorDialog.value = false;
-  selectedSectorId.value = null;
-  updatedSector.value = '';
-};
+const handleSectorDialog = (isDeleting, id) => {
+  isDeleting ? (deleteSectorDialog.value = true) : (updateSectorDialog.value = true)
+  selectedSectorId.value = id
+}
 
-const updateSize = () => {
-  useCompanySizeOptionsStore().updateCompanySizeOptions(selectedSizeId.value, updatedSize.value);
-  updateSizeDialog.value = false;
-  selectedSizeId.value = null;
-  updatedSize.value = '';
-};
+const handleSizeDialog = (isDeleting, id) => {
+  isDeleting ? (deleteSizeDialog.value = true) : (updateSizeDialog.value = true)
+  selectedSizeId.value = id
+}
 
-const deleteRevenue = () => {
-  useCompanyRevenueOptionsStore().deleteCompanyRevenueOptions(selectedRevenueId.value);
-  deleteRevenueDialog.value = false;
-  selectedRevenueId.value = null;
-};
+const resetUpdateDialog = () => {
+  updateRevenueDialog.value = false
+  selectedRevenueId.value = null
+  updatedRevenue.value = ''
 
-const deleteSector = () => {
-  useCompanySectorOptionsStore().deleteCompanySectorOptions(selectedSectorId.value);
-  deleteSectorDialog.value = false;
-  selectedSectorId.value = null;
-};
+  updateSizeDialog.value = false
+  selectedSizeId.value = null
+  updatedSize.value = ''
 
-const deleteSize = () => {
-  useCompanySizeOptionsStore().deleteCompanySizeOptions(selectedSizeId.value);
-  deleteSizeDialog.value = false;
-  selectedSizeId.value = null;
-};
+  updateSectorDialog.value = false
+  selectedSectorId.value = null
+  updatedSector.value = ''
+}
+
+const resetDeleteDialog = () => {
+  deleteRevenueDialog.value = false
+  selectedRevenueId.value = null
+
+  deleteSectorDialog.value = false
+  selectedSectorId.value = null
+
+  deleteSizeDialog.value = false
+  selectedSizeId.value = null
+}
+
+const updateRevenue = async () => {
+  const res = await useCompanyRevenueOptionsStore().updateCompanyRevenueOptions(
+    selectedRevenueId.value,
+    updatedRevenue.value
+  )
+  console.log(res)
+  handleAnswers(res)
+  updateRevenueDialog.value = false
+  selectedRevenueId.value = null
+  updatedRevenue.value = ''
+}
+
+const updateSector = async () => {
+  const res = await useCompanySectorOptionsStore().updateCompanySectorOptions(
+    selectedSectorId.value,
+    updatedSector.value
+  )
+  handleAnswers(res)
+  updateSectorDialog.value = false
+  selectedSectorId.value = null
+  updatedSector.value = ''
+}
+
+const updateSize = async () => {
+  const res = await useCompanySizeOptionsStore().updateCompanySizeOptions(
+    selectedSizeId.value,
+    updatedSize.value
+  )
+  handleAnswers(res)
+  updateSizeDialog.value = false
+  selectedSizeId.value = null
+  updatedSize.value = ''
+}
+
+const deleteRevenue = async () => {
+  const res = await useCompanyRevenueOptionsStore().deleteCompanyRevenueOptions(
+    selectedRevenueId.value
+  )
+  handleAnswers(res)
+  deleteRevenueDialog.value = false
+  selectedRevenueId.value = null
+}
+
+const deleteSector = async () => {
+  const res = await useCompanySectorOptionsStore().deleteCompanySectorOptions(
+    selectedSectorId.value
+  )
+  handleAnswers(res)
+  deleteSectorDialog.value = false
+  selectedSectorId.value = null
+}
+
+const deleteSize = async () => {
+  const res = await useCompanySizeOptionsStore().deleteCompanySizeOptions(selectedSizeId.value)
+  handleAnswers(res)
+  deleteSizeDialog.value = false
+  selectedSizeId.value = null
+}
 </script>
 
 <style scoped>

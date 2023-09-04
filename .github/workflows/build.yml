@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: ci/cd
+    branches: main
 
 jobs:
   BuildAndPush:
@@ -28,6 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/quiz
+          target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-quiz-service:latest
 
@@ -36,6 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/application
+          target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-app-service:latest
 
@@ -44,6 +46,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/mailing
+          target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-mailing-service:latest
 
@@ -52,6 +55,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./services/authentication
+          target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-auth-service:latest
 
@@ -60,6 +64,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./api-gateway
+          target: production
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/challenges2-api:latest
 

@@ -37,7 +37,7 @@
               {{ selectedJob?.title }}
               <div>
                 <v-btn
-                  v-if="Object.keys(quiz).length === 0"
+                  v-if="selectedJob?.quizId === null"
                   color="green-500"
                   @click="createMcqDialog = true"
                   >Create Quiz</v-btn
@@ -77,7 +77,7 @@
             </v-card-text>
           </v-card>
 
-          <v-card variant="flat" color="green-400" class="mt-4" v-if="Object.keys(quiz).length > 0">
+          <v-card variant="flat" color="green-400" class="mt-4" v-if="Object.keys(quiz).length > 0 && quiz.idJobAds == selectedJob.id">
             <v-card-title class="d-flex justify-space-between">
               <h2>Quiz</h2>
               <div v-if="quiz">
