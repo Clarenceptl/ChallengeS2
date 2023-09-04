@@ -1,4 +1,4 @@
-name: App branch
+name: App service branch
 
 on:
   push:
