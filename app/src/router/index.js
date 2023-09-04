@@ -200,11 +200,11 @@ const router = createRouter({
           name: 'UsersList',
           component: () => import('@/views/admin/UsersList.vue')
         },
-        {
-          path: 'appointements/',
-          name: 'AppointementsList',
-          component: () => import('@/views/admin/AppointmentsList.vue')
-        },
+        // {
+        //   path: 'appointements/',
+        //   name: 'AppointementsList',
+        //   component: () => import('@/views/admin/AppointmentsList.vue')
+        // },
         {
           path: 'company-information/',
           children: [
