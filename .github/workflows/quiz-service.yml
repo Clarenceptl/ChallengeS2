@@ -1,4 +1,4 @@
-name: Quiz branch
+name: Quiz service branch
 
 on:
   push:
