@@ -1,4 +1,4 @@
-name: Auth branch
+name: Auth service branch
 
 on:
   push:
