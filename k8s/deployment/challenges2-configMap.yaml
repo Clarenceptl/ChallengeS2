@@ -4,6 +4,7 @@ metadata:
   name: my-app-config
   namespace: challenges2
 data:
+  NODE_ENV: "production"
   DATABASE_POSTGRES_DB: "neondb"
   DATABASE_POSTGRES_PASSWORD: "do39TFckmpjr"
   DATABASE_POSTGRES_USER: "Victsing"
