@@ -36,8 +36,4 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
   controllers: [],
   providers: []
 })
-export class AppModule {
-  constructor() {
-    console.log('AppModule', process.env.CHALLENGE_ENV);
-  }
-}
+export class AppModule {}
