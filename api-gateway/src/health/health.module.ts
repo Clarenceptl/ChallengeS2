@@ -22,4 +22,8 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [HealthController]
 })
-export class HealthModule {}
+export class HealthModule {
+  constructor() {
+    console.log('HealthModule', process.env.CHALLENGE_ENV);
+  }
+}

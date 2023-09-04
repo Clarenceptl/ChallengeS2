@@ -21,7 +21,7 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
       database: process.env.DATABASE_POSTGRES_DB,
       synchronize: true, // TODO: Remove this in production
       autoLoadEntities: true,
-      ssl: process.env.NODE_ENV === 'production'
+      ssl: process.env.CHALLENGE_ENV === 'production'
     }),
     CompanyModule,
     UsersModule,
@@ -36,4 +36,8 @@ import { CandidateJobAdsModule } from './candidate-job-ads/candidate-job-ads.mod
   controllers: [],
   providers: []
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('AppModule', process.env.CHALLENGE_ENV);
+  }
+}
