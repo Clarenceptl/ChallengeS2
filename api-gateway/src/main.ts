@@ -33,7 +33,7 @@ async function bootstrap() {
   });
 
   const corsOrigin =
-    process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : '*';
+    process.env.CHALLENGE_ENV === 'production' ? process.env.FRONTEND_URL : '*';
 
   app.use(helmet());
   app.use(compression());
@@ -44,7 +44,7 @@ async function bootstrap() {
     origin: corsOrigin
   });
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.CHALLENGE_ENV === 'development') {
     const config = new DocumentBuilder()
       .addBearerAuth()
       .setTitle('Api Mailing')

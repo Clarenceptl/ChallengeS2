@@ -16,7 +16,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       database: process.env.DATABASE_POSTGRES_DB,
       synchronize: false,
       autoLoadEntities: true,
-      ssl: process.env.NODE_ENV === 'production'
+      ssl: process.env.CHALLENGE_ENV === 'production'
     }),
     MongooseModule.forRoot(process.env.DATABASE_MONGO_URL)
   ],
