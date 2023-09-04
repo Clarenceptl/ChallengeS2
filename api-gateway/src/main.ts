@@ -31,18 +31,19 @@ async function bootstrap() {
       ]
     })
   });
-  // const corsOptions = {
-  //   origin: 'http://localhost:3000',
-  //   credentials: true
-  // };
+
+  const corsOrigin =
+    process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : '*';
+
   app.use(helmet());
   app.use(compression());
   app.enableVersioning({
     type: VersioningType.URI
   });
   app.enableCors({
-    origin: '*'
+    origin: corsOrigin
   });
+
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .addBearerAuth()
