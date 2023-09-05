@@ -56,6 +56,21 @@ export class UpdatedUserRequest {
   @IsStrongPassword()
   @IsOptional()
   confirmPassword: string;
+
+  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  firstname: string;
+
+  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  lastname: string;
+
+  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  birthdate: string;
 }
 
 export class UpdatePassword {
