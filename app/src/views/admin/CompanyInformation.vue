@@ -330,7 +330,6 @@ const updateRevenue = async () => {
     selectedRevenueId.value,
     updatedRevenue.value
   )
-  console.log(res)
   handleAnswers(res)
   updateRevenueDialog.value = false
   selectedRevenueId.value = null
