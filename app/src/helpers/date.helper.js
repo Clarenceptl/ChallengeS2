@@ -3,16 +3,10 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 export const now = dayjs()
 dayjs.extend(relativeTime)
 
-export const formatDateToApi = (date, separator = '-') => {
+export const formatDateFront = (date, separator = '-') => {
   if (!date) return null
   const [year, month, day] = date.split(separator)
   return `${day}/${month}/${year}`
-}
-
-export const formatDateToInput = (date, separator = '/') => {
-  if (!date) return null
-  const [year, month, day] = date.split(separator)
-  return `${day}-${month}-${year}`
 }
 
 export const checkDateForRefreshToken = (dateMs) => {

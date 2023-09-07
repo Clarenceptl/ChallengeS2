@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { AuthService } from '@/services'
 import { UsersService } from '@/services/users.service'
-import { formatDateToApi, clearTokens } from '@/helpers'
+import { clearTokens } from '@/helpers'
 
 export const useUsersStore = defineStore('usersStore', {
   state: () => ({
@@ -40,8 +40,7 @@ export const useUsersStore = defineStore('usersStore', {
       return res
     },
     async register(user) {
-      const body = { ...user, birthdate: formatDateToApi(user.birthdate) }
-      return await AuthService.registerUser(body)
+      return await AuthService.registerUser(user)
     },
     async login(data) {
       const res = await AuthService.loginUser(data)
