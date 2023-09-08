@@ -21,13 +21,13 @@
             </thead>
             <tbody>
               <tr v-for="(candidature, index) in me.candidatesJobAds" :key="index">
-                <td class="px-4">{{ candidature.jobAds.title }}</td>
-                <td class="px-4">{{ candidature.jobAds.city }}</td>
-                <td class="px-4">{{ candidature.jobAds.country }}</td>
-                <td class="px-4">{{ candidature.jobAds.salary }}</td>
+                <td class="px-4">{{ candidature.jobAds?.title }}</td>
+                <td class="px-4">{{ candidature.jobAds?.city }}</td>
+                <td class="px-4">{{ candidature.jobAds?.country }}</td>
+                <td class="px-4">{{ candidature.jobAds?.salary }}</td>
                 <td class="px-4 py-4">
                   <v-btn
-                    v-if="candidature.jobAds.quizId"
+                    v-if="candidature.jobAds?.quizId"
                     color="blue-500"
                     @click="openDialogQuiz(candidature)"
                     >Take the test</v-btn
