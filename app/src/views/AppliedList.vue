@@ -21,22 +21,19 @@
             </thead>
             <tbody>
               <tr v-for="(candidature, index) in me.candidatesJobAds" :key="index">
-                <div v-if="candidature.jobAds">
-                  <td class="px-4">{{ candidature.jobAds?.title }}</td>
-                  <td class="px-4">{{ candidature.jobAds?.city }}</td>
-                  <td class="px-4">{{ candidature.jobAds?.country }}</td>
-                  <td class="px-4">{{ candidature.jobAds?.salary }}</td>
-                  <td class="px-4 py-4">
-                    <v-btn
+                <td class="px-4">{{ candidature.jobAds?.title }}</td>
+                <td class="px-4">{{ candidature.jobAds?.city }}</td>
+                <td class="px-4">{{ candidature.jobAds?.country }}</td>
+                <td class="px-4">{{ candidature.jobAds?.salary }}</td>
+                <td class="px-4 py-4">
+                  <v-btn
                     v-if="candidature.jobAds?.quizId"
                     color="blue-500"
                     @click="openDialogQuiz(candidature)"
                     >Take the test</v-btn
-                    >
-                    <p v-else>No quiz</p>
-                  </td>
-                </div>
-                <div v-else>This job was deleted</div>
+                  >
+                  <p v-else>No quiz</p>
+                </td>
               </tr>
             </tbody>
           </template>
