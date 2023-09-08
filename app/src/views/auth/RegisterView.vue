@@ -43,6 +43,7 @@
           <v-text-field
             class="mb-3"
             clearable
+            hint="Must be over 18 years old"
             v-model="user.birthdate.value.value"
             :error-messages="errorBag.birthdate"
             type="date"
@@ -126,13 +127,13 @@ const submit = handleSubmit(async (values) => {
     resetForm()
     stores.toast.createToast({
       type: 'success',
-      message: res.message,
+      message: res.message
     })
     router.push('/login')
   } else {
     return stores.toast.createToast({
       type: 'error',
-      message: res.message,
+      message: res.message
     })
   }
 })
