@@ -77,7 +77,12 @@
             </v-card-text>
           </v-card>
 
-          <v-card variant="flat" color="green-400" class="mt-4" v-if="Object.keys(quiz).length > 0 && quiz.idJobAds == selectedJob.id">
+          <v-card
+            variant="flat"
+            color="green-400"
+            class="mt-4"
+            v-if="Object.keys(quiz).length > 0 && quiz.idJobAds == selectedJob.id"
+          >
             <v-card-title class="d-flex justify-space-between">
               <h2>Quiz</h2>
               <div v-if="quiz">
@@ -142,15 +147,22 @@
             <v-text-field clearable placeholder="City" type="text" v-model="newJob.city" />
             <label>Job Country</label>
             <v-text-field clearable placeholder="Country" type="text" v-model="newJob.country" />
-            <label>Job Contract Type</label>
-            <v-text-field
-              clearable
-              placeholder="Contract Type"
-              type="text"
+            <v-select
+              :items="contractTypeOptions"
+              label="Job Contract Type"
               v-model="newJob.contractType"
             />
-            <label>Job Salary</label>
-            <v-text-field clearable placeholder="Salary" type="text" v-model="newJob.salary" />
+            <label>Job annual salary</label>
+            <v-text-field
+              :min="10000"
+              :max="100000"
+              :step="1000"
+              :rules="rules.salary"
+              clearable
+              placeholder="Salary"
+              type="number"
+              v-model="newJob.salary"
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -260,15 +272,27 @@
             <v-text-field clearable placeholder="City" type="text" v-model="jobEdit.city" />
             <label>Job Country</label>
             <v-text-field clearable placeholder="Country" type="text" v-model="jobEdit.country" />
-            <label>Job Contract Type</label>
+            <v-select
+              :items="contractTypeOptions"
+              label="Job Contract Type"
+              v-model="jobEdit.contractType"
+            />
             <v-text-field
               clearable
               placeholder="Contract Type"
               type="text"
               v-model="jobEdit.contractType"
             />
-            <label>Job Salary</label>
-            <v-text-field clearable placeholder="Salary" type="number" v-model="jobEdit.salary" />
+            <label>Job annual salary</label>
+            <v-text-field
+              :min="10000"
+              :max="100000"
+              :step="1000"
+              clearable
+              placeholder="Salary"
+              type="number"
+              v-model="jobEdit.salary"
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -346,29 +370,37 @@ if (selectedJob.value?.quizId) {
   await useQuizStore().getQuizByJobId(selectedJob.value?.id)
 }
 
-watch(
-  () => selectedJob.value?.id,
-  async () => {
-    if (selectedJob.value?.quizId) {
-      await useQuizStore().getQuizByJobId(selectedJob.value?.id)
-    }
-  }
-)
-watch(myJobs, () => {
-  selectedJob.value = myJobs.value[0] ?? null
-})
+const contractTypeOptions = [
+  'CDI',
+  'CDD',
+  'Internship',
+  'Freelance',
+  'Temp',
+  'Full-time job',
+  'Part-time job',
+  'Other'
+]
+const rules = {
+  salary: [
+    (value) => {
+      if (value && value >= 10000 && value <= 100000) return true
 
-let createMcqQuestionDialog = ref(false)
-let deleteJobDialog = ref(false)
-let editJobDialog = ref(false)
-let editMcqDialog = ref(false)
-let createMcqDialog = ref(false)
-let createJobDialog = ref(false)
+      return 'Salary must be between 10000 and 100000'
+    }
+  ]
+}
+
+const createMcqQuestionDialog = ref(false)
+const deleteJobDialog = ref(false)
+const editJobDialog = ref(false)
+const editMcqDialog = ref(false)
+const createMcqDialog = ref(false)
+const createJobDialog = ref(false)
 
 const jobEdit = ref({ ...selectedJob.value })
 const mcqEdit = ref({ ...quiz.value })
 
-let newJob = ref({
+const newJob = ref({
   title: '',
   description: '',
   city: '',
@@ -376,7 +408,7 @@ let newJob = ref({
   contractType: '',
   salary: null
 })
-let newQuestion = ref({
+const newQuestion = ref({
   label: '',
   answers: [
     {
@@ -397,7 +429,7 @@ let newQuestion = ref({
     }
   ]
 })
-let newMcq = ref({
+const newMcq = ref({
   title: '',
   tempsParQuestionSecond: null,
   idJobAds: selectedJob.value?.id.toString()
@@ -421,16 +453,30 @@ const jobDetails = computed(() => {
 })
 
 const createJob = () => {
-  if (isNaN(newJob.value.salary)) {
+  if (
+    !newJob.value.title ||
+    !newJob.value.description ||
+    !newJob.value.city ||
+    !newJob.value.country ||
+    !newJob.value.contractType ||
+    !newJob.value.salary
+  ) {
     stores.toast.createToast({
       type: 'error',
-      message: 'salary must be a number'
+      message: 'All field must be filled'
     })
     return
   }
   useJobAdsStore()
     .createJobAd(newJob.value)
-    .then(async () => {
+    .then(async (res) => {
+      if (!res.success) {
+        return stores.toast.createToast({
+          type: 'error',
+          message: 'job ad not created'
+        })
+      }
+
       stores.toast.createToast({
         type: 'success',
         message: 'job ads created'
@@ -447,12 +493,6 @@ const createJob = () => {
         contractType: '',
         salary: null
       }
-    })
-    .catch(() => {
-      stores.toast.createToast({
-        type: 'error',
-        message: 'job ad not created'
-      })
     })
 }
 
@@ -673,6 +713,18 @@ const cancelQuestions = () => {
     ]
   }
 }
+
+watch(
+  () => selectedJob.value?.id,
+  async () => {
+    if (selectedJob.value?.quizId) {
+      await useQuizStore().getQuizByJobId(selectedJob.value?.id)
+    }
+  }
+)
+watch(myJobs, () => {
+  selectedJob.value = myJobs.value[0] ?? null
+})
 </script>
 
 <style scoped>
