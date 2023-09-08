@@ -75,7 +75,7 @@ let warningDialog = ref(false)
 let selectedCandidature = ref(null)
 
 const startQuiz = () => {
-  router.push(`applied-list/${selectedCandidature.value.id}/test`)
+  router.push(`applied-list/${selectedCandidature.value.jobAds.id}/test`)
   warningDialog.value = false
 }
 
