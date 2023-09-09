@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+
 export const now = dayjs()
 dayjs.extend(relativeTime)
 
@@ -22,11 +23,5 @@ export const checkDateForRefreshToken = (dateMs) => {
 }
 
 export const formatDateAppointment = (date) => {
-  const newDate = new Date(date)
-  const year = newDate.getFullYear()
-  const month = newDate.getMonth() + 1
-  const day = newDate.getDate()
-  const hours = newDate.getHours()
-  const minutes = newDate.getMinutes()
-  return `${day}/${month}/${year} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+  return dayjs(date).format('DD/MM/YYYY HH:mm')
 }

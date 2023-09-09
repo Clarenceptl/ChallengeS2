@@ -17,6 +17,7 @@
                 <th class="px-4">Country</th>
                 <th class="px-4">Salary</th>
                 <th class="px-4 text-center">Quiz</th>
+                <th class="px-4 text-center">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -33,6 +34,12 @@
                     >Take the test</v-btn
                   >
                   <p v-else>No quiz</p>
+                </td>
+                <td class="px-4 text-center">
+                  <v-icon
+                    :color="getColorStatus(statusFrontEmployeur[candidature.status])"
+                    :icon="statusFrontIcons[candidature.status]"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -66,6 +73,8 @@ import { useRouter } from 'vue-router'
 import { useUsersStore } from '../stores/users.store'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { statusFrontIcons, statusFrontEmployeur } from '@/enums'
+import { getColorStatus } from '@/helpers'
 
 await useUsersStore().getSelfUser()
 const { me } = storeToRefs(useUsersStore())
@@ -83,6 +92,7 @@ const openDialogQuiz = (candidature) => {
   warningDialog.value = true
   selectedCandidature.value = candidature
 }
+console.log(me)
 </script>
 
 <style scoped></style>
