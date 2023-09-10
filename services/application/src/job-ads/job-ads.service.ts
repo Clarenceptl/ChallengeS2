@@ -7,7 +7,7 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { CreateJobAdsRequest } from './job-ads.dto';
 import { User, UserRole } from 'src/users/users.entity';
 import { CandidatesJobAds } from 'src/candidate-job-ads/candidates-job-ads.entity';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class JobAdsService {
@@ -185,6 +185,7 @@ export class JobAdsService {
   }
 
   public async deleteJobAds(id: string, user: User): Promise<SuccessResponse> {
+    console.log('delete jobads entry', id, user);
     let res: JobAds = await this.jobAdsRepository.findOneBy({
       id: parseInt(id)
     });
@@ -203,17 +204,21 @@ export class JobAdsService {
         message: 'Forbidden'
       });
     }
+    console.log('ok pour delete');
     try {
       if (res.quizId) {
-        await lastValueFrom(
+        const test = await firstValueFrom(
           this.quizService.send(
             { cmd: SERVICE_CMD.DELETE_QUIZ },
             { id: res.quizId, tokenUser: user }
           )
         );
+        console.log('reponse delete quiz', test);
       }
       res = await this.jobAdsRepository.remove(res);
+      console.log('reponse delete jobad', res);
     } catch (error) {
+      console.log('error', error);
       throw new RpcException({
         statusCode: 500,
         message: error.message
