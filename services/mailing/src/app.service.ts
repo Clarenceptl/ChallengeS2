@@ -27,7 +27,7 @@ export class AppService {
   }
 
   public async resetPasswordMail(data: RegisterMailRequest): Promise<void> {
-    const url = process.env.FRONTEND_URL + 'reset-password/' + data.token;
+    const url = process.env.FRONTEND_URL + '/reset-password/' + data.token;
     try {
       await this.mailerService.sendMail({
         to: data.email,
