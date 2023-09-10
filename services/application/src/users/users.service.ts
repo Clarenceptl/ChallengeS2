@@ -10,7 +10,12 @@ import {
 } from './users.dto';
 import { SERVICE_CMD, SERVICE_NAME, SuccessResponse } from '../global';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { createRandToken, encryptPassword } from '../helpers';
+import {
+  checkDate,
+  createRandToken,
+  encryptPassword,
+  formatDate
+} from '../helpers';
 import type { ErrorModel } from '../global';
 import { JobAds } from 'src/job-ads/job-ads.entity';
 
@@ -160,6 +165,17 @@ export class UsersService {
       } as ErrorModel);
     }
 
+    if (updatedUser.birthdate) {
+      updatedUser.birthdate = formatDate(updatedUser.birthdate);
+      const check = checkDate(updatedUser.birthdate);
+      if (!check) {
+        throw new RpcException({
+          statusCode: 400,
+          message: 'Birthdate invalid'
+        });
+      }
+    }
+
     if (updatedUser.password) {
       updatedUser.password = encryptPassword(updatedUser.password);
     }
@@ -214,7 +230,7 @@ export class UsersService {
       password: password,
       firstname: 'Admin',
       lastname: 'Jhon',
-      birthdate: '01/01/1990',
+      birthdate: '1990-01-01',
       roles: [UserRole.ROLE_USER, UserRole.ROLE_ADMIN, UserRole.ROLE_EMPLOYEUR],
       isVerified: true
     });

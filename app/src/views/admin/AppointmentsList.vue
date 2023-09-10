@@ -31,7 +31,7 @@
                     <td class="py-4 px-4">{{ user.firstname }}</td>
                     <td class="px-4">{{ user.lastname }}</td>
                     <td class="px-4">{{ user.email }}</td>
-                    <td class="px-4">{{ user.birthdate }}</td>
+                    <td class="px-4">{{ formatDateFront(user.birthdate) }}</td>
                     <td>
                       <v-icon color="blue" @click="handleDialog(true, user)">mdi-pencil</v-icon>
                     </td>
@@ -104,8 +104,8 @@
 import { ref } from 'vue'
 import { useUsersStore, useToastStore } from '@/stores'
 import { storeToRefs } from 'pinia'
-import { formatDateToInput, formatDateToApi } from '@/helpers'
-import { UsersService } from '@/services'
+import { formatDateFront } from '@/helpers'
+// import { UsersService } from '@/services'
 
 const userStore = useUsersStore()
 const toastStore = useToastStore()
@@ -119,16 +119,11 @@ const showDeleteDialog = ref(false)
 
 const handleDialog = (show = false, user = null, deleting = false) => {
   deleting ? (showDeleteDialog.value = show) : (showDialog.value = show)
-  selectedUser.value = user ? { ...user, birthdate: '' } : null
-  if (!user) return
-  selectedUser.value.birthdate = formatDateToInput(user.birthdate)
+  selectedUser.value = user
 }
 
 const updateUser = async () => {
-  const res = await userStore.updateUser(selectedUser.value.id, {
-    ...selectedUser.value,
-    birthdate: formatDateToApi(selectedUser.value.birthdate)
-  })
+  const res = await userStore.updateUser(selectedUser.value.id, selectedUser.value)
   if (res.success) {
     showDialog.value = false
     selectedUser.value = null

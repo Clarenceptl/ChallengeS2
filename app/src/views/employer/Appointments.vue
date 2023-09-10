@@ -16,29 +16,29 @@
                 <th class="px-4">Lastname</th>
                 <th class="px-4">Job title</th>
                 <th class="px-4">Appointment date</th>
-                <th class="px-4">Status</th>
+                <th class="px-4 text-center">Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="appointment in appointments"
-                :key="appointment.id"
-                class="mb-4"
-              >
+              <tr v-for="appointment in appointments" :key="appointment.id" class="mb-4">
                 <td class="px-4">{{ appointment.candidate.firstname }}</td>
                 <td class="px-4">{{ appointment.candidate.lastname }}</td>
                 <td class="px-4">{{ appointment.job.title }}</td>
                 <td class="px-4">{{ formatDateAppointment(appointment.time) }}</td>
                 <td class="text-center px-4 py-4">
-                  <v-icon v-if="appointment.accepted === true" color="green">mdi-check</v-icon>
-                  <v-icon v-else-if="appointment.accepted === false" color="red">mdi-close</v-icon>
-                  <v-icon v-else color="orange">mdi-clock</v-icon>
-                  <!-- button for new appointment if accepted false -->
+                  <p v-if="typeof handleIcon(appointment) === 'string'">
+                    {{ handleIcon(appointment) }}
+                  </p>
+                  <v-icon v-else :color="handleIcon(appointment).color">{{
+                    handleIcon(appointment).icon
+                  }}</v-icon>
+
                   <v-btn
                     v-if="appointment.accepted === false"
                     color="blue-500 ml-4"
-                    @click="changeAppointmentDialog = true; appointmentId = appointment.id"
-                    >Change appointment</v-btn>
+                    @click="openDialog(appointment.id)"
+                    >Change appointment</v-btn
+                  >
                 </td>
               </tr>
             </tbody>
@@ -58,8 +58,7 @@
           <h2>Set an new appointment</h2>
         </v-card-title>
         <v-card-subtitle>
-          This candidate was not available at the time you set. Please choose a
-          new date and time.
+          This candidate was not available at the time you set. Please choose a new date and time.
         </v-card-subtitle>
         <v-card-text>
           <v-form>
@@ -79,9 +78,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { useAppointmentsStore } from "../../stores/appointments.store";
-import { storeToRefs } from "pinia";
+import { computed, ref } from 'vue'
+import { useAppointmentsStore } from '../../stores/appointments.store'
+import { storeToRefs } from 'pinia'
 import { useToastStore } from '@/stores'
 import { formatDateAppointment } from '@/helpers'
 
@@ -89,20 +88,54 @@ const stores = {
   toast: useToastStore()
 }
 
-let changeAppointmentDialog = ref(false);
-let appointmentId = ref(null);
-const appointmentsStore = useAppointmentsStore();
-await appointmentsStore.getAppointments();
-const { appointments } = storeToRefs(appointmentsStore);
+const changeAppointmentDialog = ref(false)
+const appointmentId = ref(null)
+const appointmentsStore = useAppointmentsStore()
+await appointmentsStore.getAppointments()
+const { appointments } = storeToRefs(appointmentsStore)
 
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`
 })
 
-let time = ref('')
-let date = ref('')
+const time = ref('')
+const date = ref('')
 
-const newAppointment = async (accepted) => {
+const handleIcon = (appointment) => {
+  const candidateJobAds = appointment.candidate.candidatesJobAds.find(
+    (candidateJobAd) => candidateJobAd.jobAds.id === appointment.job.id
+  )
+  if (candidateJobAds && candidateJobAds.status === 'REJECTED') {
+    return 'Candidate Rejected'
+  }
+  if (candidateJobAds && candidateJobAds.status === 'ACCEPTED') {
+    return 'Candidate Accepted'
+  }
+
+  if (appointment.accepted === true) {
+    return {
+      icon: 'mdi-check',
+      color: 'green'
+    }
+  } else if (appointment.accepted === false) {
+    return {
+      icon: 'mdi-close',
+      color: 'red'
+    }
+  } else {
+    return {
+      icon: 'mdi-clock',
+      color: 'orange'
+    }
+  }
+}
+
+const openDialog = (id) => {
+  changeAppointmentDialog.value = true
+  appointmentId.value = id
+}
+
+const newAppointment = async () => {
   if (!date.value || !time.value) {
     stores.toast.createToast({
       type: 'error',

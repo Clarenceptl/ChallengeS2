@@ -166,7 +166,7 @@ export class CompanyService {
       password: password,
       firstname: 'employeur',
       lastname: 'John',
-      birthdate: '01/01/1990',
+      birthdate: '1990-01-01',
       roles: [UserRole.ROLE_USER, UserRole.ROLE_EMPLOYEUR],
       isVerified: true
     });

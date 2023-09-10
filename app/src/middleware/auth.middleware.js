@@ -1,25 +1,26 @@
-import { checkDateForRefreshToken, checkToken, clearTokens } from '@/helpers'
-import { AuthService } from '@/services'
+import { isConnected } from '../helpers'
+import { useUsersStore } from '../stores/users.store'
 
-export const isConnected = async () => {
-  const token = localStorage.getItem('bearer-token')
-  const refreshToken = localStorage.getItem('refresh-token')
-  const exp = checkToken(token)
-  if (!exp) {
-    clearTokens()
-    return false
+export const isLogged = async (context) => {
+  const { next } = context
+  const res = await isConnected()
+
+  if (!res) {
+    return next({
+      name: 'Login'
+    })
   }
-  if (!refreshToken) return false
-  const expRefresToken = checkToken(refreshToken)
-  if (!expRefresToken) return true
-  const res = checkDateForRefreshToken(exp)
-  if (!res) return true
+  await useUsersStore().loadData()
+  return next()
+}
 
-  
-  const responseService = await AuthService.refreshToken(refreshToken)
-  if (!responseService.success) return false
-  localStorage.setItem('bearer-token', responseService.data.token)
-  localStorage.setItem('refresh-token', responseService.data.refreshToken)
-
-  return true
+export const isNotLogged = async (context) => {
+  const { next } = context
+  const res = await isConnected()
+  if (res) {
+    return next({
+      name: 'Home'
+    })
+  }
+  return next()
 }

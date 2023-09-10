@@ -1,6 +1,7 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your applications list</h1>
+    <InfoApplicationList />
     <div class="d-flex justify-center mb-2">
       <v-card class="mx-auto" v-if="me?.candidatesJobAds?.length > 0">
         <v-toolbar color="appgrey">
@@ -17,22 +18,29 @@
                 <th class="px-4">Country</th>
                 <th class="px-4">Salary</th>
                 <th class="px-4 text-center">Quiz</th>
+                <th class="px-4 text-center">Status</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(candidature, index) in me.candidatesJobAds" :key="index">
-                <td class="px-4">{{ candidature.jobAds.title }}</td>
-                <td class="px-4">{{ candidature.jobAds.city }}</td>
-                <td class="px-4">{{ candidature.jobAds.country }}</td>
-                <td class="px-4">{{ candidature.jobAds.salary }}</td>
+                <td class="px-4">{{ candidature.jobAds?.title }}</td>
+                <td class="px-4">{{ candidature.jobAds?.city }}</td>
+                <td class="px-4">{{ candidature.jobAds?.country }}</td>
+                <td class="px-4">{{ candidature.jobAds?.salary }}</td>
                 <td class="px-4 py-4">
                   <v-btn
-                    v-if="candidature.jobAds.quizId"
+                    v-if="candidature.jobAds?.quizId"
                     color="blue-500"
                     @click="openDialogQuiz(candidature)"
                     >Take the test</v-btn
                   >
                   <p v-else>No quiz</p>
+                </td>
+                <td class="px-4 text-center">
+                  <v-icon
+                    :color="getColorStatus(statusFrontEmployeur[candidature.status])"
+                    :icon="statusFrontIcons[candidature.status]"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -66,6 +74,9 @@ import { useRouter } from 'vue-router'
 import { useUsersStore } from '../stores/users.store'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { statusFrontIcons, statusFrontEmployeur } from '@/enums'
+import { getColorStatus } from '@/helpers'
+import InfoApplicationList from '@/components/candidate/InfoApplicationList.vue'
 
 await useUsersStore().getSelfUser()
 const { me } = storeToRefs(useUsersStore())
@@ -75,7 +86,7 @@ let warningDialog = ref(false)
 let selectedCandidature = ref(null)
 
 const startQuiz = () => {
-  router.push(`applied-list/${selectedCandidature.value.id}/test`)
+  router.push(`applied-list/${selectedCandidature.value.jobAds.id}/test`)
   warningDialog.value = false
 }
 

@@ -15,7 +15,7 @@
           color="appgrey"
           variant="outlined"
           label="Firstname"
-        /> 
+        />
       </v-col>
 
       <v-col cols="12" md="6">
@@ -40,13 +40,13 @@
           variant="outlined"
           label="Email"
           disabled
-        /> 
+        />
       </v-col>
 
       <v-col cols="12" md="6">
         <v-text-field
           clearable
-          v-model="formatedBirthdate"
+          v-model="me.birthdate"
           type="date"
           color="appgrey"
           variant="outlined"
@@ -56,49 +56,47 @@
     </v-row>
 
     <div class="text-center mb-4">
-      <v-btn :disabled="isUserToUpdate" class="mt-4" color="appgrey" @click="updateUser">Update user</v-btn>
+      <v-btn :disabled="isUserToUpdate" class="mt-4" color="appgrey" @click="updateUser"
+        >Update user</v-btn
+      >
     </div>
 
     <v-row>
       <v-col cols="12" md="4">
-          <v-text-field
+        <v-text-field
           clearable
           type="password"
           color="appgrey"
           variant="outlined"
           label="Password"
-          />
+        />
       </v-col>
 
       <v-col cols="12" md="4">
-          <v-text-field
+        <v-text-field
           clearable
           v-model="user.newPassword"
           type="password"
           color="appgrey"
           variant="outlined"
           label="New Password"
-          />
+        />
       </v-col>
 
       <v-col cols="12" md="4">
-          <v-text-field
+        <v-text-field
           clearable
           v-model="user.confirmPassword"
           type="password"
           color="appgrey"
           variant="outlined"
           label="Confirm Password"
-          />
+        />
       </v-col>
     </v-row>
 
     <div class="text-center">
-      <v-btn
-        :disabled="!user.newPassword || !user.confirmPassword"
-        class="mt-4"
-        color="appgrey"
-      >
+      <v-btn :disabled="!user.newPassword || !user.confirmPassword" class="mt-4" color="appgrey">
         Change password
       </v-btn>
     </div>
@@ -117,7 +115,7 @@
             color="appgrey"
             variant="outlined"
             label="Name"
-          /> 
+          />
         </v-col>
 
         <v-col cols="12" md="4">
@@ -152,7 +150,7 @@
             color="appgrey"
             variant="outlined"
             label="Description"
-          /> 
+          />
         </v-col>
 
         <v-col cols="12" md="4">
@@ -217,55 +215,50 @@
       </v-row>
 
       <div class="text-center">
-        <v-btn :disabled="isCompanyToUpdate" class="mt-4" color="appgrey" @click="updateCompany">Update Company</v-btn>
+        <v-btn :disabled="isCompanyToUpdate" class="mt-4" color="appgrey" @click="updateCompany"
+          >Update Company</v-btn
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue'
 import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia';
-import { useCompanySizeOptionsStore } from '@/stores/company-size-options';
-import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options';
-import { useCompanySectorOptionsStore } from '@/stores/company-sector-options';
-import { useCompaniesStore } from '@/stores/companies';
+import { storeToRefs } from 'pinia'
+import { useCompanySizeOptionsStore } from '@/stores/company-size-options'
+import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options'
+import { useCompanySectorOptionsStore } from '@/stores/company-sector-options'
+import { useCompaniesStore } from '@/stores/companies'
 import { useToastStore } from '@/stores'
 
 const stores = {
   toast: useToastStore()
 }
-await useCompanySizeOptionsStore().getCompanySizeOptions();
-await useCompanyRevenueOptionsStore().getCompanyRevenueOptions();
-await useCompanySectorOptionsStore().getCompanySectorOptions();
+await useCompanySizeOptionsStore().getCompanySizeOptions()
+await useCompanyRevenueOptionsStore().getCompanyRevenueOptions()
+await useCompanySectorOptionsStore().getCompanySectorOptions()
 
-const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore());
-const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore());
-const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore());
-const { me } = storeToRefs(useUsersStore());
+const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore())
+const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore())
+const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore())
+const { me } = storeToRefs(useUsersStore())
 
-let isCompanyToUpdate = ref(true);
-let isUserToUpdate = ref(true);
+const isCompanyToUpdate = ref(true)
+const isUserToUpdate = ref(true)
 
-const formatedBirthdate = computed(() => {
-  if (me.value?.birthdate) {
-    return me.value?.birthdate.split('/').reverse().join('-');
-  }
-  return '';
-});
-
-let user = ref({
+const user = ref({
   newPassword: '',
-  confirmPassword: '',
-});
+  confirmPassword: ''
+})
 
 const initials = computed(() => {
   if (me.value?.firstname && me.value?.lastname) {
-    return `${me.value?.firstname[0]}${me.value?.lastname[0]}`;
+    return `${me.value?.firstname[0]}${me.value?.lastname[0]}`
   }
-  return '';
-});
+  return ''
+})
 
 const companyFields = computed(() => ({
   name: me.value?.company?.name,
@@ -276,21 +269,20 @@ const companyFields = computed(() => ({
   siret: me.value?.company?.siret,
   revenue: me.value?.company?.revenue?.revenue,
   sector: me.value?.company?.sector?.sector,
-  size: me.value?.company?.size?.size,
-}));
+  size: me.value?.company?.size?.size
+}))
 
 watch(companyFields, () => {
-  isCompanyToUpdate.value = false;
-});
+  isCompanyToUpdate.value = false
+})
 
-watch([() => me.value?.firstname, () => me.value?.lastname], () => {
-  isUserToUpdate.value = false;
-});
+watch([() => me.value?.firstname, () => me.value?.lastname, () => me.value?.birthdate], () => {
+  isUserToUpdate.value = false
+})
 
 const updateCompany = async () => {
-  await useCompaniesStore().updateCompany(
-    me.value?.company?.id,
-    {
+  await useCompaniesStore()
+    .updateCompany(me.value?.company?.id, {
       name: me.value?.company?.name,
       founder: me.value?.company?.founder,
       address: me.value?.company?.address,
@@ -299,46 +291,44 @@ const updateCompany = async () => {
       siret: me.value?.company?.siret,
       revenue: me.value?.company?.revenue?.id,
       sector: me.value?.company?.sector?.id,
-      size: me.value?.company?.size?.id,
-    }
-  ).then(() => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'Company updated successfully',
-    });
-    isCompanyToUpdate.value = true;
-  }).catch((error) => {
-    console.log(error);
-    stores.toast.createToast({
-      type: 'error',
-      message: 'Error while updating company',
-    });
-  });
-};
+      size: me.value?.company?.size?.id
+    })
+    .then(() => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'Company updated successfully'
+      })
+      isCompanyToUpdate.value = true
+    })
+    .catch((error) => {
+      console.log(error)
+      stores.toast.createToast({
+        type: 'error',
+        message: 'Error while updating company'
+      })
+    })
+}
 
 const updateUser = async () => {
-  await useUsersStore().updateUser(
-    me.value?.id,
-    {
+  await useUsersStore()
+    .updateUser(me.value?.id, {
       firstname: me.value?.firstname,
       lastname: me.value?.lastname,
-      birthdate: formatedBirthdate.value,
-    }
-  ).then(() => {
-    stores.toast.createToast({
-      type: 'success',
-      message: 'User updated successfully',
-    });
-    isUserToUpdate.value = true;
-  }).catch((error) => {
-    console.log(error);
-    stores.toast.createToast({
-      type: 'error',
-      message: 'Error while updating user',
-    });
-  });
-};
-
+      birthdate: me.value?.birthdate
+    })
+    .then(() => {
+      stores.toast.createToast({
+        type: 'success',
+        message: 'User updated successfully'
+      })
+      isUserToUpdate.value = true
+    })
+    .catch((error) => {
+      console.log(error)
+      stores.toast.createToast({
+        type: 'error',
+        message: 'Error while updating user'
+      })
+    })
+}
 </script>
-
-<style scoped></style>

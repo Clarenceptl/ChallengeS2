@@ -73,7 +73,6 @@ export class CompanySectorOptionsService {
         )
       );
     } catch (error) {
-      console.log('error');
       handleErrors(error);
     }
     return res;

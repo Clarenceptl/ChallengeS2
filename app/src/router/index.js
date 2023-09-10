@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUsersStore } from '../stores/users.store'
-import { storeToRefs } from 'pinia'
-import { isConnected } from '../middleware/auth.middleware'
+import {
+  isLogged,
+  isNotLogged,
+  isEmployer,
+  middlewarePipeline,
+  isSimpleUser,
+  isAdmin
+} from '../middleware'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,117 +15,71 @@ const router = createRouter({
       path: '/',
       name: 'Home',
       meta: {
-        title: 'Home'
+        title: 'Home',
+        middleware: [isLogged]
       },
-      component: () => import('@/views/HomeView.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (await isConnected()) {
-          await useUsersStore().loadData()
-        }
-        return next()
-      }
+      component: () => import('@/views/HomeView.vue')
     },
     {
       path: '/login',
       name: 'Login',
       meta: {
-        title: 'Login'
+        title: 'Login',
+        middleware: [isNotLogged]
       },
-      component: () => import('@/views/auth/LoginView.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next()
-        }
-        return next({ name: 'Home' })
-      }
+      component: () => import('@/views/auth/LoginView.vue')
     },
     {
       path: '/register',
       name: 'Register',
       meta: {
-        title: 'Register'
+        title: 'Register',
+        middleware: [isNotLogged]
       },
-      component: () => import('@/views/auth/RegisterView.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next()
-        }
-        return next({ name: 'Home' })
-      }
+      component: () => import('@/views/auth/RegisterView.vue')
     },
     {
       path: '/reset-password/:token',
       name: 'ResetPassword',
       meta: {
-        title: 'Reset password'
+        title: 'Reset password',
+        middleware: [isNotLogged]
       },
-      component: () => import('@/views/auth/ResetPassword.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next()
-        }
-        return next({ name: 'Home' })
-      }
+      component: () => import('@/views/auth/ResetPassword.vue')
     },
     {
       path: '/verify-account/:token',
       name: 'ValidateAccount',
       meta: {
-        title: 'Verify account'
+        title: 'Verify account',
+        middleware: [isNotLogged]
       },
-      component: () => import('@/views/auth/ValidateAccount.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next()
-        }
-        return next({ name: 'Home' })
-      }
+      component: () => import('@/views/auth/ValidateAccount.vue')
     },
     {
       path: '/profile',
       name: 'Profile',
-      component: () => import('@/views/ProfileView.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          return next({ name: 'Home' })
-        }
-        await useUsersStore().loadData()
-        return next()
-      },
       meta: {
-        title: 'Profile'
-      }
+        title: 'Profile',
+        middleware: [isLogged]
+      },
+      component: () => import('@/views/ProfileView.vue')
     },
     {
       path: '/register-company',
       name: 'RegisterCompany',
-      component: () => import('@/views/RegisterCompany.vue'),
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (userStore.isUser.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
-      }
+      meta: {
+        title: 'Register company',
+        middleware: [isLogged, isSimpleUser]
+      },
+      component: () => import('@/views/RegisterCompany.vue')
     },
     {
       path: '/job-offers',
       name: 'JobOffers',
       meta: {
-        title: 'Job offers'
-      },
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (userStore.isUser.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
+        title: 'Job offers',
+        middleware: [isLogged, isSimpleUser]
       },
       component: () => import('@/views/JobOffers.vue')
     },
@@ -128,17 +87,8 @@ const router = createRouter({
       path: '/applied-list',
       name: 'AppliedList',
       meta: {
-        title: 'Applied list'
-      },
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (userStore.isUser.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
+        title: 'Applied list',
+        middleware: [isLogged, isSimpleUser]
       },
       children: [
         {
@@ -160,34 +110,16 @@ const router = createRouter({
       path: '/appointment-list',
       name: 'AppointmentList',
       meta: {
-        title: 'Appointment list'
-      },
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (userStore.isUser.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
+        title: 'Appointment list',
+        middleware: [isLogged, isSimpleUser]
       },
       component: () => import('@/views/AppointmentList.vue')
     },
     {
       path: '/admin/',
       meta: {
-        title: 'Admin'
-      },
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (!userStore.isAdmin.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
+        title: 'Admin',
+        middleware: [isLogged, isAdmin]
       },
       children: [
         {
@@ -225,17 +157,8 @@ const router = createRouter({
       path: '/employer/',
       name: 'Employer',
       meta: {
-        title: 'Employer'
-      },
-      beforeEnter: async (to, from, next) => {
-        if (!(await isConnected())) {
-          const userStore = storeToRefs(useUsersStore())
-          if (!userStore.isEmployer.value) {
-            return next({ name: 'Home' })
-          }
-        }
-        await useUsersStore().loadData()
-        return next()
+        title: 'Employer',
+        middleware: [isLogged, isEmployer]
       },
       children: [
         {
@@ -272,8 +195,22 @@ router.beforeEach(async (to, from, next) => {
   const title = to.meta.title
 
   document.title = title ? `${title} - Larudakoté` : 'Larudakoté'
+  if (!to.meta.middleware) {
+    return next()
+  }
 
-  return next()
+  const middleware = to.meta.middleware
+  const context = {
+    to,
+    from,
+    next
+    //   store  | You can also pass store as an argument
+  }
+
+  return middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1)
+  })
 })
 
 export default router

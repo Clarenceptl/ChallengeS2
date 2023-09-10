@@ -29,7 +29,7 @@ export class CandidatesJobAds {
   candidate: User;
 
   @ManyToOne(() => JobAds, (jobAds) => jobAds.candidatesJobAds, {
-    onDelete: 'SET NULL',
+    onDelete: 'CASCADE',
     eager: true
   })
   jobAds: JobAds;

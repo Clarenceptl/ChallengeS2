@@ -117,7 +117,7 @@ const stores = {
   toast: useToastStore()
 }
 const today = new Date()
-const maxDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+
 const { companySizeOptions } = storeToRefs(useCompanySizeOptionsStore())
 const { companyRevenueOptions } = storeToRefs(useCompanyRevenueOptionsStore())
 const { companySectorOptions } = storeToRefs(useCompanySectorOptionsStore())
