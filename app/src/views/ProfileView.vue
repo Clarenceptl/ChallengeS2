@@ -61,46 +61,6 @@
       >
     </div>
 
-    <v-row>
-      <v-col cols="12" md="4">
-        <v-text-field
-          clearable
-          type="password"
-          color="appgrey"
-          variant="outlined"
-          label="Password"
-        />
-      </v-col>
-
-      <v-col cols="12" md="4">
-        <v-text-field
-          clearable
-          v-model="user.newPassword"
-          type="password"
-          color="appgrey"
-          variant="outlined"
-          label="New Password"
-        />
-      </v-col>
-
-      <v-col cols="12" md="4">
-        <v-text-field
-          clearable
-          v-model="user.confirmPassword"
-          type="password"
-          color="appgrey"
-          variant="outlined"
-          label="Confirm Password"
-        />
-      </v-col>
-    </v-row>
-
-    <div class="text-center">
-      <v-btn :disabled="!user.newPassword || !user.confirmPassword" class="mt-4" color="appgrey">
-        Change password
-      </v-btn>
-    </div>
-
     <div v-if="me.company">
       <div class="text-center mb-4">
         <h2 class="mt-2">Company</h2>
