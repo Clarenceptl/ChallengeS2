@@ -8,7 +8,6 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.INIT }}</h2>
           <draggable
             :id="statusFrontEmployeur.INIT"
-            @end="updateStatus"
             group="test"
             v-model="newCandidates"
             item-key="id"
@@ -31,7 +30,6 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.PENDING }}</h2>
           <draggable
             :id="statusFrontEmployeur.PENDING"
-            @end="updateStatus"
             @add="setAppointment"
             :move="handleMeetColumn"
             group="test"
@@ -56,7 +54,7 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.ACCEPTED }}</h2>
           <draggable
             :id="statusFrontEmployeur.ACCEPTED"
-            @end="updateStatus"
+            @add="updateStatus"
             group="test"
             :move="handleAcceptedColumn"
             v-model="acceptedCandidates"
@@ -81,6 +79,7 @@
           <draggable
             :id="statusFrontEmployeur.REJECTED"
             group="test"
+            @add="setRejection"
             :move="() => false"
             v-model="rejectedCandidates"
             item-key="id"
@@ -132,15 +131,15 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="deleteDialog" max-width="600">
+    <v-dialog persistent v-model="rejectDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Delete this job</h2>
+          <h2>Reject this candidate</h2>
         </v-card-title>
-        <v-card-subtitle> Are you sure you want to delete this job ? </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to reject this candidate ?</v-card-subtitle>
         <v-card-actions>
-          <v-btn color="red-500" text @click="reinitilize"> Cancel </v-btn>
-          <v-btn color="blue-800" text> Yes </v-btn>
+          <v-btn color="blue-800" text @click="closeRejectDialog"> Cancel </v-btn>
+          <v-btn class="bg-red" text @click="setRejected"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -193,7 +192,12 @@
 
         <v-card-actions class="d-flex justify-space-between">
           <v-btn color="blue-800" text @click="closeInfoDialog"> Close </v-btn>
-          <v-btn v-if="appointmentInfo" class="bg-green" text @click="router.push('/employer/appointments')">
+          <v-btn
+            v-if="appointmentInfo"
+            class="bg-green"
+            text
+            @click="router.push('/employer/appointments')"
+          >
             Go to appointment list
           </v-btn>
         </v-card-actions>
@@ -241,14 +245,15 @@ const acceptedCandidates = ref([])
 const rejectedCandidates = ref([])
 
 const appointmentDialog = ref(false)
-const deleteDialog = ref(false)
+const rejectDialog = ref(false)
 const infoDialog = ref(false)
 const time = ref('')
 const date = ref('')
 const selectedUserInfo = ref(null)
 const selectedId = ref(null)
-const waitingSetAppointementId = ref(null)
+const waitinDialogCandidateId = ref(null)
 const appointmentInfo = ref(null)
+const dragContext = ref(null)
 //#endregion
 
 //#region Methods
@@ -259,13 +264,14 @@ const setCandidatesByStatus = (status) => {
 
 const reinitilize = () => {
   appointmentDialog.value = false
-  deleteDialog.value = false
+  rejectDialog.value = false
   time.value = ''
   date.value = ''
   selectedId.value = null
   selectedUserInfo.value = null
   infoDialog.value = false
-  waitingSetAppointementId.value = null
+  waitinDialogCandidateId.value = null
+  dragContext.value = null
 }
 
 const createAppointment = async () => {
@@ -306,13 +312,13 @@ const createAppointment = async () => {
 
 const openDialog = (idCandidate, idCandidature) => {
   appointmentDialog.value = true
-  waitingSetAppointementId.value = idCandidature
+  waitinDialogCandidateId.value = idCandidature
   selectedId.value = idCandidate
 }
 
 const closeDialog = () => {
   const indexCandidature = pendingCandidates.value.findIndex((candidature) => {
-    return candidature.id === waitingSetAppointementId.value
+    return candidature.id === waitinDialogCandidateId.value
   })
   const candidature = pendingCandidates.value[indexCandidature]
 
@@ -348,6 +354,43 @@ const updateStatus = async (val) => {
 const setAppointment = (val) => {
   const candidature = val.item.__draggable_context.element
   openDialog(candidature.candidate.id, candidature.id)
+}
+
+const setRejection = (val) => {
+  dragContext.value = val
+  openRejectDialog(val.item.__draggable_context.element.id)
+}
+
+const openRejectDialog = (idCandidature) => {
+  rejectDialog.value = true
+  waitinDialogCandidateId.value = idCandidature
+}
+
+const closeRejectDialog = () => {
+  rejectDialog.value = false
+  const indexCandidature = rejectedCandidates.value.findIndex((candidature) => {
+    return candidature.id === waitinDialogCandidateId.value
+  })
+  const candidature = rejectedCandidates.value[indexCandidature]
+
+  rejectedCandidates.value.splice(indexCandidature, 1)
+  const from = dragContext.value.from.id
+
+  if (from === statusFrontEmployeur.INIT) {
+    newCandidates.value.push(candidature)
+  } else if (from === statusFrontEmployeur.PENDING) {
+    pendingCandidates.value.push(candidature)
+  } else if (from === statusFrontEmployeur.ACCEPTED) {
+    acceptedCandidates.value.push(candidature)
+  } else {
+    newCandidates.value.push(candidature)
+  }
+  reinitilize()
+}
+
+const setRejected = async () => {
+  await updateStatus(dragContext.value)
+  reinitilize()
 }
 
 //#endregion

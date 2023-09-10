@@ -1,6 +1,7 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your applications list</h1>
+    <InfoApplicationList />
     <div class="d-flex justify-center mb-2">
       <v-card class="mx-auto" v-if="me?.candidatesJobAds?.length > 0">
         <v-toolbar color="appgrey">
@@ -75,6 +76,7 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { statusFrontIcons, statusFrontEmployeur } from '@/enums'
 import { getColorStatus } from '@/helpers'
+import InfoApplicationList from '@/components/candidate/InfoApplicationList.vue'
 
 await useUsersStore().getSelfUser()
 const { me } = storeToRefs(useUsersStore())
@@ -92,7 +94,6 @@ const openDialogQuiz = (candidature) => {
   warningDialog.value = true
   selectedCandidature.value = candidature
 }
-console.log(me)
 </script>
 
 <style scoped></style>
