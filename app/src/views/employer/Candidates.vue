@@ -2,9 +2,9 @@
   <div class="pa-5">
     <h1 class="text-center my-10">Your candidates list</h1>
     <InfoDragAndDrop />
-    <v-container class="h-100" v-if="jobAd?.candidatesJobAds?.length">
+    <v-container class="h-100 w-100" v-if="jobAd?.candidatesJobAds?.length">
       <v-row>
-        <v-col class="bg-grey-100 rounded">
+        <v-col cols="12" md="2" class="mb-2 mb-md-0 bg-grey-100 rounded">
           <h2 class="mb-4">{{ statusFrontEmployeur.INIT }}</h2>
           <draggable
             :id="statusFrontEmployeur.INIT"
@@ -14,9 +14,17 @@
           >
             <template #item="{ element }">
               <v-card
+                class="mb-2"
                 :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
                 :subtitle="element.candidate.email"
               >
+                <template v-slot:text>
+                  <div class="mb-2" v-if="hasQuiz">
+                    <p>Quiz :</p>
+                    <p>- Score : {{ getQuizScore(element.candidate.id) }}</p>
+                    <p>- Attempt : {{ getQuizTentative(element.candidate.id) }}</p>
+                  </div>
+                </template>
                 <v-card-actions>
                   <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
                     >More info</v-btn
@@ -26,7 +34,7 @@
             </template>
           </draggable>
         </v-col>
-        <v-col class="ml-2 bg-grey-100 rounded">
+        <v-col cols="12" md="3" class="ml-0 ml-md-2 mb-2 mb-md-0 bg-grey-100 rounded">
           <h2 class="mb-4">{{ statusFrontEmployeur.PENDING }}</h2>
           <draggable
             :id="statusFrontEmployeur.PENDING"
@@ -38,19 +46,53 @@
           >
             <template #item="{ element }">
               <v-card
+                class="mb-2"
                 :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
                 :subtitle="element.candidate.email"
               >
-                <v-card-actions>
+                <template v-slot:text>
+                  <div class="mb-2" v-if="hasQuiz">
+                    <p>Quiz :</p>
+                    <p>- Score : {{ getQuizScore(element.candidate.id) }}</p>
+                    <p>- Attempt : {{ getQuizTentative(element.candidate.id) }}</p>
+                  </div>
+                  <div v-if="getCandidateAppointments(element.candidate.id)">
+                    <p>Appointment :</p>
+                    {{
+                      formatDateAppointment(getCandidateAppointments(element.candidate.id)?.time)
+                    }}
+                    <div class="d-flex">
+                      <p>- Status :</p>
+
+                      <v-icon
+                        color="green"
+                        v-if="getCandidateAppointments(element.candidate.id)?.accepted === true"
+                        >mdi-check</v-icon
+                      >
+                      <v-icon
+                        color="red"
+                        v-else-if="
+                          getCandidateAppointments(element.candidate.id)?.accepted === false
+                        "
+                        >mdi-close</v-icon
+                      >
+                      <v-icon color="orange" v-else>mdi-clock</v-icon>
+                    </div>
+                  </div>
+                </template>
+                <v-card-actions class="d-flex flex-column align-start">
                   <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
                     >More info</v-btn
                   >
+                  <v-btn class="bg-green ml-0 mt-2" text @click="navigateToAppointment">
+                    Appointment list
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </template>
           </draggable>
         </v-col>
-        <v-col class="ml-2 bg-grey-100 rounded">
+        <v-col cols="12" md="3" class="ml-0 ml-md-2 mb-2 mb-md-0 bg-grey-100 rounded">
           <h2 class="mb-4">{{ statusFrontEmployeur.ACCEPTED }}</h2>
           <draggable
             :id="statusFrontEmployeur.ACCEPTED"
@@ -62,9 +104,40 @@
           >
             <template #item="{ element }">
               <v-card
+                class="mb-2"
                 :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
                 :subtitle="element.candidate.email"
               >
+                <template v-slot:text>
+                  <div class="mb-2" v-if="hasQuiz">
+                    <p>Quiz :</p>
+                    <p>- Score : {{ getQuizScore(element.candidate.id) }}</p>
+                    <p>- Attempt : {{ getQuizTentative(element.candidate.id) }}</p>
+                  </div>
+                  <div v-if="getCandidateAppointments(element.candidate.id)">
+                    <p>Appointment :</p>
+                    {{
+                      formatDateAppointment(getCandidateAppointments(element.candidate.id)?.time)
+                    }}
+                    <div class="d-flex">
+                      <p>- Status :</p>
+
+                      <v-icon
+                        color="green"
+                        v-if="getCandidateAppointments(element.candidate.id)?.accepted === true"
+                        >mdi-check</v-icon
+                      >
+                      <v-icon
+                        color="red"
+                        v-else-if="
+                          getCandidateAppointments(element.candidate.id)?.accepted === false
+                        "
+                        >mdi-close</v-icon
+                      >
+                      <v-icon color="orange" v-else>mdi-clock</v-icon>
+                    </div>
+                  </div>
+                </template>
                 <v-card-actions>
                   <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
                     >More info</v-btn
@@ -74,7 +147,7 @@
             </template>
           </draggable>
         </v-col>
-        <v-col class="ml-2 bg-grey-100 rounded">
+        <v-col cols="12" md="3" class="ml-0 ml-md-2 mb-2 mb-md-0 bg-grey-100 rounded">
           <h2 class="mb-4">{{ statusFrontEmployeur.REJECTED }}</h2>
           <draggable
             :id="statusFrontEmployeur.REJECTED"
@@ -86,9 +159,41 @@
           >
             <template #item="{ element }">
               <v-card
+                class="mb-2"
+                variant="tonal"
                 :title="`${element.candidate.firstname} ${element.candidate.lastname}`"
                 :subtitle="element.candidate.email"
               >
+                <template v-slot:text>
+                  <div class="mb-2" v-if="hasQuiz">
+                    <p>Quiz :</p>
+                    <p>- Score : {{ getQuizScore(element.candidate.id) }}</p>
+                    <p>- Attempt : {{ getQuizTentative(element.candidate.id) }}</p>
+                  </div>
+                  <div v-if="getCandidateAppointments(element.candidate.id)">
+                    <p>Appointment :</p>
+                    {{
+                      formatDateAppointment(getCandidateAppointments(element.candidate.id)?.time)
+                    }}
+                    <div class="d-flex">
+                      <p>- Status :</p>
+
+                      <v-icon
+                        color="green"
+                        v-if="getCandidateAppointments(element.candidate.id)?.accepted === true"
+                        >mdi-check</v-icon
+                      >
+                      <v-icon
+                        color="red"
+                        v-else-if="
+                          getCandidateAppointments(element.candidate.id)?.accepted === false
+                        "
+                        >mdi-close</v-icon
+                      >
+                      <v-icon color="orange" v-else>mdi-clock</v-icon>
+                    </div>
+                  </div>
+                </template>
                 <v-card-actions>
                   <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
                     >More info</v-btn
@@ -168,38 +273,10 @@
             <p>Birthdate :</p>
             <p class="ml-2">{{ formatDateFront(selectedUserInfo.birthdate) }}</p>
           </div>
-          <div class="d-flex" v-if="appointmentInfo">
-            <p>Appointment :</p>
-            <p class="ml-2 mr-2">{{ formatDateAppointment(appointmentInfo.time) }}</p>
-            <div v-if="appointmentInfo">
-              <v-icon color="green" v-if="appointmentInfo.accepted === true">mdi-check</v-icon>
-              <v-icon color="red" v-else-if="appointmentInfo.accepted === false">mdi-close</v-icon>
-              <v-icon color="orange" v-else>mdi-clock</v-icon>
-            </div>
-          </div>
-
-          <div v-if="hasQuiz">
-            <div class="d-flex">
-              <p>Quiz score :</p>
-              <p class="ml-2">{{ getQuizScore(selectedUserInfo.id) }}</p>
-            </div>
-            <div class="d-flex">
-              <p>Quiz attempt :</p>
-              <p class="ml-2">{{ getQuizTentative(selectedUserInfo.id) }}</p>
-            </div>
-          </div>
         </v-card-text>
 
         <v-card-actions class="d-flex justify-space-between">
           <v-btn color="blue-800" text @click="closeInfoDialog"> Close </v-btn>
-          <v-btn
-            v-if="appointmentInfo"
-            class="bg-green"
-            text
-            @click="router.push('/employer/appointments')"
-          >
-            Go to appointment list
-          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -252,7 +329,6 @@ const date = ref('')
 const selectedUserInfo = ref(null)
 const selectedId = ref(null)
 const waitinDialogCandidateId = ref(null)
-const appointmentInfo = ref(null)
 const dragContext = ref(null)
 //#endregion
 
@@ -329,13 +405,11 @@ const closeDialog = () => {
 
 const openInfoDialog = (candidate) => {
   infoDialog.value = true
-  checkCandidateAppointments(candidate.id)
   selectedUserInfo.value = candidate
 }
 
 const closeInfoDialog = () => {
   infoDialog.value = false
-  appointmentInfo.value = null
 }
 
 const updateStatus = async (val) => {
@@ -393,21 +467,18 @@ const setRejected = async () => {
   reinitilize()
 }
 
+const navigateToAppointment = () => {
+  return router.push({ name: 'EmployerAppointments' })
+}
 //#endregion
 
 //#region computed
 const formattedDatetime = computed(() => {
   return `${date.value}T${time.value}:00Z`
 })
-// computed that returns appointments for this job
-const jobAppointments = computed(() => {
-  return appointments.value.filter((appointment) => {
-    return appointment.job.id === jobAd.value.id
-  })
-})
 
 const hasQuiz = computed(() => {
-  return jobAppointments.value?.job?.quizId
+  return jobAd.value?.quizId
 })
 
 const getQuizScore = (candidateId) => {
@@ -424,17 +495,10 @@ const getQuizTentative = (candidateId) => {
   return response ? response.tentative : 'Not taken'
 }
 
-const checkCandidateAppointments = (candidateId) => {
-  const res = jobAppointments.value.find((appointment) => {
-    return appointment.candidate.id === candidateId
+const getCandidateAppointments = (candidateId) => {
+  return appointments.value.find((appointment) => {
+    return appointment.candidate.id === candidateId && appointment.job.id === jobAd.value.id
   })
-  if (!res) {
-    return
-  }
-  appointmentInfo.value = {
-    accepted: res?.accepted,
-    time: res?.time
-  }
 }
 
 //#endregion

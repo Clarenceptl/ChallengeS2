@@ -6,7 +6,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(duration);
 
 const now = dayjs();
-const FORMAT = 'DD/MM/YYYY';
+const FORMAT = 'YYYY-MM-DD';
 
 export const formatDate = (date: string | null) => {
   if (!date) {

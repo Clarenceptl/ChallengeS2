@@ -10,6 +10,12 @@ export const formatDateFront = (date, separator = '-') => {
   return `${day}/${month}/${year}`
 }
 
+export const formatDateBack = (date, separator = '/') => {
+  if (!date) return null
+  const [day, month, year] = date.split(separator)
+  return `${day}`
+}
+
 export const checkDateForRefreshToken = (dateMs) => {
   const nowMs = now.unix()
   const twentyMinutesBeforeExp = dayjs.unix(dateMs).subtract(20, 'm').unix()
