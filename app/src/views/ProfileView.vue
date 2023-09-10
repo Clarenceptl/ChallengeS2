@@ -232,6 +232,7 @@ import { useCompanyRevenueOptionsStore } from '@/stores/company-revenue-options'
 import { useCompanySectorOptionsStore } from '@/stores/company-sector-options'
 import { useCompaniesStore } from '@/stores/companies'
 import { useToastStore } from '@/stores'
+import { formatDateBack } from '@/helpers'
 
 const stores = {
   toast: useToastStore()
@@ -314,7 +315,7 @@ const updateUser = async () => {
     .updateUser(me.value?.id, {
       firstname: me.value?.firstname,
       lastname: me.value?.lastname,
-      birthdate: me.value?.birthdate
+      birthdate: formatDateBack(me.value?.birthdate)
     })
     .then(() => {
       stores.toast.createToast({
