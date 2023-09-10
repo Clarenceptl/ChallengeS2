@@ -234,35 +234,39 @@ export class JobAdsService {
         message: 'Forbidden'
       });
     }
+
+    const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOne({
+      where: {
+        id: parseInt(id)
+      },
+      relations: {
+        candidatesJobAds: true
+      }
+    });
+
+    if (!jobAdsToUpdate) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'Job ad not found'
+      });
+    }
+
+    const currentUser = await this.userRepository.findOneBy({
+      id: user.id
+    });
+
+    if (
+      currentUser.candidatesJobAds.length &&
+      currentUser.candidatesJobAds.find(
+        (candidatesJobAds) => candidatesJobAds.jobAds.id === jobAdsToUpdate.id
+      )
+    ) {
+      throw new RpcException({
+        statusCode: 401,
+        message: 'You already applied for this job'
+      });
+    }
     try {
-      const jobAdsToUpdate: JobAds = await this.jobAdsRepository.findOne({
-        where: {
-          id: parseInt(id)
-        },
-        relations: {
-          candidatesJobAds: true
-        }
-      });
-      const currentUser = await this.userRepository.findOneBy({
-        id: user.id
-      });
-      if (!jobAdsToUpdate) {
-        throw new RpcException({
-          statusCode: 404,
-          message: 'Job ad not found'
-        });
-      }
-      if (
-        jobAdsToUpdate.candidatesJobAds.length &&
-        jobAdsToUpdate.candidatesJobAds.find(
-          (candidatesJobAds) => candidatesJobAds.candidate.id === user.id
-        )
-      ) {
-        throw new RpcException({
-          statusCode: 401,
-          message: 'You already applied for this job'
-        });
-      }
       const newCandidature = new CandidatesJobAds();
       newCandidature.candidate = currentUser;
       jobAdsToUpdate.candidatesJobAds.push(newCandidature);
