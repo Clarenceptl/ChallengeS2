@@ -23,5 +23,8 @@ export const checkDateForRefreshToken = (dateMs) => {
 }
 
 export const formatDateAppointment = (date) => {
-  return dayjs(date).format('DD/MM/YYYY HH:mm')
+  const [datePart, timePart] = date.split('T')
+  const [year, month, day] = datePart.split('-')
+  const [hour, minute] = timePart.split(':')
+  return `${day}/${month}/${year} ${hour}:${minute}`
 }
