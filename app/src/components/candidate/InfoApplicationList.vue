@@ -14,26 +14,31 @@
               <v-icon
                 :color="getColorStatus(statusFrontEmployeur.INIT)"
                 :icon="statusFrontIcons.INIT"
-              /> : Application in progress
+              />
+              : Application in progress
             </li>
             <li>
               <v-icon
                 :color="getColorStatus(statusFrontEmployeur.PENDING)"
                 :icon="statusFrontIcons.PENDING"
-              /> : Appointment in progress
+              />
+              : Appointment in progress
             </li>
             <li>
               <v-icon
                 :color="getColorStatus(statusFrontEmployeur.ACCEPTED)"
                 :icon="statusFrontIcons.ACCEPTED"
-              /> : Application accepted
+              />
+              : Application accepted
             </li>
             <li>
               <v-icon
                 :color="getColorStatus(statusFrontEmployeur.REJECTED)"
                 :icon="statusFrontIcons.REJECTED"
-              /> : Application rejected
+              />
+              : Application rejected
             </li>
+            <li>Your quiz attempt and your score will be saved.</li>
           </ul>
         </v-expansion-panel-text>
       </v-expansion-panel>
