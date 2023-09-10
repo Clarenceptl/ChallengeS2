@@ -19,11 +19,11 @@ spec:
             - containerPort: 3021
           image: docking2000/challenges2-app-service:latest
           env:
-          - name: NODE_ENV
+          - name: CHALLENGE_ENV
             valueFrom:
               configMapKeyRef:
                 name: my-app-config
-                key: NODE_ENV
+                key: CHALLENGE_ENV
           - name: DATABASE_POSTGRES_DB
             valueFrom:
               configMapKeyRef:
