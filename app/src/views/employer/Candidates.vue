@@ -410,7 +410,6 @@ const hasQuiz = computed(() => {
   return jobAppointments.value?.job?.quizId
 })
 
-// method that returns the quiz score for a candidate, find response by candidate id
 const getQuizScore = (candidateId) => {
   const response = quiz.value?.reponses?.find((response) => {
     return response.userId === candidateId
@@ -418,7 +417,6 @@ const getQuizScore = (candidateId) => {
   return response ? `${response.score}/${quiz.value.questions.length}` : 'Not taken'
 }
 
-// method that returns the quiz tentative for a candidate, find response by candidate id
 const getQuizTentative = (candidateId) => {
   const response = quiz.value?.reponses?.find((response) => {
     return response.userId === candidateId
@@ -426,7 +424,6 @@ const getQuizTentative = (candidateId) => {
   return response ? response.tentative : 'Not taken'
 }
 
-// method that check if candidate id is in job appointments candidate id
 const checkCandidateAppointments = (candidateId) => {
   const res = jobAppointments.value.find((appointment) => {
     return appointment.candidate.id === candidateId

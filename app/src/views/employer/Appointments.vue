@@ -32,7 +32,7 @@
                   <v-icon v-else :color="handleIcon(appointment).color">{{
                     handleIcon(appointment).icon
                   }}</v-icon>
-                  <!-- button for new appointment if accepted false -->
+
                   <v-btn
                     v-if="appointment.accepted === false"
                     color="blue-500 ml-4"
