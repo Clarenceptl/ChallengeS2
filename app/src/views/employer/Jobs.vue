@@ -277,12 +277,6 @@
               label="Job Contract Type"
               v-model="jobEdit.contractType"
             />
-            <v-text-field
-              clearable
-              placeholder="Contract Type"
-              type="text"
-              v-model="jobEdit.contractType"
-            />
             <label>Job annual salary</label>
             <v-text-field
               :min="10000"
