@@ -1,13 +1,13 @@
 <template>
   <div class="pa-5">
     <h1 class="text-center my-10">Your candidates list</h1>
+    <InfoDragAndDrop />
     <v-container class="h-100" v-if="jobAd?.candidatesJobAds?.length">
       <v-row>
         <v-col class="bg-grey-100 rounded">
           <h2 class="mb-4">{{ statusFrontEmployeur.INIT }}</h2>
           <draggable
             :id="statusFrontEmployeur.INIT"
-            @end="updateStatus"
             group="test"
             v-model="newCandidates"
             item-key="id"
@@ -21,9 +21,6 @@
                   <v-btn class="bg-blue" @click="openInfoDialog(element.candidate)"
                     >More info</v-btn
                   >
-                  <v-btn class="bg-green" @click="openDialog(element.candidate.id)"
-                    >Set appointment</v-btn
-                  >
                 </v-card-actions>
               </v-card>
             </template>
@@ -33,7 +30,8 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.PENDING }}</h2>
           <draggable
             :id="statusFrontEmployeur.PENDING"
-            @end="updateStatus"
+            @add="setAppointment"
+            :move="handleMeetColumn"
             group="test"
             v-model="pendingCandidates"
             item-key="id"
@@ -56,8 +54,9 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.ACCEPTED }}</h2>
           <draggable
             :id="statusFrontEmployeur.ACCEPTED"
-            @end="updateStatus"
+            @add="updateStatus"
             group="test"
+            :move="handleAcceptedColumn"
             v-model="acceptedCandidates"
             item-key="id"
           >
@@ -79,8 +78,9 @@
           <h2 class="mb-4">{{ statusFrontEmployeur.REJECTED }}</h2>
           <draggable
             :id="statusFrontEmployeur.REJECTED"
-            @end="updateStatus"
             group="test"
+            @add="setRejection"
+            :move="() => false"
             v-model="rejectedCandidates"
             item-key="id"
           >
@@ -109,7 +109,7 @@
       </v-card>
     </div>
 
-    <v-dialog v-model="appointmentDialog" max-width="600">
+    <v-dialog persistent v-model="appointmentDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
           <h2>Set an appointment</h2>
@@ -126,20 +126,20 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red-500" text @click="reinitilize">Cancel</v-btn>
+          <v-btn color="red-500" text @click="closeDialog">Cancel</v-btn>
           <v-btn color="blue-800" text @click="createAppointment">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="deleteDialog" max-width="600">
+    <v-dialog persistent v-model="rejectDialog" max-width="600">
       <v-card class="pa-5 bg-green-300" variant="outlined">
         <v-card-title>
-          <h2>Delete this job</h2>
+          <h2>Reject this candidate</h2>
         </v-card-title>
-        <v-card-subtitle> Are you sure you want to delete this job ? </v-card-subtitle>
+        <v-card-subtitle> Are you sure you want to reject this candidate ?</v-card-subtitle>
         <v-card-actions>
-          <v-btn color="red-500" text @click="reinitilize"> Cancel </v-btn>
-          <v-btn color="blue-800" text> Yes </v-btn>
+          <v-btn color="blue-800" text @click="closeRejectDialog"> Cancel </v-btn>
+          <v-btn class="bg-red" text @click="setRejected"> Yes </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -166,12 +166,40 @@
 
           <div class="d-flex">
             <p>Birthdate :</p>
-            <p class="ml-2">{{ selectedUserInfo.birthdate }}</p>
+            <p class="ml-2">{{ formatDateFront(selectedUserInfo.birthdate) }}</p>
+          </div>
+          <div class="d-flex" v-if="appointmentInfo">
+            <p>Appointment :</p>
+            <p class="ml-2 mr-2">{{ formatDateAppointment(appointmentInfo.time) }}</p>
+            <div v-if="appointmentInfo">
+              <v-icon color="green" v-if="appointmentInfo.accepted === true">mdi-check</v-icon>
+              <v-icon color="red" v-else-if="appointmentInfo.accepted === false">mdi-close</v-icon>
+              <v-icon color="orange" v-else>mdi-clock</v-icon>
+            </div>
+          </div>
+
+          <div v-if="hasQuiz">
+            <div class="d-flex">
+              <p>Quiz score :</p>
+              <p class="ml-2">{{ getQuizScore(selectedUserInfo.id) }}</p>
+            </div>
+            <div class="d-flex">
+              <p>Quiz attempt :</p>
+              <p class="ml-2">{{ getQuizTentative(selectedUserInfo.id) }}</p>
+            </div>
           </div>
         </v-card-text>
 
-        <v-card-actions>
-          <v-btn color="blue-800" text @click="infoDialog = false"> Close </v-btn>
+        <v-card-actions class="d-flex justify-space-between">
+          <v-btn color="blue-800" text @click="closeInfoDialog"> Close </v-btn>
+          <v-btn
+            v-if="appointmentInfo"
+            class="bg-green"
+            text
+            @click="router.push('/employer/appointments')"
+          >
+            Go to appointment list
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -189,7 +217,14 @@ import { storeToRefs } from 'pinia'
 import draggable from 'vuedraggable'
 import { JobAdsService } from '@/services'
 import { statusFrontEmployeur } from '@/enums'
-import { getKeyByValue } from '@/helpers'
+import {
+  getKeyByValue,
+  handleAcceptedColumn,
+  handleMeetColumn,
+  formatDateAppointment,
+  formatDateFront
+} from '@/helpers'
+import InfoDragAndDrop from '@/components/candidate/InfoDragAndDrop.vue'
 
 //#region Stores / Router
 const stores = {
@@ -210,12 +245,15 @@ const acceptedCandidates = ref([])
 const rejectedCandidates = ref([])
 
 const appointmentDialog = ref(false)
-const deleteDialog = ref(false)
+const rejectDialog = ref(false)
 const infoDialog = ref(false)
 const time = ref('')
 const date = ref('')
 const selectedUserInfo = ref(null)
 const selectedId = ref(null)
+const waitinDialogCandidateId = ref(null)
+const appointmentInfo = ref(null)
+const dragContext = ref(null)
 //#endregion
 
 //#region Methods
@@ -226,12 +264,14 @@ const setCandidatesByStatus = (status) => {
 
 const reinitilize = () => {
   appointmentDialog.value = false
-  deleteDialog.value = false
+  rejectDialog.value = false
   time.value = ''
   date.value = ''
   selectedId.value = null
   selectedUserInfo.value = null
   infoDialog.value = false
+  waitinDialogCandidateId.value = null
+  dragContext.value = null
 }
 
 const createAppointment = async () => {
@@ -261,7 +301,8 @@ const createAppointment = async () => {
       type: 'success',
       message: 'Appointment created'
     })
-    return router.push('/employer/appointments')
+    reinitilize()
+    return
   }
   stores.toast.createToast({
     type: 'error',
@@ -269,14 +310,32 @@ const createAppointment = async () => {
   })
 }
 
-const openDialog = (id) => {
+const openDialog = (idCandidate, idCandidature) => {
   appointmentDialog.value = true
-  selectedId.value = id
+  waitinDialogCandidateId.value = idCandidature
+  selectedId.value = idCandidate
+}
+
+const closeDialog = () => {
+  const indexCandidature = pendingCandidates.value.findIndex((candidature) => {
+    return candidature.id === waitinDialogCandidateId.value
+  })
+  const candidature = pendingCandidates.value[indexCandidature]
+
+  pendingCandidates.value.splice(indexCandidature, 1)
+  newCandidates.value.push(candidature)
+  reinitilize()
 }
 
 const openInfoDialog = (candidate) => {
   infoDialog.value = true
+  checkCandidateAppointments(candidate.id)
   selectedUserInfo.value = candidate
+}
+
+const closeInfoDialog = () => {
+  infoDialog.value = false
+  appointmentInfo.value = null
 }
 
 const updateStatus = async (val) => {
@@ -291,6 +350,49 @@ const updateStatus = async (val) => {
     })
   }
 }
+
+const setAppointment = (val) => {
+  const candidature = val.item.__draggable_context.element
+  openDialog(candidature.candidate.id, candidature.id)
+}
+
+const setRejection = (val) => {
+  dragContext.value = val
+  openRejectDialog(val.item.__draggable_context.element.id)
+}
+
+const openRejectDialog = (idCandidature) => {
+  rejectDialog.value = true
+  waitinDialogCandidateId.value = idCandidature
+}
+
+const closeRejectDialog = () => {
+  rejectDialog.value = false
+  const indexCandidature = rejectedCandidates.value.findIndex((candidature) => {
+    return candidature.id === waitinDialogCandidateId.value
+  })
+  const candidature = rejectedCandidates.value[indexCandidature]
+
+  rejectedCandidates.value.splice(indexCandidature, 1)
+  const from = dragContext.value.from.id
+
+  if (from === statusFrontEmployeur.INIT) {
+    newCandidates.value.push(candidature)
+  } else if (from === statusFrontEmployeur.PENDING) {
+    pendingCandidates.value.push(candidature)
+  } else if (from === statusFrontEmployeur.ACCEPTED) {
+    acceptedCandidates.value.push(candidature)
+  } else {
+    newCandidates.value.push(candidature)
+  }
+  reinitilize()
+}
+
+const setRejected = async () => {
+  await updateStatus(dragContext.value)
+  reinitilize()
+}
+
 //#endregion
 
 //#region computed
@@ -304,7 +406,10 @@ const jobAppointments = computed(() => {
   })
 })
 
-// method that returns the quiz score for a candidate, find response by candidate id
+const hasQuiz = computed(() => {
+  return jobAppointments.value?.job?.quizId
+})
+
 const getQuizScore = (candidateId) => {
   const response = quiz.value?.reponses?.find((response) => {
     return response.userId === candidateId
@@ -312,7 +417,6 @@ const getQuizScore = (candidateId) => {
   return response ? `${response.score}/${quiz.value.questions.length}` : 'Not taken'
 }
 
-// method that returns the quiz tentative for a candidate, find response by candidate id
 const getQuizTentative = (candidateId) => {
   const response = quiz.value?.reponses?.find((response) => {
     return response.userId === candidateId
@@ -320,19 +424,18 @@ const getQuizTentative = (candidateId) => {
   return response ? response.tentative : 'Not taken'
 }
 
-// method that check if candidate id is in job appointments candidate id
-const isCandidateInAppointments = (candidateId) => {
-  return jobAppointments.value.some((appointment) => {
+const checkCandidateAppointments = (candidateId) => {
+  const res = jobAppointments.value.find((appointment) => {
     return appointment.candidate.id === candidateId
   })
+  if (!res) {
+    return
+  }
+  appointmentInfo.value = {
+    accepted: res?.accepted,
+    time: res?.time
+  }
 }
-
-// computed that return user based on selected user info id
-// const selectedUser = computed(() => {
-//   return jobAd.value?.candidates?.find((userInfo) => {
-//     return userInfo.id === selectedUserInfoId.value
-//   })
-// })
 
 //#endregion
 
