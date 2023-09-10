@@ -163,6 +163,7 @@ const router = createRouter({
       children: [
         {
           path: 'appointments',
+          name: 'EmployerAppointments',
           component: () => import('@/views/employer/Appointments.vue')
         },
         {
