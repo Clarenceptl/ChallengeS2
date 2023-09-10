@@ -34,7 +34,8 @@ export class Appointment {
   employee: User;
 
   @ManyToOne(() => JobAds, (job) => job, {
-    eager: true
+    eager: true,
+    onDelete: 'CASCADE'
   })
   job: JobAds;
 
