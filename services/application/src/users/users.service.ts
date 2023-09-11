@@ -100,7 +100,7 @@ export class UsersService {
     try {
       const userCompany = tokenUser?.company?.id;
       const jobAds = await this.jobAdsRepository.find({
-        where: { company: userCompany },
+        where: { company: { id: userCompany } },
         relations: ['candidatesJobAds'],
         select: {
           candidatesJobAds: {
