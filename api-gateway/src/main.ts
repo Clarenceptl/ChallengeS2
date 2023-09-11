@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as compression from 'compression';
 import { WinstonModule } from 'nest-winston';
 import { transports, format } from 'winston';
@@ -40,6 +40,11 @@ async function bootstrap() {
   app.enableCors({
     origin: '*'
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true
+    })
+  );
 
   if (process.env.CHALLENGE_ENV === 'development') {
     const config = new DocumentBuilder()
