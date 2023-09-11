@@ -89,19 +89,6 @@ export class QuizService {
       });
     }
 
-    let res;
-    try {
-      res = await lastValueFrom(
-        this.client.send(
-          { cmd: SERVICE_CMD.DELETE_QUIZ },
-          { tokenUser, id: quiz._id.toString() }
-        )
-      );
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-
     try {
       await quiz.deleteOne();
     } catch (error) {
